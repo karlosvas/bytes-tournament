@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JwtAuthenticationFilter es un filtro de autenticación que se encarga de procesar las solicitudes de inicio de sesión.
@@ -26,6 +28,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      */
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -57,7 +60,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 );
 
             return authenticationManager.authenticate(authToken);
-            return null;
         } catch (Error e) {
             throw new RuntimeException("Error al procesar las credenciales", e);
         }
