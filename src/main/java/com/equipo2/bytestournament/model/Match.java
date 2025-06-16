@@ -1,11 +1,4 @@
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import jakarta.persistence.*;
 
 /**
  * Entidad JPA que representa una partida de un torneo de la aplicación de torneos.
@@ -16,7 +9,7 @@ import org.hibernate.annotations.Type;
  */
 
 @Entity
-public class match {
+public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,21 +55,21 @@ public class match {
     }
 
     /**
-     * Construye un nuevo torneo con nombre, número máximo de jugadores y estado.
+     * Construye una nueva partida con el id del torneo, el jugador1, el jugador 2, el resultado y la ronda.
      *
-     * @param player1 Jugador1 que participa en la partida. No puede ser null ni vacío.
-     * @param maxPlayers cantidad máxima de jugadores participantes .
-     * @param status estado actual del torneo. No puede ser null ni vacío.
+     * @param tournamentId id del torneo al que pertenece la partida
+     * @param player1 jugador nº 1 de la partida.
+     * @param player2 jugador nº 2 de la partida.
+     * @param result resultado actual de la partida.
+     * @param round ronda actual de la partida
      */
     public Match(long tournamentId, User player1, User player2, Result result, int round) {
 
         this.tournamentId = tournamentId;
-
         this.player1 = player1;
-        }
 
         if (player1.getId() == player2.getId()) {
-            throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.")
+            throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.");
         } else {
             this.player2 = player2;
         }
@@ -103,7 +96,7 @@ public class match {
     }
 
     public void setPlayer1(User player1) {
-            this.player1 = player1;
+        this.player1 = player1;
     }
 
     public User getPlayer2() {

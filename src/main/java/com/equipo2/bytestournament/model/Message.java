@@ -1,11 +1,4 @@
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Column;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -40,7 +33,8 @@ public class Message {
     private String content;
 
     /**
-     * Fecha y hora de envío del mensaje. No puede ser nulo.*/
+     * Fecha y hora de envío del mensaje. No puede ser nulo.
+     */
     @Column(name = "timestamp", updatable = false, nullable = false)
     private LocalDateTime timestamp;
 
@@ -63,10 +57,10 @@ public class Message {
      * Construye un nuevo mensaje con el id del jugador que lo manda, el contenido, la fecha y hora del envío,
      * el id de la partida y el id del torneo al que pertenece la partida.
      *
-     * @param senderId id del jugador que envía el mensaje que participa en la partida. No puede ser null ni vacío.
-     * @param content contenido del mensaje.
-     * @param timestamp fecha y hora en la que se envía el mensaje.
-     * @param matchId id de la partida
+     * @param senderId     id del jugador que envía el mensaje que participa en la partida. No puede ser null ni vacío.
+     * @param content      contenido del mensaje.
+     * @param timestamp    fecha y hora en la que se envía el mensaje.
+     * @param matchId      id de la partida
      * @param tournamentId id del torneo al que pertenece la partida
      */
     public Message(long senderId, String content, LocalDateTime timestamp, long matchId, long tournamentId) {
