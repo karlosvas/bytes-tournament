@@ -8,6 +8,7 @@ public class BytestournamentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BytestournamentApplication.class, args);
+		
 	}
 
 }
