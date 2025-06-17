@@ -16,15 +16,23 @@ import jakarta.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "DTO para partidos o encuentros")
+@Schema(description = "DTO para partidas o encuentros")
+
+/**
+ *  MatchDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
+ *  especialmente entre el backend y el frontend o entre servicios.
+    Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
+    ni las entidades del modelo de datos.
+ */
 
 public class MatchDTO {
-    @Schema(description = "Identificador único del partido", example = "100")
-    private long id;
+    @NotNull
+    @Schema(description = "Identificador único del partido", example = "100" , required = true)
+    private Long id;
 
     @NotNull
     @Schema(description = "ID del torneo", example = "1", required = true)
-    private long torunamentId;
+    private Long torunamentId;
 
     @NotNull
     @Schema(description = "Jugador 1", required = true)
@@ -40,5 +48,5 @@ public class MatchDTO {
 
     @NotNull
     @Schema(description = "Número de ronda", example = "1", required = true)
-    private int round;
+    private Integer round;
 }
