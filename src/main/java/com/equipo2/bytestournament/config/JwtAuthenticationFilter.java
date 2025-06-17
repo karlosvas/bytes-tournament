@@ -1,6 +1,7 @@
 package com.equipo2.bytestournament.config;
 
 import java.io.IOException;
+import com.equipo2.bytestournament.model.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.core.Authentication;
@@ -49,8 +50,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         try {
              // TODO: Deserializar directamente a tu modelo Usuario para ello es necesario el modelo Usuario.
-            Usuario usuario = new ObjectMapper()
-            .readValue(request.getInputStream(), Usuario.class);
+            User usuario = new ObjectMapper()
+                .readValue(request.getInputStream(), User.class);
 
             logger.info("Intento de autenticación para usuario: " + usuario.getUsername());
             UsernamePasswordAuthenticationToken authToken = 
@@ -60,7 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 );
 
             return authenticationManager.authenticate(authToken);
-        } catch (Error e) {
+        } catch (Error | IOException e) {
             throw new RuntimeException("Error al procesar las credenciales", e);
         }
     }

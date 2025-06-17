@@ -19,11 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.equipo2.bytestournament.service.CustomUserDetailsService;
 
 /**
- * @Configuración este bean define la configuración de seguridad de la aplicación.
- * @EnableWebSecurity Habilita la seguridad web en de Spring.
- * @EnableMethodSecurity Habilita la seguridad a nivel de método, permitiendo el uso de anotaciones como @PreAuthorize.
- * @Bean Define beans necesarios para la configuración de seguridad.
- * 
+ * see @Configuración este bean define la configuración de seguridad de la aplicación.
+ * see @EnableWebSecurity Habilita la seguridad web en de Spring.
+ * see @EnableMethodSecurity Habilita la seguridad a nivel de método, permitiendo el uso de anotaciones como @PreAuthorize.
+ * see @Bean Define beans necesarios para la configuración de seguridad.
  * Esta clase configura la seguridad de la aplicación, incluyendo la autenticación y autorización de usuarios.
  * Utiliza JWT para la autenticación y define un usuario en memoria con un nombre de usuario y contraseña.
  */

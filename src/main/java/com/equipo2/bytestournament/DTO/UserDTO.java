@@ -19,36 +19,36 @@ import lombok.Setter;
 /**
  *  UserDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
-    Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
-    ni las entidades del modelo de datos.
+ * Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
+ * ni las entidades del modelo de datos.
  */
 public class UserDTO {
 
     @NotNull
-    @Schema(description = "Identificador único del usuario", example = "1", required=true)
+    @Schema(description = "Identificador único del usuario", example = "1")
     private Long id;
 
     @NotBlank
-    @Schema(description = "Nombre de usuario", example = "usuario123", required = true)
+    @Schema(description = "Nombre de usuario", example = "usuario123")
     private String username;
 
     @NotBlank
-    @Schema(description = "Correo electrónico", example = "usuario@gmail.com", required = true)
+    @Schema(description = "Correo electrónico", example = "usuario@gmail.com")
     private String email;
 
     @NotBlank
-    @Schema(description = "Contraseña", example = "password123", required = true)
+    @Schema(description = "Contraseña", example = "password123")
     private String password;
 
     @NotNull
-    @Schema(description = "Rol del usuario", example = "ADMIN", required = true)
+    @Schema(description = "Rol del usuario", example = "ADMIN")
     private Role role;
 
     @NotBlank
-    @Schema(description = "Rango del usuario", example = "Oro", required = true)
+    @Schema(description = "Rango del usuario", example = "Oro")
     private String rank;
 
     @NotNull
-    @Schema(description = "Puntos del usuario", example = "1500", required = true)
+    @Schema(description = "Puntos del usuario", example = "1500")
     private Integer points;
 }

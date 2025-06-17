@@ -27,18 +27,21 @@ public class Match {
     /**
      * Identificador único del torneo. No debe ser nulo
      */
+    // TODO: Relación entre Match y Tournament
     @Column(name = "tournament_id", updatable = false, nullable = false)
     private Long tournamentId;
 
     /**
      * Jugador 1 que participa en la partida. No debe ser nulo
      */
+    // TODO: Relación entre Match y User
     @Column(name = "player1", updatable = false, nullable = false)
     private User player1;
 
     /**
      * Jugador 2 que participa en la partida. No debe ser nulo
      */
+    // TODO: Relación entre Match y User
     @Column(name = "player2", updatable = false, nullable = false)
     private User player2;
 
@@ -83,7 +86,7 @@ public class Match {
         this.result = result;
 
         if (round < 1) {
-            throw new IllegalArgumentException("La ronda debe ser al menos la 1.")
+            throw new IllegalArgumentException("La ronda debe ser al menos la 1.");
         } else {
             this.round = round;
         }
@@ -112,7 +115,7 @@ public class Match {
     public void setPlayer2(User player2) {
 
         if (player1.getId() == player2.getId()) {
-            throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.")
+            throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.");
         } else {
             this.player2 = player2;
         }
@@ -133,7 +136,7 @@ public class Match {
     public void setRound(Integer round) {
 
         if (round < 1) {
-            throw new IllegalArgumentException("La ronda debe ser al menos la 1.")
+            throw new IllegalArgumentException("La ronda debe ser al menos la 1.");
         } else {
             this.round = round;
         }

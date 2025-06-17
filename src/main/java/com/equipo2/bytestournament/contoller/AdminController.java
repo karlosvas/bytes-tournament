@@ -36,8 +36,8 @@ public class AdminController {
      */
     @PostMapping("/user")
     @PreAuthorize("hasAutority('USER_CREATE')")
-    public ResponseEntity<?> postMethodName(@RequestBody UsuarioDTO dto) {
-        return ResponseEntity.ok().build();;
+    public ResponseEntity<?> postMethodName(@RequestBody String username) {
+        return ResponseEntity.ok().build();
     }
     
 }
