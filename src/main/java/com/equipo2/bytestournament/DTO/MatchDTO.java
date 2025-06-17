@@ -1,9 +1,7 @@
 package com.equipo2.bytestournament.DTO;
 
-import javax.naming.spi.DirStateFactory.Result;
-
-import org.apache.catalina.User;
-
+import com.equipo2.bytestournament.enums.Result;
+import com.equipo2.bytestournament.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,18 +19,18 @@ import jakarta.validation.constraints.NotNull;
 /**
  *  MatchDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
-    Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
-    ni las entidades del modelo de datos.
+ * Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
+ * ni las entidades del modelo de datos.
  */
 
 public class MatchDTO {
     @NotNull
-    @Schema(description = "Identificador único del partido", example = "100" , required = true)
+    @Schema(description = "Identificador único del partido", example = "100", required = true)
     private Long id;
 
     @NotNull
     @Schema(description = "ID del torneo", example = "1", required = true)
-    private Long torunamentId;
+    private Long tournamentId;
 
     @NotNull
     @Schema(description = "Jugador 1", required = true)
