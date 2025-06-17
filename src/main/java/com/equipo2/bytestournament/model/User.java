@@ -1,3 +1,6 @@
+package com.equipo2.bytestournament.model;
+import com.equipo2.bytestournament.enums.Role;
+
 import jakarta.persistence.*;
 
 /**
@@ -18,7 +21,7 @@ public class User {
      * Identificador único del usuario que se genera automaticamente
      */
     @Column(name = "id", updatable = false, nullable = false)
-    private long id;
+    private Long id;
 
     /**
      * Nombre de usuario. Debe ser único y no nulo.
@@ -55,7 +58,7 @@ public class User {
      * Puntos del usuario. Valor no negativo.
      */
     @Column(name = "points", nullable = false)
-    private int points;
+    private Integer points;
 
     protected User() {
     }

@@ -1,3 +1,4 @@
+package com.equipo2.bytestournament.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -18,13 +19,13 @@ public class Message {
      * Identificador único del mensaje. No debe ser nulo
      */
     @Column(name = "id", updatable = false, nullable = false)
-    private long id;
+    private Long id;
 
     /**
      * Identificador único del jugador que envía el mensaje. No debe ser nulo
      */
     @Column(name = "sender_id", updatable = false, nullable = false)
-    private long senderId;
+    private Long senderId;
 
     /**
      * Contenido del mensaje enviado. No puede ser nulo.
@@ -41,13 +42,13 @@ public class Message {
      * Identificador único del torneo. No debe ser nulo
      */
     @Column(name = "match_id", updatable = false, nullable = false)
-    private long matchId;
+    private Long matchId;
 
     /**
      * Identificador único del torneo que se genera automaticamente
      */
     @Column(name = "tournament_id", updatable = false, nullable = false)
-    private long tournamentId;
+    private Long tournamentId;
 
     public Message() {
     }
@@ -62,7 +63,7 @@ public class Message {
      * @param matchId id de la partida
      * @param tournamentId id del torneo al que pertenece la partida
      */
-    public Message(long senderId, String content, LocalDateTime timestamp, long matchId, long tournamentId) {
+    public Message(Long senderId, String content, LocalDateTime timestamp, Long matchId, Long tournamentId) {
 
         this.senderId = senderId;
         this.content = content;
@@ -71,11 +72,11 @@ public class Message {
         this.tournamentId = tournamentId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public long getSenderId() {
+    public Long getSenderId() {
         return senderId;
     }
 
@@ -91,11 +92,11 @@ public class Message {
         return timestamp;
     }
 
-    public long getMatchId() {
+    public Long getMatchId() {
         return matchId;
     }
 
-    public long getTournamentId() {
+    public Long getTournamentId() {
         return tournamentId;
     }
 }

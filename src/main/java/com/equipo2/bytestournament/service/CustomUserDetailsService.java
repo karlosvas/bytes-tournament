@@ -4,10 +4,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.equipo2.bytestournament.repository.UserRepository;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+
+import com.equipo2.bytestournament.model.User;
+
 
 /**
  * CustomUserDetailsService es una implementación de UserDetailsService que se utiliza para cargar los detalles del usuario desde la base de datos.
@@ -15,7 +20,7 @@ import org.springframework.security.core.userdetails.User;
  * @Service Anotación que indica que esta clase es un servicio de Spring.
  */
 @Service
-// TODO: Necesario implementar  UserRepository
+
 public class CustomUserDetailsService implements UserDetailsService {
     /**
      * userRepository es una instancia del repositorio de usuarios que se utiliza para acceder a los datos del usuario en la base de datos.
@@ -26,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    // TODO: Necesario implementar UserRepository y el modelo de usuario
+     
     /**
      * loadUserByUsername es un método que busca un usuario por su nombre de usuario (email) y devuelve un objeto UserDetails, se ejecuta automaticamente por Spring Security durante el proceso de autenticación en el filtros JwtAuthentication Filter.
      * @param username El nombre de usuario (email) del usuario a buscar.
@@ -35,12 +40,13 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
+        Optional<User> userOptional = userRepository.findByEmail(username);
 
-        if(!user.isPresent())
+        if(!userOptional.isPresent())
             throw new UsernameNotFoundException("Usuario no encontrado: " + username);
-        
-        return User.builder()
+        User user = userOptional.get();
+            
+        return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .roles(user.getRoles().stream()

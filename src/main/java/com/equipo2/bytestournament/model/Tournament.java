@@ -1,5 +1,9 @@
+package com.equipo2.bytestournament.model;
 import jakarta.persistence.*;
 import java.util.List;
+
+import com.equipo2.bytestournament.enums.Status;
+
 import java.util.ArrayList;
 
 /**
@@ -20,7 +24,7 @@ public class Tournament {
      * Identificador único del torneo que se genera automaticamente
      */
     @Column(name = "id", updatable = false, nullable = false)
-    private long id;
+    private Long id;
 
     /**
      * Nombre del torneo. Debe ser único y no nulo.
@@ -28,7 +32,7 @@ public class Tournament {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    private int maxPlayers;
+    private Integer maxPlayers;
 
     /**
      * Estado asignado al usuario. No debe ser nulo ni vacío.
@@ -47,14 +51,14 @@ public class Tournament {
      * @param maxPlayers cantidad máxima de jugadores participantes .
      * @param status estado actual del torneo. No puede ser null ni vacío.
      */
-    public Tournament(String name, int maxPlayers, Status status) {
+    public Tournament(String name, Integer maxPlayers, Status status) {
 
         this.name = name;
         this.maxPlayers = maxPlayers;
         this.status = status;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

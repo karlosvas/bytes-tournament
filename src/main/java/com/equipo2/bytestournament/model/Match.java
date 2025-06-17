@@ -1,4 +1,8 @@
+package com.equipo2.bytestournament.model;
 import jakarta.persistence.*;
+
+import com.equipo2.bytestournament.enums.Result;
+import com.equipo2.bytestournament.model.User;
 
 /**
  * Entidad JPA que representa una partida de un torneo de la aplicación de torneos.
@@ -18,13 +22,13 @@ public class Match {
      * Identificador único de la partida. No debe ser nulo
      */
     @Column(name = "id", updatable = false, nullable = false)
-    private long id;
+    private Long id;
 
     /**
      * Identificador único del torneo. No debe ser nulo
      */
     @Column(name = "tournament_id", updatable = false, nullable = false)
-    private long tournamentId;
+    private Long tournamentId;
 
     /**
      * Jugador 1 que participa en la partida. No debe ser nulo
@@ -49,7 +53,7 @@ public class Match {
      * Ronda actual de la partida
      */
     @Column(name = "round", updatable = true, nullable = false)
-    private int round;
+    private Integer round;
 
     public Match() {
     }
@@ -63,12 +67,12 @@ public class Match {
      * @param result resultado actual de la partida. No puede ser null ni vacío.
      * @param round ronda actual de la partida.
      */
-    public Match(long tournamentId, User player1, User player2, Result result, int round) {
+    public Match(Long tournamentId, User player1, User player2, Result result, Integer round) {
 
         this.tournamentId = tournamentId;
 
         this.player1 = player1;
-        }
+        
 
         if (player1.getId() == player2.getId()) {
             throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.");
@@ -85,11 +89,11 @@ public class Match {
         }
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public long getTournamentId() {
+    public Long getTournamentId() {
         return tournamentId;
     }
 
@@ -122,11 +126,11 @@ public class Match {
         this.result = result;
     }
 
-    public int getRound() {
+    public Integer getRound() {
         return round;
     }
 
-    public void setRound(int round) {
+    public void setRound(Integer round) {
 
         if (round < 1) {
             throw new IllegalArgumentException("La ronda debe ser al menos la 1.")

@@ -1,3 +1,4 @@
+package com.equipo2.bytestournament.enums;
 /**
  * Enum que muestra los valores que puede tomar el atributo status
  *
