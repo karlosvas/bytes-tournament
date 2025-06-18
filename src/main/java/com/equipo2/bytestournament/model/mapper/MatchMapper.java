@@ -19,8 +19,16 @@ import java.util.ArrayList;
 @Component
 public class MatchMapper {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final MatchRepository matchRepository;
+
+    /**
+     * Constructor para inyectar las dependencias.
+     *
+     * @param userRepository repositorio de usuarios.
+     */
+    public MatchMapper(MatchRepository matchRepository) {
+        this.matchRepository = matchRepository;
+    }
 
     /**
      * Convierte un MatchDTO en una instancia de Match.

@@ -18,8 +18,16 @@ import java.util.ArrayList;
 @Component
 public class UserMapper {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    /**
+     * Constructor para inyectar las dependencias.
+     *
+     * @param userRepository repositorio de usuarios.
+     */
+    public UserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * Convierte un UserDTO en una instancia de User.

@@ -18,8 +18,16 @@ import java.util.ArrayList;
 @Component
 public class TournamentMapper {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final TournamentRepository tournamentRepository;
+
+    /**
+     * Constructor para inyectar las dependencias.
+     *
+     * @param userRepository repositorio de usuarios.
+     */
+    public TournamentMapper(TournamentRepository tournamentRepository) {
+        this.tournamentRepository = tournamentRepository;
+    }
 
     /**
      * Convierte un TournamentDTO en una instancia de Tournament.

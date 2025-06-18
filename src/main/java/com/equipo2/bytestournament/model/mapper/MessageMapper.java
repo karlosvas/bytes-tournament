@@ -17,8 +17,16 @@ import java.util.ArrayList;
 @Component
 public class MessageMapper {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final MessageRepository messageRepository;
+
+    /**
+     * Constructor para inyectar las dependencias.
+     *
+     * @param userRepository repositorio de usuarios.
+     */
+    public MessageMapper(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
 
     /**
      * Convierte un MessageDTO en un Message.
