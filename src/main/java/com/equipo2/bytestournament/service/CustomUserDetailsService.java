@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.equipo2.bytestournament.repository.UserRepository;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.equipo2.bytestournament.model.User;

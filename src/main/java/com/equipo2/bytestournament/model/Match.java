@@ -2,7 +2,6 @@ package com.equipo2.bytestournament.model;
 import jakarta.persistence.*;
 
 import com.equipo2.bytestournament.enums.Result;
-import com.equipo2.bytestournament.model.User;
 
 /**
  * Entidad JPA que representa una partida de un torneo de la aplicación de torneos.
