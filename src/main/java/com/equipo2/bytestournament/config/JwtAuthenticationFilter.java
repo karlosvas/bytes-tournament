@@ -1,6 +1,7 @@
 package com.equipo2.bytestournament.config;
 
 import java.io.IOException;
+import com.equipo2.bytestournament.model.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JwtAuthenticationFilter es un filtro de autenticación que se encarga de procesar las solicitudes de inicio de sesión.
@@ -26,6 +29,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      */
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -46,8 +50,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         try {
              // TODO: Deserializar directamente a tu modelo Usuario para ello es necesario el modelo Usuario.
-            Usuario usuario = new ObjectMapper()
-            .readValue(request.getInputStream(), Usuario.class);
+            User usuario = new ObjectMapper()
+                .readValue(request.getInputStream(), User.class);
 
             logger.info("Intento de autenticación para usuario: " + usuario.getUsername());
             UsernamePasswordAuthenticationToken authToken = 
@@ -57,8 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 );
 
             return authenticationManager.authenticate(authToken);
-            return null;
-        } catch (Error e) {
+        } catch (Error | IOException e) {
             throw new RuntimeException("Error al procesar las credenciales", e);
         }
     }

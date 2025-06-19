@@ -15,7 +15,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "DTO para mensajes en el sistema")
-
 /**
  *  MessageDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
@@ -23,28 +22,27 @@ import lombok.Setter;
  *  ni las entidades del modelo de datos.
  */
 public class MessageDTO {
-
     @NotNull
-    @Schema(description = "Identificador único del mensaje", example = "1", required=true)
+    @Schema(description = "Identificador único del mensaje", example = "1")
     private Long id;
      
     @NotNull
-    @Schema(description = "ID del remitente", example = "10", required = true)
+    @Schema(description = "ID del remitente", example = "10")
     private Long senderId;
 
     @NotBlank
-    @Schema(description = "Contenido del mensaje", example = "¡Hola!", required = true)
+    @Schema(description = "Contenido del mensaje", example = "¡Hola!")
     private String content;
 
     @NotNull
-    @Schema(description = "Fecha y hora del mensaje", example = "2024-06-16T15:30:00", required = true)
+    @Schema(description = "Fecha y hora del mensaje", example = "2024-06-16T15:30:00")
     private LocalDateTime timestamp;
 
     private Long matchId;
 
     @NotNull
-    @Schema(description = "ID del torneo relacionado", example = "200", required = true)
-    
-    private Long tournamentId;
+    @Schema(description = "ID del torneo relacionado", example = "200")
 
+    // TODO: Poner relación entre entidaddes
+    private Long tournamentId;
 }

@@ -1,7 +1,6 @@
 package com.equipo2.bytestournament.model;
 
 import com.equipo2.bytestournament.enums.Role;
-
 import jakarta.persistence.*;
 
 /**
@@ -60,7 +59,7 @@ public class User {
     @Column(name = "points", updatable = true, nullable = false)
     private Integer points;
 
-    protected User() {
+    public User() {
     }
 
     /**
@@ -99,7 +98,7 @@ public class User {
         this.points = 0;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

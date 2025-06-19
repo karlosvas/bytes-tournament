@@ -29,26 +29,26 @@ public class UserDTO {
     private Long id;
 
     @NotBlank
-    @Schema(description = "Nombre de usuario", example = "usuario123", required = true)
+    @Schema(description = "Nombre de usuario", example = "usuario123")
     private String username;
 
     @NotBlank
-    @Schema(description = "Correo electrónico", example = "usuario@gmail.com", required = true)
+    @Schema(description = "Correo electrónico", example = "usuario@gmail.com")
     private String email;
 
     @NotBlank
-    @Schema(description = "Contraseña", example = "password123", required = true)
+    @Schema(description = "Contraseña", example = "password123")
     private String password;
 
     @NotNull
-    @Schema(description = "Rol del usuario", example = "ADMIN", required = true)
+    @Schema(description = "Rol del usuario", example = "ADMIN")
     private Role role;
 
     @NotBlank
-    @Schema(description = "Rango del usuario", example = "Oro", required = true)
+    @Schema(description = "Rango del usuario", example = "Oro")
     private String rank;
 
     @NotNull
-    @Schema(description = "Puntos del usuario", example = "1500", required = true)
+    @Schema(description = "Puntos del usuario", example = "1500")
     private Integer points;
 }

@@ -1,9 +1,8 @@
-package com.equipo2.bytestournament.model.mapper;
+package com.equipo2.bytestournament.mapper;
 
 import com.equipo2.bytestournament.DTO.MessageDTO;
 import com.equipo2.bytestournament.model.Message;
-import com.equipo2.bytestournament.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.equipo2.bytestournament.repository.MessageRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

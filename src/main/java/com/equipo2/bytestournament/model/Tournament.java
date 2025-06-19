@@ -1,12 +1,8 @@
 package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
-
-import java.util.List;
-
 import com.equipo2.bytestournament.enums.Status;
 
-import java.util.ArrayList;
 
 /**
  * Entidad JPA que representa un torneo de la aplicación de torneos.
@@ -92,11 +88,11 @@ public class Tournament {
         this.name = name;
     }
 
-    public int getMaxPlayers() {
+    public Integer getMaxPlayers() {
         return maxPlayers;
     }
 
-    public void setMaxPlayers(int maxPlayers) {
+    public void setMaxPlayers(Integer maxPlayers) {
         if (maxPlayers == null) {
             throw new IllegalArgumentException("El nombre no puede ser nulo.");
         }

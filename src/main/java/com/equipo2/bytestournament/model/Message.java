@@ -1,7 +1,6 @@
 package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 /**

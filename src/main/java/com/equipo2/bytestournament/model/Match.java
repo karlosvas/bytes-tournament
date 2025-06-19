@@ -1,7 +1,6 @@
 package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
-
 import com.equipo2.bytestournament.enums.Result;
 import com.equipo2.bytestournament.model.User;
 
@@ -27,6 +26,7 @@ public class Match {
     /**
      * Identificador único del torneo. No debe ser nulo
      */
+    // TODO: Relación entre Match y Tournament
     @Column(name = "tournament_id", updatable = false, nullable = false)
     private Long tournamentId;
 
@@ -78,7 +78,7 @@ public class Match {
         if (player1.getId() == null || player2.getId() == null) {
             throw new IllegalArgumentException("Los jugadores deben tener id asignado");
         }
-        if (player1.getId().equals(player2.getId())) {
+        if (player1.getId() == player2.getId()) {
             throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.");
         }
         if (result == null) {
@@ -111,7 +111,7 @@ public class Match {
         if (player1.getId() == null) {
             throw new IllegalArgumentException("El jugador debe tener id asignado.");
         }
-        if (player1.getId().equals(player2.getId())) {
+        if (player1.getId() == player2.getId())) {
             throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.");
         }
 

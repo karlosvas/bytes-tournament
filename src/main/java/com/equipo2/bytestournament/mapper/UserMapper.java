@@ -1,4 +1,4 @@
-package com.equipo2.bytestournament.model.mapper;
+package com.equipo2.bytestournament.mapper;
 
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.model.User;
@@ -25,7 +25,7 @@ public class UserMapper {
      *
      * @param userRepository repositorio de usuarios.
      */
-    public UserRepository(UserRepository userRepository) {
+    public UserMapper(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -91,7 +91,7 @@ public class UserMapper {
      * @param users lista de entidades User. Puede ser null.
      * @return lista de DTOs, pero si la lista users está vacía devuelve una lista vacía.
      */
-    public List<UserDTO> userToUserDtos(List<Match> users) {
+    public List<UserDTO> userToUserDtos(List<User> users) {
 
         if (users == null) {
             return List.of();
