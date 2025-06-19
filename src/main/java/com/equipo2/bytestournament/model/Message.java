@@ -46,12 +46,14 @@ public class Message {
     /**
      * Identificador único del torneo. No debe ser nulo
      */
+    // TODO: Relación entre Message y Match
     @Column(name = "match_id", updatable = false, nullable = false)
     private Long matchId;
 
     /**
      * Identificador único del torneo que se genera automaticamente
      */
+    // TODO: Relación entre Message y Tournament
     @Column(name = "tournament_id", updatable = false, nullable = false)
     private Long tournamentId;
 
@@ -75,5 +77,4 @@ public class Message {
         this.matchId = matchId;
         this.tournamentId = tournamentId;
     }
-
 }

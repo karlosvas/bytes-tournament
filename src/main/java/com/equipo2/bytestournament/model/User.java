@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
 
+
 /**
  * Entidad JPA que representa un usuario de la aplicación de torneos.
  * Contiene el nombre de usuario, el email, la contraseña, el rol, el ranking y los puntos de cada usuario.

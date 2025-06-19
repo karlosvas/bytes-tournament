@@ -44,8 +44,7 @@ public class Tournament {
     @Column(name = "status", updatable = true, nullable = false)
     private Status status;
 
-    public Tournament() {
-    }
+    public Tournament() {}
 
     /**
      * Construye un nuevo torneo con nombre, número máximo de jugadores y estado.

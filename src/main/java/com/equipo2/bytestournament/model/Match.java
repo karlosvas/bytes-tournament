@@ -7,7 +7,6 @@ import lombok.Data;
 
 /**
  * Entidad JPA que representa una partida de un torneo de la aplicación de torneos.
- * <p>
  * Contiene el id del torneo, el jugador 1, el jugador 2 y la ronda actual.
  *
  * @author Christian Escalas
@@ -69,7 +68,6 @@ public class Match {
      * @param player1      Jugador1 que participa en la partida. No puede ser null ni vacío.
      * @param player2      Jugador2 que participa en la partida. No puede ser null ni vacío.
      * @param result       resultado actual de la partida. No puede ser null ni vacío.
-     * @param round        ronda actual de la partida.
      */
     public Match(Long tournamentId, User player1, User player2, Result result) {
         this.tournamentId = tournamentId;
