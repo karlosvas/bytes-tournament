@@ -167,4 +167,5 @@ public class User {
         }
         this.points = points;
     }
+    
 }
