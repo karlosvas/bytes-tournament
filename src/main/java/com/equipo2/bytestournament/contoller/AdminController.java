@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * /admin Ruta para usuarios con rol ADMIN especificado en la configuración de seguridad
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
     /**
      * dashboard es un método que maneja las solicitudes GET a la ruta "/dashboard".
