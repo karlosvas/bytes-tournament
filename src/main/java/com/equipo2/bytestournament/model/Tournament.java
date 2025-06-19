@@ -2,6 +2,7 @@ package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
 import com.equipo2.bytestournament.enums.Status;
+import lombok.Data;
 
 
 /**
@@ -12,7 +13,9 @@ import com.equipo2.bytestournament.enums.Status;
  * @author Christian Escalas
  */
 
+@Data
 @Entity
+@Table(name = "tournaments")
 public class Tournament {
 
     /**
@@ -42,8 +45,7 @@ public class Tournament {
     @Column(name = "status", updatable = true, nullable = false)
     private Status status;
 
-    public Tournament() {
-    }
+    public Tournament() {}
 
     /**
      * Construye un nuevo torneo con nombre, número máximo de jugadores y estado.
@@ -53,63 +55,8 @@ public class Tournament {
      * @param status     estado actual del torneo. No puede ser null ni vacío.
      */
     public Tournament(String name, Integer maxPlayers, Status status) {
-
-        if (name == null) {
-            throw new IllegalArgumentException("El nombre no puede ser nulo.");
-        }
-        if (maxPlayers == null) {
-            throw new IllegalArgumentException("El nombre no puede ser nulo.");
-        }
-
-        if (maxPlayers < 2) {
-            throw new IllegalArgumentException("Al menos deben participar 2 jugadores.");
-        }
-        if (status == null) {
-            throw new IllegalArgumentException("El estado no puede ser nulo.");
-        }
-
         this.name = name;
         this.maxPlayers = maxPlayers;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("El nombre no puede ser nulo.");
-        }
-        this.name = name;
-    }
-
-    public Integer getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    public void setMaxPlayers(Integer maxPlayers) {
-        if (maxPlayers == null) {
-            throw new IllegalArgumentException("El nombre no puede ser nulo.");
-        }
-        if (maxPlayers < 2) {
-            throw new IllegalArgumentException("Al menos deben participar 2 jugadores.");
-        }
-        this.maxPlayers = maxPlayers;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        if (status == null) {
-            throw new IllegalArgumentException("El estado no puede ser nulo.");
-        }
         this.status = status;
     }
 }
