@@ -2,16 +2,18 @@ package com.equipo2.bytestournament.model;
 
 import com.equipo2.bytestournament.enums.Role;
 import jakarta.persistence.*;
+import lombok.Data;
+import java.util.List;
 
 /**
  * Entidad JPA que representa un usuario de la aplicación de torneos.
- * <p>
  * Contiene el nombre de usuario, el email, la contraseña, el rol, el ranking y los puntos de cada usuario.
  *
  * @author Christian Escalas
  */
-
+@Data
 @Entity
+@Table(name = "users")
 public class User {
 
     /**
@@ -59,6 +61,12 @@ public class User {
     @Column(name = "points", updatable = true, nullable = false)
     private Integer points;
 
+    @OneToMany(mappedBy = "player1")
+    private List<Match> matchesAsPlayer1;
+
+    @OneToMany(mappedBy = "player2")
+    private List<Match> matchesAsPlayer2;
+
     public User() {
     }
 
@@ -73,23 +81,6 @@ public class User {
      * @param rank     ranking o categoría; puede ser null o vacío.
      */
     public User(String username, String email, String password, Role role, String rank) {
-
-        if (username == null) {
-            throw new IllegalArgumentException("El nombre de usuario no puede ser nulo.");
-        }
-        if (email == null) {
-            throw new IllegalArgumentException("El email no puede ser nulo.");
-        }
-        if (password == null) {
-            throw new IllegalArgumentException("la contraseña no puede ser nula.");
-        }
-        if (role == null) {
-            throw new IllegalArgumentException("El rol no puede ser nulo.");
-        }
-        if (rank == null) {
-            throw new IllegalArgumentException("El ránking no puede ser nulo.");
-        }
-
         this.username = username;
         this.email = email;
         this.password = password;
@@ -97,75 +88,4 @@ public class User {
         this.rank = rank;
         this.points = 0;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        if (username == null) {
-            throw new IllegalArgumentException("El nombre de usuario no puede ser nulo.");
-        }
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        if (email == null) {
-            throw new IllegalArgumentException("El email no puede ser nulo.");
-        }
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        if (password == null) {
-            throw new IllegalArgumentException("la contraseña no puede ser nula.");
-        }
-        this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        if (role == null) {
-            throw new IllegalArgumentException("El rol no puede ser nulo.");
-        }
-        this.role = role;
-    }
-
-    public String getRank() {
-        return rank;
-    }
-
-    public void setRank(String rank) {
-        if (rank == null) {
-            throw new IllegalArgumentException("El ránking no puede ser nulo.");
-        }
-        this.rank = rank;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        if (points < 0) {
-            throw new IllegalArgumentException("Los puntos no pueden ser negativos.");
-        }
-        this.points = points;
-    }
-    
 }

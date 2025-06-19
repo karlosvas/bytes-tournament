@@ -1,4 +1,4 @@
-package com.equipo2.bytestournament.model;
+package com.equipo2.bytestournament.enums;
 
    public enum AuthorityPrivilege {
     USER_CREATE,

@@ -17,7 +17,7 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 
 # Empaqueta la aplicación
-RUN mvn package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Etapa de ejecución usando una imagen más ligera
 FROM eclipse-temurin:17-jre-jammy
@@ -26,7 +26,7 @@ FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 # Copia el JAR específico desde la etapa de construcción
-COPY --from=build /app/target/bytestournament-0.0.1-SNAPSHOT-jar-with-dependencies.jar app.jar
+COPY --from=build /app/target/bytestournament-0.0.1-SNAPSHOT.jar app.jar
 
 # Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
