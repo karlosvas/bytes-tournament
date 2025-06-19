@@ -8,8 +8,16 @@ package com.equipo2.bytestournament.enums;
  */
 
 public enum Role {
+    ADMIN("ADMIN"),
+    PLAYER("PLAYER");
 
-    ADMIN,
-    PLAYER,
+    private final String name;
 
+    Role(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
