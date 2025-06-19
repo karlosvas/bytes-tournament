@@ -18,8 +18,8 @@ import lombok.Setter;
 /**
  *  MessageDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
- * Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
- * ni las entidades del modelo de datos.
+ *  Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
+ *  ni las entidades del modelo de datos.
  */
 public class MessageDTO {
     @NotNull
@@ -37,6 +37,7 @@ public class MessageDTO {
     @NotNull
     @Schema(description = "Fecha y hora del mensaje", example = "2024-06-16T15:30:00")
     private LocalDateTime timestamp;
+
     private Long matchId;
 
     @NotNull

@@ -1,9 +1,7 @@
 package com.equipo2.bytestournament.DTO;
 
-import javax.naming.spi.DirStateFactory.Result;
-
-import org.apache.catalina.User;
-
+import com.equipo2.bytestournament.enums.Result;
+import com.equipo2.bytestournament.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,12 +23,12 @@ import jakarta.validation.constraints.NotNull;
  */
 public class MatchDTO {
     @NotNull
-    @Schema(description = "Identificador único del partido", example = "100")
+    @Schema(description = "Identificador único del partido", example = "100", required = true)
     private Long id;
 
     @NotNull
-    @Schema(description = "ID del torneo", example = "1")
-    private Long torunamentId;
+    @Schema(description = "ID del torneo", example = "1", required = true)
+    private Long tournamentId;
 
     @NotNull
     @Schema(description = "Jugador 1")
