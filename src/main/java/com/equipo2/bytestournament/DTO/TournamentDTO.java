@@ -15,24 +15,27 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "DTO para torneos")
-
 /**
  *  TournamentDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
-    Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
-    ni las entidades del modelo de datos.
+ *  Su objetivo principal es encapsular y transferir solo la información necesaria, sin exponer la lógica interna
+ *  ni las entidades del modelo de datos.
  */
 public class TournamentDTO {
 
     @NotNull
-    @Schema(description = "Identificador único del torneo", example = "1", required=true)
+    @Schema(description = "Identificador único del torneo", example = "1", required = true)
     private Long id;
 
     @NotBlank
-    @Schema(description = "Nombre del torneo", example = "Torneo de Primavera", required = true)
+    @Schema(description = "Nombre del torneo", example = "Torneo de Primavera")
     private String name;
 
+    @NotBlank
+    @Schema(description = "Cantidad máxima de participantes", example = "6", required = true)
+    private Integer maxPlayers;
+
     @NotNull
-    @Schema(description = "Estado del torneo", example = "EN_CURSO", required = true)
+    @Schema(description = "Estado del torneo", example = "EN_CURSO")
     private Status status;
 }

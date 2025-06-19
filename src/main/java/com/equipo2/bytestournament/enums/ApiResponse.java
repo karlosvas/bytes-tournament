@@ -1,0 +1,90 @@
+package com.equipo2.bytestournament.enums;
+
+import org.springframework.http.HttpStatus;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Enumeración de errores de la API con sus respectivos códigos de estado HTTP, títulos y detalles.
+ * Esta enumeración se utiliza para estandarizar los mensajes de error devueltos por la API.
+ * see @Getter, @RequiredArgsConstructor son anotaciones de Lombok para generar automáticamente los getters
+ * y constructores con todos los argumentos
+ */
+@Getter
+@RequiredArgsConstructor
+public enum ApiResponse {
+    // User-related responses
+    USER_DELETE_FAILED(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Eliminación de Usuario Fallida",
+            "No se pudo eliminar el usuario debido a un error interno."),
+    USER_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "Usuario No Encontrado",
+            "El usuario solicitado no existe en el sistema."),
+    USER_ALREADY_EXISTS(
+            HttpStatus.CONFLICT,
+            "Usuario Existente",
+            "El usuario ya existe con el identificador proporcionado."),
+    AUTHENTICATION_FAILED(
+            HttpStatus.UNAUTHORIZED,
+            "Autenticación Fallida",
+            "Credenciales Inválidas"),
+    // Other responses
+    BAD_REQUEST(
+            HttpStatus.BAD_REQUEST,
+            "Petición Incorrecta",
+            "La solicitud no se pudo procesar debido a datos incorrectos o mal formados."),
+    FORBIDDEN(
+            HttpStatus.FORBIDDEN,
+            "Acción Prohibida",
+            "Permisos insuficientes para realizar esta acción."),
+    FORBIDDEN_CREATE_ADMIN(
+            HttpStatus.FORBIDDEN,
+            "Acción Prohibida",
+            "No se puede crear un usuario con rol de administrador sin permisos adecuados."),
+    RECORD_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "Registro No Encontrado",
+            "El registro solicitado no existe en la base de datos."),
+    METHOD_NOT_ALLOWED(
+            HttpStatus.METHOD_NOT_ALLOWED,
+            "Método No Permitido",
+            "El método HTTP utilizado no está permitido para este recurso."),
+    CONFLICT(
+            HttpStatus.CONFLICT,
+            "Conflicto de Recursos",
+            "La solicitud no se puede completar debido a un conflicto con el estado actual del recurso."),
+    DUPLICATE_RESOURCE(
+            HttpStatus.CONFLICT,
+            "Recurso Duplicado",
+            "El recurso que intenta crear ya existe."),
+    UNPROCESSABLE_ENTITY(
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "Entidad No Procesable",
+            "La solicitud contiene datos que no se pueden procesar debido a errores de validación."),
+    ASSOCIATED_RESOURCES(
+            HttpStatus.CONFLICT,
+            "Recurso Asociado",
+            "No se puede eliminar el recurso porque tiene dependencias asociadas."),
+    REQUEST_TIMEOUT(
+            HttpStatus.REQUEST_TIMEOUT,
+            "Operación Expirada",
+            "La operación ha tardado demasiado tiempo y ha expirado."),
+    INTERNAL_SERVER_ERROR(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "Error Interno del Servidor",
+            "Se ha producido un error inesperado en el servidor."),
+    EXTERNAL_API_ERROR(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            "Servicio No Disponible",
+            "El servicio externo requerido no está disponible temporalmente."),
+    ENDPOINT_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "Endpoint No Encontrado",
+            "El endpoint solicitado de la API no existe.");
+
+    private final HttpStatus status;
+    private final String title;
+    private final String detail;
+}

@@ -1,10 +1,11 @@
 package com.equipo2.bytestournament.model;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
  * Entidad JPA que representa un mensaje en el chat de una partida de la aplicación de torneos.
- *
+ * <p>
  * Contiene el id del mensaje, el id del jugador que lo envía, el contenido, la fecha y hora de envío del mensaje, el id de la partidaa y el id del torneo.
  *
  * @author Christian Escalas
@@ -12,12 +13,11 @@ import java.time.LocalDateTime;
 @Entity
 public class Message {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     /**
      * Identificador único del mensaje. No debe ser nulo
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
@@ -34,7 +34,8 @@ public class Message {
     private String content;
 
     /**
-     * Fecha y hora de envío del mensaje. No puede ser nulo.*/
+     * Fecha y hora de envío del mensaje. No puede ser nulo.
+     */
     @Column(name = "timestamp", updatable = false, nullable = false)
     private LocalDateTime timestamp;
 
@@ -57,13 +58,29 @@ public class Message {
      * Construye un nuevo mensaje con el id del jugador que lo manda, el contenido, la fecha y hora del envío,
      * el id de la partida y el id del torneo al que pertenece la partida.
      *
-     * @param senderId id del jugador que envía el mensaje que participa en la partida. No puede ser null ni vacío.
-     * @param content contenido del mensaje.
-     * @param timestamp fecha y hora en la que se envía el mensaje.
-     * @param matchId id de la partida
+     * @param senderId     id del jugador que envía el mensaje que participa en la partida. No puede ser null ni vacío.
+     * @param content      contenido del mensaje.
+     * @param timestamp    fecha y hora en la que se envía el mensaje.
+     * @param matchId      id de la partida
      * @param tournamentId id del torneo al que pertenece la partida
      */
     public Message(Long senderId, String content, LocalDateTime timestamp, Long matchId, Long tournamentId) {
+
+        if (senderId == null) {
+            throw new IllegalArgumentException("El ID del jugador que envía el mensaje no puede ser nulo.")
+        }
+        if (content == null) {
+            throw new IllegalArgumentException("El contenido del mensaje no puede ser nulo.")
+        }
+        if (timestamp == null) {
+            throw new IllegalArgumentException("La fecha y hora de envío del mensaje no puede ser nulo.")
+        }
+        if (matchId == null) {
+            throw new IllegalArgumentException("El ID de la partida no puede ser nulo.")
+        }
+        if (tournamentId == null) {
+            throw new IllegalArgumentException("El ID del torneo no puede ser nulo.")
+        }
 
         this.senderId = senderId;
         this.content = content;
@@ -85,6 +102,9 @@ public class Message {
     }
 
     public void setContent(String content) {
+        if (content == null) {
+            throw new IllegalArgumentException("El contenido del mensaje no puede ser nulo.")
+        }
         this.content = content;
     }
 
