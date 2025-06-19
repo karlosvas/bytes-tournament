@@ -3,6 +3,8 @@ package com.equipo2.bytestournament.model;
 import com.equipo2.bytestournament.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.List;
+
 
 /**
  * Entidad JPA que representa un usuario de la aplicación de torneos.
@@ -60,7 +62,14 @@ public class User {
     @Column(name = "points", updatable = true, nullable = false)
     private Integer points;
 
-    public User() {}
+    @OneToMany(mappedBy = "player1")
+    private List<Match> matchesAsPlayer1;
+
+    @OneToMany(mappedBy = "player2")
+    private List<Match> matchesAsPlayer2;
+
+    public User() {
+    }
 
     /**
      * Construye un nuevo usuario con nombre, email, contraseña, rol y rango es opcional.

@@ -2,6 +2,7 @@ package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
 import com.equipo2.bytestournament.enums.Result;
+import com.equipo2.bytestournament.model.User;
 import lombok.Data;
 
 /**
@@ -33,15 +34,15 @@ public class Match {
     /**
      * Jugador 1 que participa en la partida. No debe ser nulo
      */
-    // TODO: Relación entre Match y User
-    @Column(name = "player1", updatable = true, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "player1_id", nullable = false)
     private User player1;
 
     /**
      * Jugador 2 que participa en la partida. No debe ser nulo
      */
-    // TODO: Relación entre Match y User
-    @Column(name = "player2", updatable = true, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "player2_id", nullable = false)
     private User player2;
 
     /**

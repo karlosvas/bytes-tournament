@@ -12,7 +12,6 @@ import lombok.Data;
  *
  * @author Christian Escalas
  */
-
 @Data
 @Entity
 @Table(name = "tournaments")
