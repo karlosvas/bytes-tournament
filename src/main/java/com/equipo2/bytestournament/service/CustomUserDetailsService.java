@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.equipo2.bytestournament.repository.UserRepository;
+
+import java.util.HashSet;
 import java.util.Optional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.config.JwtUtil;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.exceptions.RequestException;
 import com.equipo2.bytestournament.mapper.UserMapper;
 import com.equipo2.bytestournament.model.User;
@@ -149,5 +152,18 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .authorities(new SimpleGrantedAuthority(user.getRole().getName()))
                 .build();
     }
-    
+
+    public void addAuthorityToUser(Long userId, AuthorityPrivilegies authority) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+        
+        User existingUser = userOptional.get();
+        if (existingUser.getAuthorityPrivilegies() == null) {
+            existingUser.setAuthorityPrivilegies(new HashSet<>());
+        }
+        existingUser.getAuthorityPrivilegies().add(authority);
+        userRepository.save(existingUser);
+    }
 }

@@ -2,7 +2,6 @@ package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
 import com.equipo2.bytestournament.enums.Result;
-import com.equipo2.bytestournament.model.User;
 import lombok.Data;
 
 /**
@@ -27,7 +26,8 @@ public class Match {
     /**
      * Identificador único del torneo. No debe ser nulo
      */
-    // TODO: Relación entre Match y Tournament
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "tournament_id", updatable = false, nullable = false)
     private Long tournamentId;
 

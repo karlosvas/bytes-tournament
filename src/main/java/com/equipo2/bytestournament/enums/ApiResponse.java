@@ -1,8 +1,6 @@
 package com.equipo2.bytestournament.enums;
 
 import org.springframework.http.HttpStatus;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Enumeración de errores de la API con sus respectivos códigos de estado HTTP, títulos y detalles.
@@ -10,8 +8,6 @@ import lombok.RequiredArgsConstructor;
  * see @Getter, @RequiredArgsConstructor son anotaciones de Lombok para generar automáticamente los getters
  * y constructores con todos los argumentos
  */
-@Getter
-@RequiredArgsConstructor
 public enum ApiResponse {
     // User-related responses
     USER_DELETE_FAILED(
@@ -87,4 +83,34 @@ public enum ApiResponse {
     private final HttpStatus status;
     private final String title;
     private final String detail;
+
+    private ApiResponse(HttpStatus status, String title, String detail) {
+        this.status = status;
+        this.title = title;
+        this.detail = detail;
+    }
+
+    /**
+     * Obtiene el código de estado HTTP asociado a la respuesta de la API.
+     * @return El código de estado HTTP.
+     */
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * Obtiene el título de la respuesta de la API.
+     * @return El título de la respuesta.
+     */
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+     * Obtiene el detalle de la respuesta de la API.
+     * @return El detalle de la respuesta.
+     */
+    public String getDetail() {
+        return detail;
+    }
 }

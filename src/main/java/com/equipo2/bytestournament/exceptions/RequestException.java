@@ -2,10 +2,12 @@ package com.equipo2.bytestournament.exceptions;
 
 import java.util.Map;
 import com.equipo2.bytestournament.enums.ApiResponse;
+
+import lombok.Getter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import lombok.Getter;
 
 /**
  * Excepción personalizada para representar errores de petición HTTP.
@@ -21,7 +23,7 @@ public class RequestException extends RuntimeException {
     private final String detail;
     private final HttpStatus statusCode;
     private Map<String, String> reasons;
-    private ApiResponse apiResponse;
+    private final ApiResponse apiResponse;
     private final Logger logger = LoggerFactory.getLogger(RequestException.class);
 
     /**

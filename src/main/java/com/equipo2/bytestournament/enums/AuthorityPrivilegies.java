@@ -1,6 +1,6 @@
 package com.equipo2.bytestournament.enums;
 
-public enum AuthorityPrivilege {
+public enum AuthorityPrivilegies {
     USER_CREATE,
     USER_DELETE,
     USER_UPDATE,
