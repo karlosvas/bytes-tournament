@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.equipo2.bytestournament.repository.UserRepository;
-
 import java.util.HashSet;
 import java.util.Optional;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,12 +14,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.config.JwtUtil;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.model.Users;
 import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.exceptions.RequestException;
 import com.equipo2.bytestournament.mapper.UserMapper;
-import com.equipo2.bytestournament.model.User;
 import org.springframework.security.core.Authentication;
-
 
 /**
  * CustomUserDetailsService es una implementación de UserDetailsService que se utiliza para cargar los detalles del usuario desde la base de datos.
@@ -50,13 +48,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     public String registerUser(UserDTO userDTO){
         try {
              // UserDTO -> User
-            User user = userMapper.userDtoToUser(userDTO);
+            Users user = userMapper.userDtoToUser(userDTO);
 
             // Ciframos la contraseña
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             
             // Guardar en la base de datos el User
-            User newUser = userRepository.save(user);
+            Users newUser = userRepository.save(user);
 
             // Creamos el objecto authentication
             Authentication authentication = authenticationManager.authenticate(
@@ -99,7 +97,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         try {
             // Obtener de la base de datos el User, pasandole el id de DTO
             String email = authentication.getName();
-            Optional<User> newUser = userRepository.findByEmail(email);
+            Optional<Users> newUser = userRepository.findByEmail(email);
             
             // Si no existe devolvemos un error
             if(!newUser.isPresent())
@@ -118,7 +116,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDTO profileUser(Long id) {
         try {
             // Cojemos de la base de datos el usuario con el id de userDTO
-            Optional<User> newUserOptional = userRepository.findById(id);
+            Optional<Users> newUserOptional = userRepository.findById(id);
             
             // Si no existe error
             if(!newUserOptional.isPresent())
@@ -140,11 +138,11 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepository.findByEmail(username);
+        Optional<Users> userOptional = userRepository.findByEmail(username);
 
         if(!userOptional.isPresent())
             throw new UsernameNotFoundException("Usuario no encontrado: " + username);
-        User user = userOptional.get();
+        Users user = userOptional.get();
             
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
@@ -154,12 +152,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     public void addAuthorityToUser(Long userId, AuthorityPrivilegies authority) {
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Users> userOptional = userRepository.findById(userId);
         if (!userOptional.isPresent()) {
             throw new RuntimeException("User not found with id: " + userId);
         }
         
-        User existingUser = userOptional.get();
+        Users existingUser = userOptional.get();
         if (existingUser.getAuthorityPrivilegies() == null) {
             existingUser.setAuthorityPrivilegies(new HashSet<>());
         }

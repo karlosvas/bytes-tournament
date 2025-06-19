@@ -1,7 +1,7 @@
 package com.equipo2.bytestournament.mapper;
 
 import com.equipo2.bytestournament.DTO.UserDTO;
-import com.equipo2.bytestournament.model.User;
+import com.equipo2.bytestournament.model.Users;
 import org.mapstruct.Mapper;
 import java.util.List;
 
@@ -12,11 +12,11 @@ import java.util.List;
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    UserDTO userToUserDTO(User user);
+    UserDTO userToUserDTO(Users user);
 
-    User userDtoToUser(UserDTO userDTO);
+    Users userDtoToUser(UserDTO userDTO);
 
-    List<UserDTO> userToUserDtos(List<User> users);
+    List<UserDTO> userToUserDtos(List<Users> users);
 
-    List<User> userDtosToUsers(List<UserDTO> userDTOS);
+    List<Users> userDtosToUsers(List<UserDTO> userDTOS);
 }

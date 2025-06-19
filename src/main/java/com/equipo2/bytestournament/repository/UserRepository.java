@@ -1,14 +1,12 @@
 package com.equipo2.bytestournament.repository;
 
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.equipo2.bytestournament.model.User;
+import com.equipo2.bytestournament.model.Users;
  
 @Repository
-public interface UserRepository extends JpaRepository  <User, Long> {
+public interface UserRepository extends JpaRepository  <Users, Long> {
 
     /**
      * Busca un usuario por su nombre de usuario.
@@ -16,7 +14,7 @@ public interface UserRepository extends JpaRepository  <User, Long> {
      * @param username el nombre de usuario a buscar
      * @return un Optional con el usuario si existe, o vacío si no
      */
-    Optional<User> findByUsername(String username);
+    Optional<Users> findByUsername(String username);
 
     /**
      * Busca un usuario por su correo electrónico.
@@ -24,5 +22,5 @@ public interface UserRepository extends JpaRepository  <User, Long> {
      * @param email el correo electrónico a buscar
      * @return un Optional con el usuario si existe, o vacío si no
      */
-    Optional<User> findByEmail(String email);
+    Optional<Users> findByEmail(String email);
 }

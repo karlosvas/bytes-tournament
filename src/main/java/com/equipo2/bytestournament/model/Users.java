@@ -4,12 +4,10 @@ import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -23,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
+public class Users implements UserDetails{
 
     /**
      * Identificador único del usuario que se genera automaticamente
@@ -76,16 +74,15 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "player2")
     private List<Match> matchesAsPlayer2;
 
-   @ElementCollection
-    @CollectionTable(name = "user_authority_privilegies", 
-                    joinColumns = @JoinColumn(name = "user_id"))
+    @ElementCollection
+    @CollectionTable(name = "user_authority_privilegies", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<AuthorityPrivilegies> authorityPrivilegies = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Combina los privilegios del rol con los privilegios adicionales del usuario
-        Set<AuthorityPrivilegies> allPrivilegies = new HashSet<>(role.getAuthorityPrivilegies());
+        Set<AuthorityPrivilegies> allPrivilegies = new HashSet<>();
         if (authorityPrivilegies != null) {
             allPrivilegies.addAll(authorityPrivilegies);
         }
@@ -98,7 +95,7 @@ public class User implements UserDetails{
     /**
      * Constructor por defecto requerido por JPA.
      */
-    public User() {
+    public Users() {
     }
 
     /**
@@ -111,7 +108,7 @@ public class User implements UserDetails{
      * @param role     rol del usuario. No puede ser null.
      * @param rank     ranking o categoría; puede ser null o vacío.
      */
-    public User(String username, String email, String password, Role role, String rank) {
+    public Users(String username, String email, String password, Role role, String rank) {
         this.username = username;
         this.email = email;
         this.password = password;
