@@ -67,12 +67,11 @@
 			<version>0.9.1</version>
 		</dependency>
 		<dependency>
-  </dependency>
-		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.7.3</version>
 		</dependency>
+		<dependency>
     		<groupId>org.projectlombok</groupId>
     		<artifactId>lombok</artifactId>
     		<version>1.18.36</version>
