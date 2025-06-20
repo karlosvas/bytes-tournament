@@ -1,5 +1,7 @@
 package com.equipo2.bytestournament.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +33,7 @@ import com.equipo2.bytestournament.service.CustomUserDetailsService;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
     /**
      * Un PasswordEncoder es un componente que se utiliza para codificar contraseñas de forma segura.
      * 
@@ -52,13 +55,17 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil, CustomUserDetailsService uds, AuthenticationManager authenticationManager) throws Exception {
+        logger.info("Configurando la cadena de filtros de seguridad HTTP");
         // Desabilita CSRF, establece la política de sesión como sin estado (stateless) y configura las reglas de autorización
         http
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/admin/**").hasRole("ADMIN")
-            .requestMatchers("/auth/**").permitAll() // Cualquier operación en /auth es permitida sin autenticación
+            .requestMatchers("/api/admin/**").hasRole("ADMIN")
+            .requestMatchers("/api/auth/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**").permitAll() // Cualquier operación en /auth es permitida sin autenticación y Swagger UI y OpenAPI también son accesibles sin autenticación
             .anyRequest().authenticated() 
         )
         // Se llama a el filtro de autenticación JWT y posteriormente al filtro de autorización JWT

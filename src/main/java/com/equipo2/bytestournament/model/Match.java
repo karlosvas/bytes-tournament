@@ -1,9 +1,8 @@
 package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
-import com.equipo2.bytestournament.enums.Result;
-import com.equipo2.bytestournament.model.User;
 import lombok.Data;
+import com.equipo2.bytestournament.enums.Result;
 
 /**
  * Entidad JPA que representa una partida de un torneo de la aplicación de torneos.
@@ -13,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "matches")
+@Table(name = "matches") // Ensure the table name is correctly set
 public class Match {
 
     /**
@@ -27,8 +26,7 @@ public class Match {
     /**
      * Identificador único del torneo. No debe ser nulo
      */
-    // TODO: Relación entre Match y Tournament
-    @Column(name = "tournament_id", updatable = false, nullable = false)
+    @Column(name = "tournament_id", nullable = false)
     private Long tournamentId;
 
     /**
@@ -49,7 +47,7 @@ public class Match {
      * Resultado de la partida. No debe ser nulo ni vacío.
      */
     @Enumerated(EnumType.STRING)
-    @Column(name = "result", updatable = true, nullable = false)
+    @Column(name = "result")
     private Result result;
 
     /**

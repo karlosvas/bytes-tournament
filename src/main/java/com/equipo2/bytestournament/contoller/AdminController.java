@@ -1,5 +1,6 @@
 package com.equipo2.bytestournament.contoller;
 
+import com.equipo2.bytestournament.service.CustomUserDetailsService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 
 /**
  * AdminController es un controlador REST que maneja las solicitudes relacionadas con la administración de usuarios.
@@ -18,25 +20,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+
+
+    private final CustomUserDetailsService userService;
+
+
+    public AdminController(CustomUserDetailsService userService) {
+        this.userService = userService;
+    }
+
+
     /**
      * dashboard es un método que maneja las solicitudes GET a la ruta "/dashboard".
-     * @return
+     * @return ResponseEntity<String> Un objeto ResponseEntity que contiene un mensaje de éxito y un estado HTTP 200 OK.
      */
     @GetMapping("/dashboard")
-    public ResponseEntity<?> dashboard() {
+    public ResponseEntity<String> dashboard() {
         // TODO: Implementar la lógica del dashboard de administración
         return ResponseEntity.ok("Admin Dashboard");
     }
-    
-    // TODO: Implementar el método para crear un usuario, necesario el UsuarioDTO
+
     /**
      * postMethodName es un método que maneja las solicitudes POST a la ruta "/user".
-     * @PreAuthorize("hasAutority('USER_CREATE')") Anotación que especifica, este método solo puede ser accedido por usuarios con el permiso "USER_CREATE".
+     * {@link PreAuthorize} Anotación que especifica, este método solo puede ser accedido por usuarios con el permiso "USER_CREATE".
      */
     @PostMapping("/user")
-    @PreAuthorize("hasAutority('USER_CREATE')")
-    public ResponseEntity<?> postMethodName(@RequestBody String username) {
+    @PreAuthorize("hasAuthority('USER_CREATE')")
+    public ResponseEntity<?> postMethodName(@RequestBody Long username) {
+        userService.addAuthorityToUser(username, AuthorityPrivilegies.USER_CREATE);
         return ResponseEntity.ok().build();
     }
-    
 }
+

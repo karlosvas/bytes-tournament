@@ -2,21 +2,31 @@ package com.equipo2.bytestournament.mapper;
 
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.model.User;
-import org.mapstruct.Mapper;
-import java.util.List;
+import org.springframework.stereotype.Component;
 
-/**
- * Mapper que convierte la entidad User a DTO y la DTO a entidad
- *
- * @author Christian Escalas
- */
-@Mapper(componentModel = "spring")
-public interface UserMapper {
-    UserDTO userToUserDTO(User user);
-
-    User userDtoToUser(UserDTO userDTO);
-
-    List<UserDTO> userToUserDtos(List<User> users);
-
-    List<User> userDtosToUsers(List<UserDTO> userDTOS);
+@Component
+public class UserMapper {
+    
+    public UserDTO userToUserDTO(User user) {
+       return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .rank(user.getRank())
+                .points(user.getPoints())
+                .build();
+    }
+    
+    public User userDTOToUser(UserDTO dto) {
+       return User.builder()
+                .username(dto.getUsername())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .role(dto.getRole())
+                .rank(dto.getRank())
+                .points(dto.getPoints())
+                .build();
+    }
 }

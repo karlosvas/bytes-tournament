@@ -10,7 +10,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
+-- SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -19,46 +19,9 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- TOC entry 859 (class 1247 OID 16408)
--- Name: match_result; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public.match_result AS ENUM (
-    'PLAYER1_WIN',
-    'PLAYER2_WIN',
-    'DRAW'
-);
-
-
-ALTER TYPE public.match_result OWNER TO postgres;
-
---
--- TOC entry 856 (class 1247 OID 16401)
--- Name: tournament_status; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public.tournament_status AS ENUM (
-    'PENDING',
-    'ONGOING',
-    'FINISHED'
-);
-
-
-ALTER TYPE public.tournament_status OWNER TO postgres;
-
---
--- TOC entry 850 (class 1247 OID 16391)
--- Name: user_role; Type: TYPE; Schema: public; Owner: postgres
---
-
-CREATE TYPE public.user_role AS ENUM (
-    'ADMIN',
-    'PLAYER'
-);
-
-
-ALTER TYPE public.user_role OWNER TO postgres;
+-- --
+-- -- TOC entry 859 (class 1247 OID 16408)
+-- -- Name: match_result; Type: TYPE; Schema: public; Owner: postgres
 
 SET default_tablespace = '';
 
@@ -70,11 +33,11 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.matches (
-    id uuid NOT NULL,
-    tournament_id uuid NOT NULL,
-    player1_id uuid,
-    player2_id uuid,
-    result public.match_result,
+    id BIGINT NOT NULL,
+    tournament_id BIGINT NOT NULL,
+    player1_id BIGINT,
+    player2_id BIGINT,
+    result varchar(20) check (result IN ('PLAYER1_WIN', 'PLAYER2_WIN', 'DRAW', 'IN_PROGRESS')) NOT NULL,
     round integer NOT NULL
 );
 
@@ -87,12 +50,12 @@ ALTER TABLE public.matches OWNER TO postgres;
 --
 
 CREATE TABLE public.messages (
-    id uuid NOT NULL,
-    sender_id uuid NOT NULL,
+    id BIGINT NOT NULL,
+    sender_id BIGINT NOT NULL,
     content text NOT NULL,
     "timestamp" timestamp with time zone NOT NULL,
-    match_id uuid,
-    tournament_id uuid
+    match_id BIGINT,
+    tournament_id BIGINT
 );
 
 
@@ -104,8 +67,8 @@ ALTER TABLE public.messages OWNER TO postgres;
 --
 
 CREATE TABLE public.tournament_players (
-    tournament_id uuid NOT NULL,
-    user_id uuid NOT NULL
+    tournament_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL
 );
 
 
@@ -117,10 +80,10 @@ ALTER TABLE public.tournament_players OWNER TO postgres;
 --
 
 CREATE TABLE public.tournaments (
-    id uuid NOT NULL,
+    id BIGINT NOT NULL,
     name character varying(100) NOT NULL,
     max_players integer NOT NULL,
-    status public.tournament_status NOT NULL
+    status varchar(20) check (status IN ('PENDING', 'ONGOING', 'FINISHED')) NOT NULL
 );
 
 
@@ -132,17 +95,26 @@ ALTER TABLE public.tournaments OWNER TO postgres;
 --
 
 CREATE TABLE public.users (
-    role public.user_role NOT NULL,
-    id uuid NOT NULL,
-    username character varying(50) NOT NULL,
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    username character varying(50) NOT NULL unique,
     password character varying(255) NOT NULL,
-    email character varying(100),
-    rank character varying(50),
+    email character varying(100) NOT NULL unique,
+    rank character varying(50) NOT NULL,
+    role varchar(20) check (role IN ('ADMIN', 'PLAYER')) NOT NULL DEFAULT 'PLAYER',
     points integer NOT NULL
 );
 
 
 ALTER TABLE public.users OWNER TO postgres;
+
+CREATE TABLE public.user_authority_privilegies (
+    user_id BIGINT NOT NULL,
+    authority_privilegies VARCHAR(255) check (authority_privilegies IN ('CREATE_TOURNAMENT', 'JOIN_TOURNAMENT', 'START_MATCH', 'SEND_MESSAGE', 'VIEW_MATCHES', 'VIEW_TOURNAMENTS', 'MANAGE_USERS')) NOT NULL,
+    CONSTRAINT fk_user_auth_priv FOREIGN KEY (user_id) REFERENCES public.users(id),
+    PRIMARY KEY (user_id, authority_privilegies)
+);
+
+ALTER TABLE public.user_authority_privilegies OWNER TO postgres;
 
 --
 -- TOC entry 4933 (class 0 OID 16435)

@@ -34,7 +34,7 @@ public class Tournament {
     /**
      * Cantidad máxima de jugadores que pueden participar en el torneo. No puede ser nulo.
      */
-    @Column(name = "maxPlayers", updatable = true, nullable = false)
+    @Column(name = "max_players", updatable = true, nullable = false)
     private Integer maxPlayers;
 
     /**

@@ -17,7 +17,7 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 
 # Empaqueta la aplicación
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 # Etapa de ejecución usando una imagen más ligera
 FROM eclipse-temurin:17-jre-jammy

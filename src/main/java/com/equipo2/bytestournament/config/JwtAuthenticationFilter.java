@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-             // TODO: Deserializar directamente a tu modelo Usuario para ello es necesario el modelo Usuario.
+             logger.info("Procesando solicitud de autenticación");
             User usuario = new ObjectMapper()
                 .readValue(request.getInputStream(), User.class);
 

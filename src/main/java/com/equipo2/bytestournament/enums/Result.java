@@ -8,9 +8,8 @@ package com.equipo2.bytestournament.enums;
  */
 
 public enum Result {
-
-    PENDING,
     PLAYER1_WIN,
-    PLAYER2_WIN
-
+    PLAYER2_WIN,
+    PENDING,
+    DRAW
 }

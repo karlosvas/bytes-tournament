@@ -16,6 +16,6 @@ public interface MatchMapper {
     Match matchDtoToMatch(MatchDTO matchDTO);
 
     List<MatchDTO> matchToMatchDtos(List<Match> matches);
-
+    
     List<Match> matchDtosToMatches(List<MatchDTO> matchDTOs);
 }

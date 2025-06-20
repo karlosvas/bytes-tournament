@@ -1,9 +1,18 @@
 package com.equipo2.bytestournament.model;
 
+import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
+import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 /**
@@ -15,7 +24,9 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
-public class User {
+@AllArgsConstructor
+@Builder
+public class User implements UserDetails{
 
     /**
      * Identificador único del usuario que se genera automaticamente
@@ -53,8 +64,9 @@ public class User {
     /**
      * Categoría del usuario. No puede ser nula
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "rank", updatable = true, nullable = false)
-    private String rank;
+    private Rank rank;
 
     /**
      * Puntos del usuario. Valor no negativo.
@@ -68,6 +80,27 @@ public class User {
     @OneToMany(mappedBy = "player2")
     private List<Match> matchesAsPlayer2;
 
+    @ElementCollection
+    @CollectionTable(name = "user_authority_privilegies", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<AuthorityPrivilegies> authorityPrivilegies = new HashSet<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Combina los privilegios del rol con los privilegios adicionales del usuario
+        Set<AuthorityPrivilegies> allPrivilegies = new HashSet<>();
+        if (authorityPrivilegies != null) {
+            allPrivilegies.addAll(authorityPrivilegies);
+        }
+        
+        return allPrivilegies.stream()
+                .map(authority -> (GrantedAuthority) () -> authority.name())
+                .toList();
+    }
+
+    /**
+     * Constructor por defecto requerido por JPA.
+     */
     public User() {
     }
 
@@ -81,7 +114,7 @@ public class User {
      * @param role     rol del usuario. No puede ser null.
      * @param rank     ranking o categoría; puede ser null o vacío.
      */
-    public User(String username, String email, String password, Role role, String rank) {
+    public User(String username, String email, String password, Role role, Rank rank) {
         this.username = username;
         this.email = email;
         this.password = password;
