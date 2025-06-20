@@ -39,8 +39,11 @@
 				},
 				{
 					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -68,7 +71,17 @@
 				{
 					"name": "Me",
 					"request": {
-						"method": "POST",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c3VhcmlvQGVtYWlsLmNvbSIsImlhdCI6MTc1MDQ0NDcyOCwiZXhwIjoxNDcxMDQ0NDcyOH0.HGkSi_RCzFufSrU41MG6vrpoBoFQhGkXtpVw4SvNMDBQizlflaUMQN3-Z0UOei7nVMMtUDtWYySClcckwE3xPg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/users/me",
@@ -87,7 +100,7 @@
 				{
 					"name": "IdUser",
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/users/{id}",
