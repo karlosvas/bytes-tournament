@@ -95,11 +95,11 @@ ALTER TABLE public.tournaments OWNER TO postgres;
 --
 
 CREATE TABLE public.users (
-    id BIGINT PRIMARY KEY NOT NULL,
-    username character varying(50) NOT NULL,
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    username character varying(50) NOT NULL unique,
     password character varying(255) NOT NULL,
-    email character varying(100),
-    rank character varying(50),
+    email character varying(100) NOT NULL unique,
+    rank character varying(50) NOT NULL,
     role varchar(20) check (role IN ('ADMIN', 'PLAYER')) NOT NULL DEFAULT 'PLAYER',
     points integer NOT NULL
 );

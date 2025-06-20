@@ -3,6 +3,8 @@ package com.equipo2.bytestournament.model;
 import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,7 +23,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @Entity
 @Table(name = "users")
-public class Users implements UserDetails{
+@AllArgsConstructor
+@Builder
+public class User implements UserDetails{
 
     /**
      * Identificador único del usuario que se genera automaticamente
@@ -95,7 +99,7 @@ public class Users implements UserDetails{
     /**
      * Constructor por defecto requerido por JPA.
      */
-    public Users() {
+    public User() {
     }
 
     /**
@@ -108,7 +112,7 @@ public class Users implements UserDetails{
      * @param role     rol del usuario. No puede ser null.
      * @param rank     ranking o categoría; puede ser null o vacío.
      */
-    public Users(String username, String email, String password, Role role, String rank) {
+    public User(String username, String email, String password, Role role, String rank) {
         this.username = username;
         this.email = email;
         this.password = password;

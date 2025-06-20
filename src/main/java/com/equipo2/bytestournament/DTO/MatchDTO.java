@@ -1,7 +1,7 @@
 package com.equipo2.bytestournament.DTO;
 
 import com.equipo2.bytestournament.enums.Result;
-import com.equipo2.bytestournament.model.Users;
+import com.equipo2.bytestournament.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,11 +32,11 @@ public class MatchDTO {
 
     @NotNull
     @Schema(description = "Jugador 1")
-    private Users player1;
+    private User player1;
 
     @NotNull
     @Schema(description = "Jugador 2")
-    private Users player2;
+    private User player2;
 
     @NotNull
     @Schema(description = "Resultado del partido")
