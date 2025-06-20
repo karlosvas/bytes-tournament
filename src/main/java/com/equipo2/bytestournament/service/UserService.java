@@ -38,13 +38,9 @@ public class UserService {
             User user = userMapper.userDTOToUser(userDTO);
 
 
-            System.out.println("Registering user: " + user.getEmail());
-
             // Ciframos la contraseña
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             
-
-            System.out.println("Password encoded: " + user.getPassword());
 
             // Guardar en la base de datos el User
             User newUser = userRepository.save(user);
@@ -60,7 +56,6 @@ public class UserService {
             );
             
             // Generar y devolver JWT 
-            System.out.println("Generating JWT for user: " + newUser.getEmail());
             return jwtUtil.generateToken(authentication);
         } catch (Exception e) {
              // Si las credenciales son inválidas o hay otro problema
@@ -88,7 +83,6 @@ public class UserService {
         }
     }
 
-    
     public UserDTO profileData(Authentication authentication) {
         try {
             // Obtener de la base de datos el User, pasandole el id de DTO

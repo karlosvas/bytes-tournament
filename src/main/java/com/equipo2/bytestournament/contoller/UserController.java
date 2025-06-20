@@ -33,7 +33,7 @@ public class UserController {
 
 
     @PostMapping("/users/me")
-    @PreAuthorize("hasRole('ROLE_PLAYER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     public UserDTO personalData(@PathVariable Authentication authentication) {
         return userService.profileData(authentication);
     }

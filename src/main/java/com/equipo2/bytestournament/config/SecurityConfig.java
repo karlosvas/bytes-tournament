@@ -62,7 +62,10 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/api/admin/**").hasRole("ADMIN")
-            .requestMatchers("/api/auth/**").permitAll() // Cualquier operación en /auth es permitida sin autenticación
+            .requestMatchers("/api/auth/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**").permitAll() // Cualquier operación en /auth es permitida sin autenticación y Swagger UI y OpenAPI también son accesibles sin autenticación
             .anyRequest().authenticated() 
         )
         // Se llama a el filtro de autenticación JWT y posteriormente al filtro de autorización JWT

@@ -1,5 +1,6 @@
 package com.equipo2.bytestournament.DTO;
 
+import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,7 +48,7 @@ public class UserDTO {
 
     @NotBlank
     @Schema(description = "Rango del usuario", example = "Oro")
-    private String rank;
+    private Rank rank;
 
     @NotNull
     @Schema(description = "Puntos del usuario", example = "1500")

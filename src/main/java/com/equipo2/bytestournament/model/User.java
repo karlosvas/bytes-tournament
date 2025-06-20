@@ -1,6 +1,7 @@
 package com.equipo2.bytestournament.model;
 
 import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
+import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -63,8 +64,9 @@ public class User implements UserDetails{
     /**
      * Categoría del usuario. No puede ser nula
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "rank", updatable = true, nullable = false)
-    private String rank;
+    private Rank rank;
 
     /**
      * Puntos del usuario. Valor no negativo.
@@ -112,7 +114,7 @@ public class User implements UserDetails{
      * @param role     rol del usuario. No puede ser null.
      * @param rank     ranking o categoría; puede ser null o vacío.
      */
-    public User(String username, String email, String password, Role role, String rank) {
+    public User(String username, String email, String password, Role role, Rank rank) {
         this.username = username;
         this.email = email;
         this.password = password;

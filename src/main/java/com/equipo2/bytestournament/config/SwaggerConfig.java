@@ -23,9 +23,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API Sistema de Pedidos") // Título de la API
+                        .title("API Bytes Turnament") // Título de la API
                         .version("1.0") // Versión de la API
-                        .description("Documentación de la API para el sistema de pedidos. Proporciona endpoints para gestionar usuarios, autenticación y más.")) // Descripción de la API
+                        .description("Documentación de la API para el bytes turnament. Proporciona endpoints para gestionar usuarios, autenticación y más.")) // Descripción de la API
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
