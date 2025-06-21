@@ -15,7 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class UserMapperTest {
 
-    private final UserMapper userMapper = new UserMapper();
+    private final UserMapper userMapper;
+
+    public UserMapperTest(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     /**
      * Test para verificar la conversión de User a UserDTO y viceversa.
@@ -65,7 +69,7 @@ class UserMapperTest {
                 .points(100)
                 .build();
 
-        User user = userMapper.userDTOToUser(userDTO);
+        User user = userMapper.userDtoToUser(userDTO);
 
         // Verificamos que el User no sea nulo y que los valores coincidan con el UserDTO original, a excecpción del ID
         // porque se genera automáticamente al guardar en la base de datos.

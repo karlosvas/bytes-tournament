@@ -1,6 +1,7 @@
 package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import com.equipo2.bytestournament.enums.Result;
 
@@ -12,8 +13,10 @@ import com.equipo2.bytestournament.enums.Result;
  */
 @Data
 @Entity
+@Builder
 @Table(name = "matches") // Ensure the table name is correctly set
 public class Match {
+    public static final Integer UMBRAL = 100;
 
     /**
      * Identificador único de la partida. No debe ser nulo
@@ -24,10 +27,11 @@ public class Match {
     private Long id;
 
     /**
-     * Identificador único del torneo. No debe ser nulo
+     * Identificador único del torneo al que pertenece. No debe ser nulo
      */
-    @Column(name = "tournament_id", nullable = false)
-    private Long tournamentId;
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
+    private Tournament tournament;
 
     /**
      * Jugador 1 que participa en la partida. No debe ser nulo
@@ -62,16 +66,17 @@ public class Match {
     /**
      * Construye un nuevo torneo con nombre, número máximo de jugadores y estado.
      *
-     * @param tournamentId id del torneo al que pertenece la partida.
+     * @param tournament id del torneo al que pertenece la partida.
      * @param player1      Jugador1 que participa en la partida. No puede ser null ni vacío.
      * @param player2      Jugador2 que participa en la partida. No puede ser null ni vacío.
      * @param result       resultado actual de la partida. No puede ser null ni vacío.
      */
-    public Match(Long tournamentId, User player1, User player2, Result result) {
-        this.tournamentId = tournamentId;
+    public Match(Long id, Tournament tournament, User player1, User player2, Result result, Integer round) {
+        this.id = id;
+        this.tournament = tournament;
         this.player1 = player1;
         this.player2 = player2;
         this.result = result;
-        this.round = 1;
+        this.round = round;
     }
 }

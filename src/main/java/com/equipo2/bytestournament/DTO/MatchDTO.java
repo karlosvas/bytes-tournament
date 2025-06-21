@@ -22,21 +22,20 @@ import jakarta.validation.constraints.NotNull;
  * ni las entidades del modelo de datos.
  */
 public class MatchDTO {
-    @NotNull
     @Schema(description = "Identificador único del partido", example = "100", required = true)
     private Long id;
 
     @NotNull
     @Schema(description = "ID del torneo", example = "1", required = true)
-    private Long tournamentId;
+    private Long tournament;
 
     @NotNull
     @Schema(description = "Jugador 1")
-    private User player1;
+    private Long player1;
 
     @NotNull
     @Schema(description = "Jugador 2")
-    private User player2;
+    private Long player2;
 
     @NotNull
     @Schema(description = "Resultado del partido")

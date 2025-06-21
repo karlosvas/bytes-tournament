@@ -22,7 +22,6 @@ import lombok.Setter;
  *  ni las entidades del modelo de datos.
  */
 public class MessageDTO {
-    @NotNull
     @Schema(description = "Identificador único del mensaje", example = "1")
     private Long id;
      
