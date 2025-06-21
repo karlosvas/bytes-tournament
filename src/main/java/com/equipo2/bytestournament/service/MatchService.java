@@ -111,7 +111,8 @@ public class MatchService {
     public List<User> matchUsers(List<User> allPlayers) {
         // Comprobamos que haya al menos 2 jugadores para emparejar
         if(allPlayers.size() < 2)
-            throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY);
+            throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable",
+            "La solicitud contiene datos que no se pueden procesar debido a que se necesitan al menos 2 jugadores para emparejar");
 
         // Obtenemos el jugador 1 de forma aleatoria
         User player1 = allPlayers.get((int) (Math.random() * allPlayers.size()));

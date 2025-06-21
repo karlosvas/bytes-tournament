@@ -2,19 +2,26 @@ package com.equipo2.bytestournament.model;
 
 import jakarta.persistence.*;
 import com.equipo2.bytestournament.enums.Status;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Entidad JPA que representa un torneo de la aplicación de torneos.
- * <p>
  * Contiene el nombre del torneo, los jugadores máximos que participan y el estado.
  *
  * @author Christian Escalas
  */
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tournaments")
 public class Tournament {
     /**
@@ -57,21 +64,4 @@ public class Tournament {
             joinColumns = @JoinColumn(name = "tournament_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> players = new ArrayList<>();
-
-    public Tournament() {}
-
-    /**
-     * Construye un nuevo torneo con nombre, número máximo de jugadores y estado.
-     *
-     * @param name       nombre de usuario. No puede ser null ni vacío.
-     * @param maxPlayers cantidad máxima de jugadores participantes .
-     * @param status     estado actual del torneo. No puede ser null ni vacío.
-     */
-    public Tournament(String name, Integer maxPlayers, Status status) {
-        this.name = name;
-        this.maxPlayers = maxPlayers;
-        this.status = status;
-        this.rounds = 0; // Inicializamos las rondas en 0
-        this.maxRounds = 0; // Inicializamos las rondas máximas en 0
-    }
 }

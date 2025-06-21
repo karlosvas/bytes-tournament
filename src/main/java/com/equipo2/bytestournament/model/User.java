@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 /**
  * Entidad JPA que representa un usuario de la aplicación de torneos.
@@ -24,9 +24,10 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Data
 @Entity
-@Table(name = "users")
 @AllArgsConstructor
+@NoArgsConstructor 
 @Builder
+@Table(name = "users")
 public class User implements UserDetails{
 
     /**
@@ -85,9 +86,9 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     private Set<AuthorityPrivilegies> authorityPrivilegies = new HashSet<>();
 
+    // Combina los privilegios del rol con los privilegios adicionales del usuario
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Combina los privilegios del rol con los privilegios adicionales del usuario
         Set<AuthorityPrivilegies> allPrivilegies = new HashSet<>();
         if (authorityPrivilegies != null) {
             allPrivilegies.addAll(authorityPrivilegies);
@@ -96,26 +97,5 @@ public class User implements UserDetails{
         return allPrivilegies.stream()
                 .map(authority -> (GrantedAuthority) () -> authority.name())
                 .toList();
-    }
-
-    public User() {}
-
-    /**
-     * Construye un nuevo usuario con nombre, email, contraseña, rol y rango es opcional.
-     * Los puntos iniciales se establecen a 0.
-     *
-     * @param username nombre de usuario. No puede ser null ni vacío.
-     * @param email    dirección de email. No puede ser null ni vacío.
-     * @param password contraseña. No puede ser null ni vacío.
-     * @param role     rol del usuario. No puede ser null.
-     * @param rank     ranking o categoría; puede ser null o vacío.
-     */
-    public User(String username, String email, String password, Role role, Rank rank) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.rank = rank;
-        this.points = 0; 
     }
 }

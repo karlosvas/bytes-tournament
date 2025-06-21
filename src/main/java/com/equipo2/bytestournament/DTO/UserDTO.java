@@ -1,5 +1,7 @@
 package com.equipo2.bytestournament.DTO;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import com.equipo2.bytestournament.enums.Rank;
@@ -15,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "DTO para usuarios")
 @Builder
+@Schema(description = "DTO para usuarios")
 /**
  *  UserDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
@@ -37,7 +39,7 @@ public class UserDTO {
 
     @NotBlank
     @Schema(description = "Contraseña del usuario", example = "password123")
-    private String password;
+    private String password = "hidden"; // Se oculta la contraseña en la documentación
 
     @NotNull
     @Schema(description = "Rol del usuario", example = "ADMIN")
@@ -52,11 +54,11 @@ public class UserDTO {
     private Integer points;
 
     @Schema(description = "Lista de IDs de partidas en las que el usuario ha participado")
-    private List<Long> matches;
+    private List<Long> matches = new ArrayList<>();
 
     @Schema(description = "Lista de IDs de torneos en los que el usuario ha participado")
-    private List<Long> tournaments;
+    private List<Long> tournaments = new ArrayList<>();
 
     @Schema(description = "Lista de privilegios de autoridad del usuario")
-    private Set<String> authorityPrivilegies;
+    private Set<String> authorityPrivilegies = new HashSet<>();
 }

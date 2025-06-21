@@ -33,11 +33,11 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.matches (
-    id BIGINT NOT NULL,
+    id BIGSERIAL NOT NULL,
     tournament_id BIGINT NOT NULL,
     player1_id BIGINT,
     player2_id BIGINT,
-    result varchar(20) check (result IN ('PLAYER1_WIN', 'PLAYER2_WIN', 'DRAW', 'IN_PROGRESS')) NOT NULL,
+    result varchar(20) check (result IN ('PLAYER1_WIN', 'PLAYER2_WIN', 'DRAW', 'PENDING')) NOT NULL,
     round integer NOT NULL
 );
 
@@ -50,7 +50,7 @@ ALTER TABLE public.matches OWNER TO postgres;
 --
 
 CREATE TABLE public.messages (
-    id BIGINT NOT NULL,
+    id BIGSERIAL NOT NULL,
     sender_id BIGINT NOT NULL,
     content text NOT NULL,
     "timestamp" timestamp with time zone NOT NULL,
@@ -71,8 +71,8 @@ CREATE TABLE public.tournament_players (
     user_id BIGINT NOT NULL
 );
 
-
 ALTER TABLE public.tournament_players OWNER TO postgres;
+
 
 --
 -- TOC entry 218 (class 1259 OID 16415)
@@ -80,10 +80,12 @@ ALTER TABLE public.tournament_players OWNER TO postgres;
 --
 
 CREATE TABLE public.tournaments (
-    id BIGINT NOT NULL,
+    id BIGSERIAL NOT NULL,
     name character varying(100) NOT NULL,
     max_players integer NOT NULL,
-    status varchar(20) check (status IN ('PENDING', 'ONGOING', 'FINISHED')) NOT NULL
+    status varchar(20) check (status IN ('PENDING', 'IN_PROGRESS', 'FINISHED')) NOT NULL,
+    rounds integer NOT NULL DEFAULT 0,
+    max_rounds integer NOT NULL DEFAULT 0
 );
 
 
@@ -97,10 +99,10 @@ ALTER TABLE public.tournaments OWNER TO postgres;
 CREATE TABLE public.users (
     id BIGSERIAL PRIMARY KEY NOT NULL,
     username character varying(50) NOT NULL unique,
-    password character varying(255) NOT NULL,
     email character varying(100) NOT NULL unique,
-    rank character varying(50) NOT NULL,
+    password character varying(255) NOT NULL,
     role varchar(20) check (role IN ('ADMIN', 'PLAYER')) NOT NULL DEFAULT 'PLAYER',
+    rank character varying(50) NOT NULL,
     points integer NOT NULL
 );
 
@@ -152,7 +154,7 @@ COPY public.tournament_players (tournament_id, user_id) FROM stdin;
 -- Data for Name: tournaments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tournaments (id, name, max_players, status) FROM stdin;
+COPY public.tournaments (id, name, max_players, status, rounds, max_rounds) FROM stdin;
 \.
 
 
@@ -289,10 +291,7 @@ ALTER TABLE ONLY public.tournament_players
 --
 
 ALTER TABLE ONLY public.tournament_players
-    ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id);
-
-
--- Completed on 2025-06-19 16:02:47
+    ADD CONSTRAINT user_id FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
 
 --
 -- PostgreSQL database dump complete

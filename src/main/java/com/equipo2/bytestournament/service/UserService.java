@@ -18,6 +18,7 @@ import com.equipo2.bytestournament.repository.UserRepository;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
@@ -34,8 +35,15 @@ public class UserService {
     }
 
 
-    public String registerUser(UserDTO userDTO){
+    public String registerUser(UserDTO userDTO) {
         try {
+            Optional<User> userSearch = userRepository.findByUsername(userDTO.getUsername());
+
+            // Si el usuario ya existe, lanzamos una excepción ya que no puede haver registro duplicado
+            if(userSearch.isPresent()) 
+                throw new RequestException(ApiResponse.DUPLICATE_RESOURCE);
+            
+
             // UserDTO -> User
             User user = userMapper.userDTOToUser(userDTO);
             
@@ -58,6 +66,9 @@ public class UserService {
             
             // Generar y devolver JWT 
             return jwtUtil.generateToken(authentication);
+        } catch (RequestException e) {
+            // Si el usuario ya existe o hay otro problema relacionado con la solicitud
+            throw e; // Re-lanzamos la excepción para que sea manejada por el controlador
         } catch (Exception e) {
              // Si las credenciales son inválidas o hay otro problema
             throw new RequestException(ApiResponse.INTERNAL_SERVER_ERROR);
