@@ -9,24 +9,14 @@ import org.springframework.http.HttpStatus;
  * y constructores con todos los argumentos
  */
 public enum ApiResponse {
-    // User-related responses
-    USER_DELETE_FAILED(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "Eliminación de Usuario Fallida",
-            "No se pudo eliminar el usuario debido a un error interno."),
-    USER_NOT_FOUND(
-            HttpStatus.NOT_FOUND,
-            "Usuario No Encontrado",
-            "El usuario solicitado no existe en el sistema."),
-    USER_ALREADY_EXISTS(
-            HttpStatus.CONFLICT,
-            "Usuario Existente",
-            "El usuario ya existe con el identificador proporcionado."),
     AUTHENTICATION_FAILED(
             HttpStatus.UNAUTHORIZED,
             "Autenticación Fallida",
             "Credenciales Inválidas"),
-    // Other responses
+    NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "Recurso no encontrado",
+            "El recuros solicitado no existe en el sistema."),
     BAD_REQUEST(
             HttpStatus.BAD_REQUEST,
             "Petición Incorrecta",

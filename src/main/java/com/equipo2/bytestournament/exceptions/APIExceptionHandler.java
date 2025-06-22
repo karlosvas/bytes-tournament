@@ -1,11 +1,17 @@
 package com.equipo2.bytestournament.exceptions;
 
 import com.equipo2.bytestournament.DTO.ExceptionDTO;
+import com.equipo2.bytestournament.config.JwtAuthenticationFilter;
 import com.equipo2.bytestournament.enums.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +31,7 @@ import java.util.Map;
  */
 @RestControllerAdvice
 public class APIExceptionHandler {
+    private final Logger logger = LoggerFactory.getLogger(APIExceptionHandler.class);
     /**
      * Maneja excepciones de validación de argumentos de métodos.
      * Se activa cuando los datos de entrada no cumplen con las reglas de validación
@@ -116,6 +123,32 @@ public class APIExceptionHandler {
         );
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
+
+            /**
+         * Maneja excepciones específicas de autorización cuando un usuario
+         * intenta acceder a un recurso sin los permisos necesarios.
+         * 
+         * @param ex La excepción de autorización denegada
+         * @return ResponseEntity con detalles sobre el error de autorización
+         */
+        @ExceptionHandler(AuthorizationDeniedException.class)
+        public ResponseEntity<ExceptionDTO> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+            // Crear DTO de excepción utilizando ApiResponse predefinido
+            ExceptionDTO exceptionDTO = new ExceptionDTO(
+                    ApiResponse.AUTHENTICATION_FAILED.getTitle(),
+                    "No tienes los permisos necesarios para realizar esta operación",
+                    ApiResponse.AUTHENTICATION_FAILED.getStatus().value(),
+                    null,
+                    ZonedDateTime.now().toLocalDateTime());
+            
+            // Log del error
+            logger.warn("Access denied para usuario: {}", 
+                    SecurityContextHolder.getContext().getAuthentication() != null ? 
+                    SecurityContextHolder.getContext().getAuthentication().getName() : "unknown");
+                    
+            // Devolver respuesta con estado 403 FORBIDDEN
+            return new ResponseEntity<>(exceptionDTO, ApiResponse.AUTHENTICATION_FAILED.getStatus());
+        }
 
     /**
      * Maneja excepciones generales que no son capturadas por otros manejadores.

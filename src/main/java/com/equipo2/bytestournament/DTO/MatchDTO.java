@@ -1,19 +1,18 @@
 package com.equipo2.bytestournament.DTO;
 
 import com.equipo2.bytestournament.enums.Result;
-import com.equipo2.bytestournament.model.User;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Schema(description = "DTO para partidas o encuentros")
 /**
  *  MatchDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
@@ -22,21 +21,20 @@ import jakarta.validation.constraints.NotNull;
  * ni las entidades del modelo de datos.
  */
 public class MatchDTO {
-    @NotNull
     @Schema(description = "Identificador único del partido", example = "100", required = true)
     private Long id;
 
     @NotNull
     @Schema(description = "ID del torneo", example = "1", required = true)
-    private Long tournamentId;
+    private Long tournament;
 
     @NotNull
     @Schema(description = "Jugador 1")
-    private User player1;
+    private Long player1;
 
     @NotNull
     @Schema(description = "Jugador 2")
-    private User player2;
+    private Long player2;
 
     @NotNull
     @Schema(description = "Resultado del partido")

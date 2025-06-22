@@ -3,9 +3,15 @@ package com.equipo2.bytestournament.mapper;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
+import com.equipo2.bytestournament.mapper.helper.UserMapperHelper;
 import com.equipo2.bytestournament.model.User;
+import com.equipo2.bytestournament.repository.TournamentRepository;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import static org.junit.jupiter.api.Assertions.*;
+import java.lang.reflect.Field;
+import org.junit.jupiter.api.BeforeEach;
+import org.mockito.Mockito;
 
 /**
  * Clase de prueba para UserMapper.
@@ -15,7 +21,22 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class UserMapperTest {
 
-    private final UserMapper userMapper = new UserMapper();
+     private UserMapper userMapper;
+
+    @BeforeEach
+    void setUp() {
+        try {
+            userMapper = Mappers.getMapper(UserMapper.class);
+            TournamentRepository tournamentRepository = Mockito.mock(TournamentRepository.class);
+            UserMapperHelper helper = new UserMapperHelper(tournamentRepository);
+            Field helperField = userMapper.getClass().getDeclaredField("userMapperHelper");
+            helperField.setAccessible(true);
+            helperField.set(userMapper, helper);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al inyectar el helper en el mapper para los tests", e);
+        }
+    }
+
 
     /**
      * Test para verificar la conversión de User a UserDTO y viceversa.
@@ -25,7 +46,7 @@ class UserMapperTest {
     @Test
     void testUserToUserDTO() {
         User user = User.builder()
-                .id(1L)
+                .id(1L)// Ejemplo de id de la DB
                 .username("testUserMapper")
                 .email("testmapper@gmail.com")
                 .password("1234")
@@ -56,7 +77,7 @@ class UserMapperTest {
     @Test
     void testUserDTOToUser() {
         UserDTO userDTO = UserDTO.builder()
-                .id(1L)
+                .id(1L) // Ejemplo de ID que proporciono el User
                 .username("testUserMapper")
                 .email("testmapper@gmail.com")
                 .password("1234")
@@ -70,8 +91,8 @@ class UserMapperTest {
         // Verificamos que el User no sea nulo y que los valores coincidan con el UserDTO original, a excecpción del ID
         // porque se genera automáticamente al guardar en la base de datos.
         assertNotNull(user);
-        assertNull(user.getId());
         assertAll(
+                () -> assertEquals(userDTO.getId(), user.getId()),
                 () -> assertEquals(userDTO.getEmail(), user.getEmail()),
                 () -> assertEquals(userDTO.getUsername(), user.getUsername()),
                 () -> assertEquals(userDTO.getRole(), user.getRole()),

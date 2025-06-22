@@ -1,7 +1,8 @@
 package com.equipo2.bytestournament.service;
 
 import java.util.Optional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,11 +18,13 @@ import com.equipo2.bytestournament.repository.UserRepository;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     
     public UserService(AuthenticationManager authenticationManager, UserRepository userRepository, UserMapper userMapper, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
@@ -32,15 +35,21 @@ public class UserService {
     }
 
 
-    public String registerUser(UserDTO userDTO){
+    public String registerUser(UserDTO userDTO) {
         try {
-             // UserDTO -> User
+            Optional<User> userSearch = userRepository.findByUsername(userDTO.getUsername());
+
+            // Si el usuario ya existe, lanzamos una excepción ya que no puede haver registro duplicado
+            if(userSearch.isPresent()) 
+                throw new RequestException(ApiResponse.DUPLICATE_RESOURCE);
+            
+
+            // UserDTO -> User
             User user = userMapper.userDTOToUser(userDTO);
-
-
+            
             // Ciframos la contraseña
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            
+            logger.info("Password encoded for user: " + user.getEmail());
 
             // Guardar en la base de datos el User
             User newUser = userRepository.save(user);
@@ -57,9 +66,12 @@ public class UserService {
             
             // Generar y devolver JWT 
             return jwtUtil.generateToken(authentication);
+        } catch (RequestException e) {
+            // Si el usuario ya existe o hay otro problema relacionado con la solicitud
+            throw e; // Re-lanzamos la excepción para que sea manejada por el controlador
         } catch (Exception e) {
              // Si las credenciales son inválidas o hay otro problema
-            throw new RequestException(ApiResponse.AUTHENTICATION_FAILED);
+            throw new RequestException(ApiResponse.INTERNAL_SERVER_ERROR);
         }
        
     }

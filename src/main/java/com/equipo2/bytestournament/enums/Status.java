@@ -8,9 +8,7 @@ package com.equipo2.bytestournament.enums;
  */
 
 public enum Status {
-
-    CREATED,
+    PENDING,
     IN_PROGRESS,
     FINISHED
-
 }

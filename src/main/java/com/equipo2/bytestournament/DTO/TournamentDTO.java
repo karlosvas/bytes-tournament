@@ -1,19 +1,21 @@
 package com.equipo2.bytestournament.DTO;
 
 import com.equipo2.bytestournament.enums.Status;
-
+import com.equipo2.bytestournament.model.Match;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Schema(description = "DTO para torneos")
 /**
  *  TournamentDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
@@ -22,8 +24,6 @@ import lombok.Setter;
  *  ni las entidades del modelo de datos.
  */
 public class TournamentDTO {
-
-    @NotNull
     @Schema(description = "Identificador único del torneo", example = "1", required = true)
     private Long id;
 
@@ -38,4 +38,18 @@ public class TournamentDTO {
     @NotNull
     @Schema(description = "Estado del torneo", example = "EN_CURSO")
     private Status status;
+
+    @NotNull
+    @Schema(description = "Número de rondas del torneo", example = "3")
+    private Integer rounds = 0;
+
+    @NotNull
+    @Schema(description = "Número máximo de rondas del torneo", example = "5")
+    private Integer maxRounds;
+
+    @Schema(description = "Lista de partidos asociados al torneo")
+    private List<Match> matches = new ArrayList<>();
+
+    @Schema(description = "Lista de jugadores que participan en el torneo")
+    private List<Long> players = new ArrayList<>();
 }

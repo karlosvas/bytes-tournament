@@ -1,19 +1,18 @@
 package com.equipo2.bytestournament.DTO;
 
 import java.time.LocalDateTime;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank; 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Schema(description = "DTO para mensajes en el sistema")
 /**
  *  MessageDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
@@ -22,7 +21,6 @@ import lombok.Setter;
  *  ni las entidades del modelo de datos.
  */
 public class MessageDTO {
-    @NotNull
     @Schema(description = "Identificador único del mensaje", example = "1")
     private Long id;
      

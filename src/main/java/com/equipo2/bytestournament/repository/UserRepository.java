@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.equipo2.bytestournament.model.User;
  
 @Repository
-public interface UserRepository extends JpaRepository  <User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Busca un usuario por su nombre de usuario.

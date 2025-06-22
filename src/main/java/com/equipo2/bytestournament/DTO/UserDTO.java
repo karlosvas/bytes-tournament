@@ -1,23 +1,24 @@
 package com.equipo2.bytestournament.DTO;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "DTO para usuarios")
 @Builder
+@Schema(description = "DTO para usuarios")
 /**
  *  UserDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
  *  especialmente entre el backend y el frontend o entre servicios.
@@ -25,22 +26,20 @@ import lombok.Setter;
  *  ni las entidades del modelo de datos.
  */
 public class UserDTO {
-
-    @NotNull
     @Schema(description = "Identificador único del usuario", example = "1", required = true)
     private Long id;
 
     @NotBlank
     @Schema(description = "Nombre de usuario", example = "usuario123")
     private String username;
-
+    
     @NotBlank
     @Schema(description = "Correo electrónico", example = "usuario@gmail.com")
     private String email;
 
     @NotBlank
-    @Schema(description = "Contraseña", example = "password123")
-    private String password;
+    @Schema(description = "Contraseña del usuario", example = "password123")
+    private String password = "hidden"; // Se oculta la contraseña en la documentación
 
     @NotNull
     @Schema(description = "Rol del usuario", example = "ADMIN")
@@ -53,4 +52,13 @@ public class UserDTO {
     @NotNull
     @Schema(description = "Puntos del usuario", example = "1500")
     private Integer points;
+
+    @Schema(description = "Lista de IDs de partidas en las que el usuario ha participado")
+    private List<Long> matches = new ArrayList<>();
+
+    @Schema(description = "Lista de IDs de torneos en los que el usuario ha participado")
+    private List<Long> tournaments = new ArrayList<>();
+
+    @Schema(description = "Lista de privilegios de autoridad del usuario")
+    private Set<String> authorityPrivilegies = new HashSet<>();
 }
