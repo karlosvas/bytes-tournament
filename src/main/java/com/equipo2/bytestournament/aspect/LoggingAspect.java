@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.equipo2.bytestournament.utilities.Colours;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,6 +69,6 @@ public class LoggingAspect {
             path = request.getRequestURI();
         }
 
-        logger.info("\n\u001B[32m{} {} \nParams: {}\u001B[0m", httpMethod, path, Arrays.toString(joinPoint.getArgs()));
+        logger.info(Colours.paintGreen("\n{} {} \nParams: {}"), httpMethod, path, Arrays.toString(joinPoint.getArgs()));
     }
 }

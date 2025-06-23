@@ -2,6 +2,8 @@ package com.equipo2.bytestournament.exceptions;
 
 import java.util.Map;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.utilities.Colours;
+
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,7 @@ public class RequestException extends RuntimeException {
         this.detail = apiResponse.getDetail();
         this.statusCode = apiResponse.getStatus();
         this.apiResponse = apiResponse;
-        logger.error("ID error: {}", apiResponse);
+        logger.error(Colours.paintRed("ID error :"+ apiResponse));
     }
 
     /**
@@ -51,6 +53,6 @@ public class RequestException extends RuntimeException {
         this.detail = detail;
         this.statusCode = apiResponse.getStatus();
         this.apiResponse = apiResponse;
-        logger.error("ID error : {}", apiResponse);
+        logger.error(Colours.paintRed("ID error :" + apiResponse));
     }
 }

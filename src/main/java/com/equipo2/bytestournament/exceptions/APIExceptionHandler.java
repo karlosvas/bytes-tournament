@@ -2,6 +2,7 @@ package com.equipo2.bytestournament.exceptions;
 
 import com.equipo2.bytestournament.DTO.ExceptionDTO;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.utilities.Colours;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,8 @@ public class APIExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach((error) -> errors.put(
                                                                             error.getField(),
                                                                             error.getDefaultMessage()));
+
+        logger.error(Colours.paintRed("Error de validación: {}"), errors);
         return new ResponseEntity<>(
                 new ExceptionDTO(
                         ApiResponse.BAD_REQUEST.getTitle(),
@@ -72,6 +75,7 @@ public class APIExceptionHandler {
                 ex.getReasons(),
                 ZonedDateTime.now(ZoneId.of("Z")).toLocalDateTime());
 
+        logger.error(Colours.paintRed("Excepción de la API: {} - {}"), ex.getTitle(), ex.getDetail());
         return new ResponseEntity<>(apiException, ex.getStatusCode());
     }
 
@@ -84,6 +88,7 @@ public class APIExceptionHandler {
      */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionDTO> handleNotFoundException(NoHandlerFoundException ex) {
+        logger.error(Colours.paintRed("Endpoint no encontrado: {}"), ex.getMessage());
         return new ResponseEntity<>(
                 new ExceptionDTO(
                         ApiResponse.ENDPOINT_NOT_FOUND.getTitle(),
@@ -120,6 +125,8 @@ public class APIExceptionHandler {
                 null,
                 ZonedDateTime.now().toLocalDateTime()
         );
+
+        logger.error(Colours.paintRed("Error al leer el mensaje HTTP: {}"), cause);
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
@@ -141,7 +148,7 @@ public class APIExceptionHandler {
                 ZonedDateTime.now().toLocalDateTime());
         
         // Log del error
-        logger.warn("Acceso denegado para : {}", 
+        logger.warn(Colours.paintRed("Acceso denegado para : {}"), 
                 SecurityContextHolder.getContext().getAuthentication() != null ? 
                 SecurityContextHolder.getContext().getAuthentication().getName() : "unknown");
                 
@@ -159,6 +166,7 @@ public class APIExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDTO> handleAllExceptions(Exception ex) {
+    logger.error(Colours.paintRed("Error interno del servidor: {}"), ex.getMessage(), ex);
         return new ResponseEntity<>(
                 new ExceptionDTO(
                         ApiResponse.INTERNAL_SERVER_ERROR.getTitle(),

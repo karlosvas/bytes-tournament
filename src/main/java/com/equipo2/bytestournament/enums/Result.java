@@ -6,8 +6,6 @@ package com.equipo2.bytestournament.enums;
  * PLAYER1_WIN: Indica que el jugador 1 ha ganado.
  * PLAYER2_WIN: Indica que el jugador 2 ha ganado.
  * PENDING: Indica que el resultado del juego está pendiente.
- * WIN: Indica que el jugador ha ganado.
- * LOSE: Indica que el jugador ha perdido.
  * DRAW: Indica que el juego ha terminado en empate.
  */
 
@@ -15,7 +13,5 @@ public enum Result {
     PLAYER1_WIN,
     PLAYER2_WIN,
     PENDING,
-    WIN,
-    LOSE,
     DRAW
 }

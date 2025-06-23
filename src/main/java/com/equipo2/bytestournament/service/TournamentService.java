@@ -198,20 +198,24 @@ public class TournamentService {
             // Calculamos el total de victorias, derrotas, empates y puntos
             Integer totalWins = 0, totalLosses = 0, totalDraws = 0, totalPoints = 0;
             for (Match match : listMatches) {
+
+                // Asignamos derrotas y victorias según el resultado del match
                 Result result = match.getResult();
-                if(result == Result.WIN){
+                boolean isPlayer1 = user.getId().equals(match.getPlayer1().getId());
+                boolean isPlayer2 = user.getId().equals(match.getPlayer2().getId());
+                if(result == Result.PLAYER1_WIN){
                     totalWins++;
-                    totalPoints+=10;
-                } else if(result == Result.LOSE) {
+                    totalPoints+=5;
+                } else if ((isPlayer1 && result == Result.PLAYER1_WIN) || (isPlayer2 && result == Result.PLAYER2_WIN)) {
+                    totalWins++;
+                    totalPoints += 10;
+                } else if ((isPlayer1 && result == Result.PLAYER2_WIN) || (isPlayer2 && result == Result.PLAYER1_WIN)) {
                     totalLosses++;
-                    if(totalPoints > 10)
-                        totalPoints-=10;
-                } else if(result == Result.DRAW){
-                    totalDraws++;
+                    if (totalPoints > 10) totalPoints -= 10;
                 }
             }
 
-            // Creamos un RankingDetailsDTO con los detalles del usuario
+            // Creamos un RankingDetailsDTO con los detalles del ranking del usuario y lo añadimos a la lista
             RankingDetailsDTO detailsRankingDTO = new RankingDetailsDTO(user.getUsername(), totalWins, totalLosses, totalDraws, totalPoints);
             listDetailsRanking.add(detailsRankingDTO);
         }

@@ -12,11 +12,21 @@
         {
           "name": "RegisterPlayer1",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"username\": \"jorge\",\r\n  \"email\": \"jorge@gmail.com\",\r\n  \"password\": \"jorge20\",\r\n  \"role\": \"ADMIN\",\r\n  \"rank\": \"GOLD\",\r\n  \"points\": 1000\r\n}",
+              "raw": "{\r\n  \"username\": \"jorge\",\r\n  \"email\": \"jorge@gmail.com\",\r\n  \"password\": \"jorge20\",\r\n  \"role\": \"PLAYER\",\r\n  \"points\": 900\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -34,11 +44,21 @@
         {
           "name": "RegisterPlayer2",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"username\": \"chanti\",\r\n  \"email\": \"chanti@gmail.com\",\r\n  \"password\": \"chanti20\",\r\n  \"role\": \"ADMIN\",\r\n  \"rank\": \"GOLD\",\r\n  \"points\": 1000\r\n}",
+              "raw": "{\r\n  \"username\": \"chanti\",\r\n  \"email\": \"cchanti@gmail.com\",\r\n  \"password\": \"chanti20\",\r\n  \"role\": \"PLAYER\",\r\n  \"points\": 1000\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -63,7 +83,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"username\": \"cahnti\",\r\n  \"email\": \"jorge@gmail.com\",\r\n  \"password\": \"jorge20\",\r\n  \"role\": \"ADMIN\",\r\n  \"rank\": \"GOLD\",\r\n  \"points\": 1000\r\n}",
+              "raw": "{\r\n  \"username\": \"admin\",\r\n  \"email\": \"admin@bytes.com\",\r\n  \"password\": \"admin\",\r\n  \"role\": \"ADMIN\",\r\n  \"points\": 1000\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -86,7 +106,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb3JnZUBnbWFpbC5jb20iLCJpYXQiOjE3NTA1MjM1MzIsImV4cCI6MTQ3MTA1MjM1MzJ9.quR1zQwyyM7W5Hi0paBLdNNrxLC9PWn8E8i1SU0q5PFwBvflIJajHp-hxdZoCTkrh_2zqeQvg09S1dSw7m3oxg",
+                  "value": "",
                   "type": "string"
                 }
               ]
@@ -130,7 +150,7 @@
       "name": "Tournament",
       "item": [
         {
-          "name": "Create_Tournaments",
+          "name": "Create tournaments",
           "request": {
             "auth": {
               "type": "bearer",
@@ -146,7 +166,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"name\": \"Torneo de Verano 2025\",\r\n  \"maxPlayers\": 10,\r\n  \"status\": \"CREATED\",\r\n  \"maxRounds\": 10\r\n}",
+              "raw": "{\r\n  \"name\": \"Torneo de Verano 2025\",\r\n  \"maxPlayers\": 10,\r\n  \"status\": \"PENDING\",\r\n  \"maxRounds\": 10\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -162,24 +182,20 @@
           "response": []
         },
         {
-          "name": "Add usert to turnament",
+          "name": "Add user to tournament",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb3JnZUBnbWFpbC5jb20iLCJpYXQiOjE3NTA1MjM1MzIsImV4cCI6MTQ3MTA1MjM1MzJ9.quR1zQwyyM7W5Hi0paBLdNNrxLC9PWn8E8i1SU0q5PFwBvflIJajHp-hxdZoCTkrh_2zqeQvg09S1dSw7m3oxg",
+                  "value": "",
                   "type": "string"
                 }
               ]
             },
             "method": "POST",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
             "url": {
               "raw": "{{base_url}}/api/tournaments/players?tournamentId=1&userName=jorge",
               "host": ["{{base_url}}"],
@@ -199,40 +215,88 @@
           "response": []
         },
         {
-          "name": "Tournaments",
+          "name": "Add me to turnament",
           "request": {
-            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/tournaments",
+              "raw": "{{base_url}}/api/tournaments/players/me?tournamentId=1",
               "host": ["{{base_url}}"],
-              "path": ["api", "tournaments"]
+              "path": ["api", "tournaments", "players", "me"],
+              "query": [
+                {
+                  "key": "tournamentId",
+                  "value": "1"
+                }
+              ]
             }
           },
           "response": []
         },
         {
-          "name": "Tournaments_ID",
+          "name": "Ranking",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/tournaments/{id}",
+              "raw": "{{base_url}}/api/tournaments/ranking/1?pretty=true",
               "host": ["{{base_url}}"],
-              "path": ["api", "tournaments", "{id}"]
+              "path": ["api", "tournaments", "ranking", "1"],
+              "query": [
+                {
+                  "key": "pretty",
+                  "value": "true"
+                }
+              ]
             }
           },
           "response": []
         },
         {
-          "name": "Tournaments_Join",
+          "name": "DetailsRanking",
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/api/tournaments/{id}/join",
+              "raw": "{{base_url}}/api/tournaments/ranking/details/1?pretty=true",
               "host": ["{{base_url}}"],
-              "path": ["api", "tournaments", "{id}", "join"]
+              "path": ["api", "tournaments", "ranking", "details", "1"],
+              "query": [
+                {
+                  "key": "pretty",
+                  "value": "true"
+                }
+              ]
             }
           },
           "response": []

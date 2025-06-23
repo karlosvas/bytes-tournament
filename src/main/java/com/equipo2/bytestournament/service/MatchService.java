@@ -154,7 +154,7 @@ public class MatchService {
         // Comprobamos si el match existe
         Optional<Match> matchOptional = matchRepository.findById(matchId);
         if (matchOptional.isEmpty())
-            throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + id + " no existe");
+            throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + matchId + " no existe");
 
         Match match = matchOptional.get();
         logger.info("Match encontrado: " + match.getPlayer1().getEmail() + " vs " + match.getPlayer2().getEmail());
@@ -176,7 +176,7 @@ public class MatchService {
         // Comprobamos si el match existe
         Optional<Match> matchOptional = matchRepository.findById(matchID);
         if (matchOptional.isEmpty())
-            throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + id + " no existe");
+            throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + matchID + " no existe");
 
         Match match = matchOptional.get();
 
