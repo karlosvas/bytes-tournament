@@ -4,7 +4,6 @@ import com.equipo2.bytestournament.model.Match;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.MatchRepository;
 import com.equipo2.bytestournament.repository.UserRepository;
-import org.mapstruct.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -15,10 +14,20 @@ import java.util.stream.Collectors;
 /**
  * Helper para asistir al TournamentMapper con conversiones complejas
  * entre entidades y DTOs.
+ * Este helper proporciona métodos para convertir entre IDs y entidades
+ * de tipo Tournament y User, manejando excepciones y errores de manera adecuada.
+ * 
+ * @Component Anotación de Spring que indica que esta clase es un componente
+ * que puede ser inyectado en otros componentes de la aplicación.
  */
 @Component
 public class TournamentMapperHelper {
 
+    /**
+     * userRepository Repositorio para acceder a los usuarios.
+     * matchRepository Repositorio para acceder a las partidas.
+     * Logger  para registrar mensajes de error y depuración.
+     */
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
     private final Logger logger = LoggerFactory.getLogger(TournamentMapperHelper.class);
@@ -29,18 +38,17 @@ public class TournamentMapperHelper {
     }
 
     /**
-     * Convierte una lista de partidas a una lista de IDs de partidas.
+     * Convierte una lista de Match a una lista de IDs de partidas.
      * 
-     * @param matches Lista de partidas
+     * @param matchesList Lista de partidas
      * @return Lista de IDs de partidas
      */
-    public List<Long> matchesToIds(List<Match> matches) {
+    public List<Long> matchesToIds(List<Match> matchesList) {
         try {
-            if (matches == null) {
+            if (matchesList == null)
                 return null;
-            }
             
-            return matches.stream()
+            return matchesList.stream()
                     .map(Match::getId)
                     .collect(Collectors.toList());
         } catch (Exception e) {
@@ -50,16 +58,15 @@ public class TournamentMapperHelper {
     }
 
     /**
-     * Convierte una lista de IDs de partidas a una lista de partidas.
+     * Convierte una lista de IDs de partidas a una lista de Match.
      * 
      * @param matchIds Lista de IDs de partidas
-     * @return Lista de partidas
+     * @return Lista de partidas (Match)
      */
     public List<Match> idsToMatches(List<Long> matchIds) {
         try {
-            if (matchIds == null) {
+            if (matchIds == null)
                 return null;
-            }
             
             return matchIds.stream()
                     .map(id -> matchRepository.findById(id).orElse(null))
@@ -79,9 +86,8 @@ public class TournamentMapperHelper {
      */
     public List<Long> playersToIds(List<User> players) {
         try {
-            if (players == null) {
+            if (players == null)
                 return null;
-            }
             
             return players.stream()
                     .map(User::getId)

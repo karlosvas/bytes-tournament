@@ -1,5 +1,6 @@
 package com.equipo2.bytestournament.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import com.equipo2.bytestournament.DTO.UserDTO;
@@ -43,6 +44,8 @@ class UserServiceTest {
     // Datos de prueba, cremos un UserDTO y un User para simular el registro y el inicio de sesión
     private final UserDTO userDTO;
     private final User user;
+    private final User userAdmin;
+    private final UserDTO userAdminDTO;
 
     // Inyectamos los mocks en la instancia de UserService
     @InjectMocks
@@ -67,6 +70,26 @@ class UserServiceTest {
                 .rank(Rank.BRONZE)
                 .points(0)
                 .build();
+
+        userAdminDTO = UserDTO.builder()
+                .id(2L)
+                .username("adminUser")
+                .password("adminPass")
+                .email("admin@gmail.com")
+                .role(Role.ADMIN)
+                .rank(Rank.BRONZE)
+                .points(0)
+                .build();
+
+        userAdmin = User.builder()
+                .id(2L)
+                .username("adminUser")
+                .email("admin@gmail.com")
+                .password("encodedPassword")
+                .role(Role.ADMIN)
+                .rank(Rank.BRONZE)
+                .points(0)
+                .build();
     }
 
     /**
@@ -84,11 +107,15 @@ class UserServiceTest {
         // Simula la autenticación del usuario
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
+
+        // Simula que el usuario que se registra no está autenticado ya uqe solo hace falta estarlo para crear administradores
+        Authentication authenticationRequest = null;
+
         // Simula la generación del token JWT
         when(jwtUtil.generateToken(authentication)).thenReturn("mocked-jwt-token");
 
         // Ejecuta el metodo a probar
-        String result = userService.registerUser(userDTO);
+        String result = userService.registerUser(userDTO, authenticationRequest);
 
         // Verifica que el resultado no sea nulo y que el token sea el esperado
         assertNotNull(result);
@@ -131,11 +158,15 @@ class UserServiceTest {
         // Simula la autentificacion de usuario que se obtiene al iniciar sesion o registrarse, cojendo el jwt que se le pasa para autentificarse
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
+
+        // Simula que el usuario que se registra no está autenticado ya uqe solo hace falta estarlo para crear administradores
+        Authentication authenticationRequest = null;
+
         // Simula la generación del token JWT
         when(jwtUtil.generateToken(authentication)).thenReturn("mocked-jwt-token");
 
         // Ejecuta los métodos a probar
-        String tokenRegister = userService.registerUser(userDTO);
+        String tokenRegister = userService.registerUser(userDTO, authenticationRequest);
         String tokenLogin = userService.userLogin(userDTO);
 
         // Verifica que ambos tokens sean iguales
@@ -177,4 +208,27 @@ class UserServiceTest {
         UserDTO result = userService.profileUser(1L);
         assertNotNull(result);
     }
+
+    @Test
+    void testRegisterUser_AdminCreatesAdmin() {
+        // Simula que el usuario autenticado es ADMIN
+        Authentication authenticationRequest = mock(Authentication.class);
+        when(authenticationRequest.getName()).thenReturn("admin@gmail.com");
+
+        when(userRepository.findByEmail("admin@gmail.com")).thenReturn(Optional.of(userAdmin));
+        when(userRepository.findByUsername(userAdminDTO.getUsername())).thenReturn(Optional.empty());
+        when(userMapper.userDTOToUser(userAdminDTO)).thenReturn(userAdmin);
+        when(passwordEncoder.encode(userAdmin.getPassword())).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(userAdmin);
+
+        // Simula la autenticación del nuevo usuario
+        Authentication authentication = mock(Authentication.class);
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
+        when(jwtUtil.generateToken(authentication)).thenReturn("mocked-jwt-token");
+
+         // EJECUTA el método a probar
+        String result = userService.registerUser(userAdminDTO, authenticationRequest);
+        assertNotNull(result);
+        verify(userRepository, times(1)).save(any(User.class)); 
+   }
 }

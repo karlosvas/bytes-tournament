@@ -2,9 +2,7 @@ package com.equipo2.bytestournament.exceptions;
 
 import java.util.Map;
 import com.equipo2.bytestournament.enums.ApiResponse;
-
 import lombok.Getter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,7 @@ public class RequestException extends RuntimeException {
 
     /**
      * Constructor para crear una excepción de petición con un mensaje de error específico. mediante el enum ApiResponse.
-     * @see ApiResponse Enum que representa el errores de la API
+     * {@link ApiResponse} Enum que representa el errores de la API
      */
     public RequestException(ApiResponse apiResponse) {
         this.hasError = true;

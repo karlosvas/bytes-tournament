@@ -1,10 +1,14 @@
 package com.equipo2.bytestournament.enums;
 /**
- * Enum que muestra los valores que puede tomar el atributo result
- *
- * Puede tomar los valores de PENDING, PLAYER1_WIN y PLAYER2_WIN
- *
- * @author Christian Escalas
+ * Enum Result que muestra los valores que puede tomar el atributo result
+ * 
+ * Los valores que puede tomar son:
+ * PLAYER1_WIN: Indica que el jugador 1 ha ganado.
+ * PLAYER2_WIN: Indica que el jugador 2 ha ganado.
+ * PENDING: Indica que el resultado del juego está pendiente.
+ * WIN: Indica que el jugador ha ganado.
+ * LOSE: Indica que el jugador ha perdido.
+ * DRAW: Indica que el juego ha terminado en empate.
  */
 
 public enum Result {

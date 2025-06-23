@@ -19,8 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * Entidad JPA que representa un usuario de la aplicación de torneos.
  * Contiene el nombre de usuario, el email, la contraseña, el rol, el ranking y los puntos de cada usuario.
- *
- * @author Christian Escalas
  */
 @Data
 @Entity
@@ -99,6 +97,7 @@ public class User implements UserDetails{
                 .toList();
     }
 
+    // Obtener todos los matches del usuario, tanto como jugador 1 como jugador 2
     public List<Match> getMatches() {
         List<Match> allMatches = new ArrayList<>(matchesAsPlayer1);
         allMatches.addAll(matchesAsPlayer2);

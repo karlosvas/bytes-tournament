@@ -1,5 +1,6 @@
 package com.equipo2.bytestournament.config;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -27,7 +28,7 @@ public class SwaggerConfig {
                         .version("1.0") // Versión de la API
                         .description("Documentación de la API para el bytes turnament. Proporciona endpoints para gestionar usuarios, autenticación y más.")) // Descripción de la API
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .components(new io.swagger.v3.oas.models.Components()
+                .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")

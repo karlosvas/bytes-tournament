@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 /**
  * Entidad JPA que representa un mensaje en el chat de una partida de la aplicación de torneos.
  * Contiene el id del mensaje, el id del jugador que lo envía, el contenido, la fecha y hora de envío del mensaje, el id de la partidaa y el id del torneo.
- *
- * @author Christian Escalas
  */
 @Data
 @Entity

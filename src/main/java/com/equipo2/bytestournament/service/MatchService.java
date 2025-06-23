@@ -15,11 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-
 import static com.equipo2.bytestournament.model.Match.UMBRAL;
 
+/**
+ * MatchService es un servicio que se encarga de gestionar los matches de un torneo.
+ * Proporciona métodos para generar matches, emparejar jugadores, comprobar la existencia de un
+ * match y actualizar el resultado de un match.
+ * 
+ *{@link Service} es una anotación de Spring que indica que esta clase es un servicio de spring
+ * y será utilizada para realizar operaciones de negocio relacionadas con los matches.
+ */
 @Service
 public class MatchService {
+    /**
+     * matchRepository Repositorio para acceder a los matches.
+     * matchMapper Mapeador para convertir entre Match y MatchDTO.
+     * tournamentRepository Repositorio para acceder a los torneos.
+     * Logger para registrar mensajes de error y depuración.
+     */
     private final MatchRepository matchRepository;
     private final MatchMapper matchMapper;
     private final TournamentRepository tournamentRepository;
@@ -38,8 +51,8 @@ public class MatchService {
      * Si el torneo no existe, se lanza una excepción.
      * Si se generan los matches correctamente, se devuelve una lista de MatchDTO con los matches generados.
      * 
-     * @param tournamentID
-     * @return
+     * @param tournamentID ID del torneo para el cual se quieren generar los matches.
+     * @return Lista de MatchDTO con los matches generados.
      */
     public List<MatchDTO> generateMatches(Long tournamentID) {
         try{
@@ -101,12 +114,12 @@ public class MatchService {
     }
 
     /**
-     * Empareja dos jugadores de forma aleatoria, teniendo en cuenta que la diferencia de puntos entre ellos no supere el umbral.
+     * Empareja dos jugadores de forma parcialmente aleatoria en un torneo, teniendo en cuenta que la diferencia de puntos entre ellos no supere el umbral.
      * Si no hay suficientes jugadores, se lanza una excepción.
      * Si no hay jugadores que cumplan el criterio de puntos, se lanza una excepción.
      * 
-     * @param allPlayers
-     * @return
+     * @param allPlayers Lista de todos los jugadores del torneo.
+     * @return Lista de dos jugadores emparejados.
      */
     public List<User> matchUsers(List<User> allPlayers) {
         // Comprobamos que haya al menos 2 jugadores para emparejar
@@ -135,11 +148,11 @@ public class MatchService {
      * Si el match no existe, lanza una excepción.
      * Si el match existe, devuelve un mensaje informativo con los jugadores del match.
      * 
-     * @param id
+     * @param id ID del match a comprobar.
      */
-    public MatchDTO checkMatch(Long id) {
+    public MatchDTO checkMatch(Long matchId) {
         // Comprobamos si el match existe
-        Optional<Match> matchOptional = matchRepository.findById(id);
+        Optional<Match> matchOptional = matchRepository.findById(matchId);
         if (matchOptional.isEmpty())
             throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + id + " no existe");
 
@@ -155,24 +168,25 @@ public class MatchService {
      * Si el resultado es PENDING, lanza una excepción.
      * Si el resultado es WIN o LOSE, actualiza el resultado del match y devuelve un mensaje informativo.
      * 
-     * @param id
-     * @return
+     * @param matchID ID del match a actualizar.
+     * @param macthDTO DTO con el resultado del match a actualizar.
+     * @return MatchDTO con el match actualizado.
      */
-    public MatchDTO updateMatchResult(Long id, MatchDTO macthDTO) {
+    public MatchDTO updateMatchResult(Long matchID, MatchDTO macthDTO) {
         // Comprobamos si el match existe
-        Optional<Match> matchOptional = matchRepository.findById(id);
+        Optional<Match> matchOptional = matchRepository.findById(matchID);
         if (matchOptional.isEmpty())
             throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + id + " no existe");
 
         Match match = matchOptional.get();
 
         // Comprobamos que el id proiporcionado sea el mismo que elq ue queremos actualizar
-        if (!match.getId().equals(id))
+        if (!match.getId().equals(matchID))
             throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "El id del match no coincide", "El id del match proporcionado no coincide con el id del match a actualizar");
 
         // Actualizamos el resultado del match
         Match matchUpdated = matchMapper.matchDtoToMatch(macthDTO);
-        matchUpdated.setId(id);
+        matchUpdated.setId(matchID);
 
         matchRepository.save(matchUpdated);
         logger.info("Resultado del match actualizado: " + matchUpdated.getPlayer1().getEmail() + " vs " + matchUpdated.getPlayer2().getEmail());

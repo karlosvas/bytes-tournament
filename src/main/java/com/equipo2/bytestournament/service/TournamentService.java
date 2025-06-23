@@ -20,10 +20,23 @@ import java.util.List;
 import java.util.Optional;
 import com.equipo2.bytestournament.enums.Result;
 
-
+/**
+ * TournamentService es un servicio que se encarga de gestionar los torneos.
+ * Proporciona métodos para buscar, crear torneos, añadir jugadores a un torneo,
+ * obtener la clasificación de un torneo y obtener detalles del ranking de los jugadores.
+ * 
+ * {@link Service} es una anotación de Spring que indica que esta clase es un servicio de spring
+ * y será utilizada para realizar operaciones de negocio relacionadas con los torneos.
+ */
 @Service
 public class TournamentService {
 
+    /**
+     * tournamentRepository Repositorio para acceder a los torneos.
+     * tournamentMapper Mapeador para convertir entre Tournament y TournamentDTO.
+     * userRepository Repositorio para acceder a los usuarios.
+     * Logger para registrar mensajes de error y depuración.
+     */
     private final TournamentRepository tournamentRepository;
     private final TournamentMapper tournamentMapper;
     private final UserRepository userRepository;
@@ -35,8 +48,15 @@ public class TournamentService {
         this.userRepository = userRepository;
     }
 
-    public TournamentDTO findTournamentById(Long id){
-        Optional<Tournament> tournamentOptional = tournamentRepository.findById(id);
+    /**
+     * Busca un torneo por su ID y devuelve un TournamentDTO.
+     * Este método debería implementar la lógica para buscar un torneo en la base de datos
+     * 
+     * @param tournamentId ID del torneo a buscar.
+     * @return TournamentDTO con la información del torneo encontrado.
+     */
+    public TournamentDTO findTournamentById(Long tournamentId){
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentId);
 
         if(!tournamentOptional.isPresent())
             throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un tournament con esa ID");
@@ -45,15 +65,33 @@ public class TournamentService {
         return tournamentMapper.tournamentToTournamentDTO(tournament);
     }
 
-    public TournamentDTO createTournament(TournamentDTO entity) {
+    /**
+     * Crea un nuevo torneo a partir de un TournamentDTO.
+     * Este método debería implementar la lógica para crear un torneo a partir de la entidad proporcionada.
+     * 
+     * @param tournamentDTO TournamentDTO que contiene la información del torneo a crear.
+     * @return
+     */
+    public TournamentDTO createTournament(TournamentDTO tournamentDTO) {
         // Aquí se debería implementar la lógica para crear un torneo a partir de la entidad proporcionada
         // Por ahora, simplemente retornamos un TournamentDTO vacío como ejemplo
-        Tournament tournament = tournamentMapper.tournamentDtoToTournament(entity);
+        Tournament tournament = tournamentMapper.tournamentDtoToTournament(tournamentDTO);
         // Aquí se deberían establecer los valores del torneo según la entidad recibida
         tournamentRepository.save(tournament);
         return tournamentMapper.tournamentToTournamentDTO(tournament);
     }
 
+    /**
+     * Añade un jugador a un torneo existente.
+     * Este método busca el torneo por su ID y el usuario por su nombre de usuario.
+     * Si ambos existen, añade el usuario al torneo y viceversa.
+     * Si el torneo o el usuario no existen, lanza una excepción.
+     * Si el usuario ya está apuntado al torneo, lanza una excepción.
+     * 
+     * @param tournamentId ID del torneo al que se quiere añadir el jugador.
+     * @param userName Nombre de usuario del jugador que se quiere añadir al torneo.
+     * @return TournamentDTO con la información del torneo actualizado.
+     */
     public TournamentDTO addPlayerToTournament(Long tournamentId, String userName) {
         // Validamos si existe el torneo y el usuario
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentId);
@@ -89,7 +127,17 @@ public class TournamentService {
         return tournamentMapper.tournamentToTournamentDTO(torurnamentSaved);
     }
 
+    /**
+     * Obtiene la clasificación de un torneo dado su ID.
+     * Este método busca el torneo por su ID y ordena a los jugadores por sus puntos en orden descendente.
+     * Luego, crea un RankingDTO con la información de los jugadores ordenados.
+     * Si el torneo no existe, lanza una excepción.
+     * 
+     * @param tournamentId ID del torneo para el cual se quiere obtener la clasificación.
+     * @return RankingDTO con la clasificación de los jugadores del torneo.
+     */
     public RankingDTO getClassification(Long tournamentId) {
+        // Obtenemos el torneo por su ID de la DB
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentId);
 
         if(tournamentOptional.isEmpty())
@@ -97,11 +145,13 @@ public class TournamentService {
         
         Tournament tournament = tournamentOptional.get();
 
+        // Ordenamos los jugadores del torneo por sus puntos en orden descendente
         List<User> sortedPlayers = tournament.getPlayers()
         .stream()
         .sorted(Comparator.comparingInt(User::getPoints).reversed())
         .toList();
 
+        // Creamos el RankingDTO con la información de los jugadores ordenados
         RankingDTO classification = new RankingDTO();
         for (User player : sortedPlayers) {
             RankingDTO.InnerClassificationDTO classificationPlayer = new RankingDTO.InnerClassificationDTO(player.getUsername(), player.getRank(), player.getPoints());
@@ -111,29 +161,42 @@ public class TournamentService {
         return classification;
     }
 
+    /**
+     * Obtiene los detalles del ranking de un torneo dado su ID.
+     * Este método busca el torneo por su ID y obtiene la lista de jugadores.
+     * Luego, para cada jugador, calcula el total de victorias, derrotas, empates y puntos.
+     * Si el torneo o el usuario no existen, lanza una excepción.
+     * 
+     * @param tournamentId ID del torneo para el cual se quieren obtener los detalles del ranking.
+     * @return Lista de RankingDetailsDTO con los detalles del ranking de los jugadores del torneo.
+     */
     public List<RankingDetailsDTO> getRankingDetails(Long tournamentId) {
+        // Obtenemos el torneo por su ID de la DB
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentId);
-
         
         if(tournamentOptional.isEmpty())
-            throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un torneo con esa ID");
+            throw new RequestException(ApiResponse.NOT_FOUND, "Torneo no encontrado", "No se encontro un torneo con esa ID");
 
+        // Obtenemos la lista de jugadores del torneo
         List<User> userList = tournamentOptional.get().getPlayers();
 
+        // Creamos una lista para almacenar los detalles del ranking de cada jugador
         List<RankingDetailsDTO> listDetailsRanking = new ArrayList<>();
         for (User user : userList) {
+            // Recoreemos cada usuario del torneo y obtenemos sus detalles
             logger.info("Detalle sde usuario: {}", user.getUsername());
 
             Optional<User> userOptional = userRepository.findByUsername(user.getUsername());
-
             if(userOptional.isEmpty())
                 throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese nombre");
 
             User actualUser = userOptional.get();
+
+            // Obtenemos la lista de matches del usuario en esta iteración
             List<Match> listMatches = actualUser.getMatches();
 
+            // Calculamos el total de victorias, derrotas, empates y puntos
             Integer totalWins = 0, totalLosses = 0, totalDraws = 0, totalPoints = 0;
-
             for (Match match : listMatches) {
                 Result result = match.getResult();
                 if(result == Result.WIN){
@@ -148,6 +211,7 @@ public class TournamentService {
                 }
             }
 
+            // Creamos un RankingDetailsDTO con los detalles del usuario
             RankingDetailsDTO detailsRankingDTO = new RankingDetailsDTO(user.getUsername(), totalWins, totalLosses, totalDraws, totalPoints);
             listDetailsRanking.add(detailsRankingDTO);
         }
