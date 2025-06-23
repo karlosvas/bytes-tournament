@@ -11,5 +11,7 @@ public enum Result {
     PLAYER1_WIN,
     PLAYER2_WIN,
     PENDING,
+    WIN,
+    LOSE,
     DRAW
 }

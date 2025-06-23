@@ -131,4 +131,14 @@ public class UserService {
           throw new RequestException(ApiResponse.BAD_REQUEST);
         }
     }
+
+    public String getUserNameFronAutentication(Authentication authentication) {
+        Optional<User> userOptional =  userRepository.findByEmail(authentication.getName());
+        
+        if(userOptional.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
+        
+        User user = userOptional.get();
+        return user.getUsername();
+    }
 }

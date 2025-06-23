@@ -98,4 +98,10 @@ public class User implements UserDetails{
                 .map(authority -> (GrantedAuthority) () -> authority.name())
                 .toList();
     }
+
+    public List<Match> getMatches() {
+        List<Match> allMatches = new ArrayList<>(matchesAsPlayer1);
+        allMatches.addAll(matchesAsPlayer2);
+        return allMatches;
+    }
 }
