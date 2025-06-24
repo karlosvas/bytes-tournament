@@ -68,10 +68,10 @@ public class JwtUtil {
      */
     public String extractUsername(String token) {
         // Intenta analizar el token con la clave secreta con la clave y analiza JWT.
+        // Si el token es válido, obtiene el cuerpo del token y extrae el sujeto (nombre de usuario o que es el subject en generateToken).
         return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
-                // Si el token es válido, obtiene el cuerpo del token y extrae el sujeto (nombre de usuario o que es el subject en generateToken).
                 .getBody()
                 .getSubject();
     }

@@ -14,8 +14,6 @@ import java.util.List;
 /**
  * Entidad JPA que representa un torneo de la aplicación de torneos.
  * Contiene el nombre del torneo, los jugadores máximos que participan y el estado.
- *
- * @author Christian Escalas
  */
 @Data
 @Entity

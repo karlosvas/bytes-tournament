@@ -1,10 +1,11 @@
 package com.equipo2.bytestournament.enums;
 /**
- * Enum que muestra los valores que puede tomar el atributo status
+ * Enum Status que muestra los valores que puede tomar el atributo status
  *
- * Puede tomar los valores de CREATED, IN_PROGRESS y FINISHED
- *
- * @author Christian Escalas
+ * Los valores que puede tomar son:
+ * PENDING: Indica que la tarea está pendiente.
+ * IN_PROGRESS: Indica que la tarea está en progreso.
+ * FINISHED: Indica que la tarea ha finalizado.
  */
 
 public enum Status {

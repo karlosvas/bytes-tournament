@@ -1,10 +1,9 @@
 package com.equipo2.bytestournament.exceptions;
 
 import com.equipo2.bytestournament.DTO.ExceptionDTO;
-import com.equipo2.bytestournament.config.JwtAuthenticationFilter;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.utilities.Colours;
 import jakarta.persistence.EntityNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,9 +24,10 @@ import java.util.Map;
  * Manejador centralizado de excepciones para la API.
  * Esta clase intercepta las excepciones lanzadas durante el procesamiento de las peticiones
  * y las convierte en respuestas HTTP estructuradas y consistentes.
- * @see RestControllerAdvice permite que los métodos de esta clase se apliquen globalmente a todos los controladores
+ * 
+ * {@link RestControllerAdvice} permite que los métodos de esta clase se apliquen globalmente a todos los controladores
  * de la aplicación.
- * @see ApiResponse para los códigos de error y mensajes utilizados en las respuestas.
+ * {@link ApiResponse} para los códigos de error y mensajes utilizados en las respuestas.
  */
 @RestControllerAdvice
 public class APIExceptionHandler {
@@ -46,6 +46,8 @@ public class APIExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach((error) -> errors.put(
                                                                             error.getField(),
                                                                             error.getDefaultMessage()));
+
+        logger.error(Colours.paintRed("Error de validación: {}"), errors);
         return new ResponseEntity<>(
                 new ExceptionDTO(
                         ApiResponse.BAD_REQUEST.getTitle(),
@@ -73,6 +75,7 @@ public class APIExceptionHandler {
                 ex.getReasons(),
                 ZonedDateTime.now(ZoneId.of("Z")).toLocalDateTime());
 
+        logger.error(Colours.paintRed("Excepción de la API: {} - {}"), ex.getTitle(), ex.getDetail());
         return new ResponseEntity<>(apiException, ex.getStatusCode());
     }
 
@@ -85,6 +88,7 @@ public class APIExceptionHandler {
      */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionDTO> handleNotFoundException(NoHandlerFoundException ex) {
+        logger.error(Colours.paintRed("Endpoint no encontrado: {}"), ex.getMessage());
         return new ResponseEntity<>(
                 new ExceptionDTO(
                         ApiResponse.ENDPOINT_NOT_FOUND.getTitle(),
@@ -108,11 +112,11 @@ public class APIExceptionHandler {
         String sol="";
 
         if(cause.contains("Enum"))
-            sol = "The role is not accepted for the Enum";
+            sol = "El rol no es aceptado para el Enum";
         else if(cause.contains("Date"))
-            sol = "Date format is not correct, the correct format is dd/MM/yyyy";
+            sol = "Formato de fecha no es correcto, el formato correcto es dd/MM/yyyy";
         else
-            sol = "Error in the JSON format";
+            sol = "Error en el formato del JSON, revisa los campos y valores enviados";
 
         ExceptionDTO apiException = new ExceptionDTO(
                 "Error en el formato del JSON",
@@ -121,34 +125,36 @@ public class APIExceptionHandler {
                 null,
                 ZonedDateTime.now().toLocalDateTime()
         );
+
+        logger.error(Colours.paintRed("Error al leer el mensaje HTTP: {}"), cause);
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
 
-            /**
-         * Maneja excepciones específicas de autorización cuando un usuario
-         * intenta acceder a un recurso sin los permisos necesarios.
-         * 
-         * @param ex La excepción de autorización denegada
-         * @return ResponseEntity con detalles sobre el error de autorización
-         */
-        @ExceptionHandler(AuthorizationDeniedException.class)
-        public ResponseEntity<ExceptionDTO> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-            // Crear DTO de excepción utilizando ApiResponse predefinido
-            ExceptionDTO exceptionDTO = new ExceptionDTO(
-                    ApiResponse.AUTHENTICATION_FAILED.getTitle(),
-                    "No tienes los permisos necesarios para realizar esta operación",
-                    ApiResponse.AUTHENTICATION_FAILED.getStatus().value(),
-                    null,
-                    ZonedDateTime.now().toLocalDateTime());
-            
-            // Log del error
-            logger.warn("Access denied para usuario: {}", 
-                    SecurityContextHolder.getContext().getAuthentication() != null ? 
-                    SecurityContextHolder.getContext().getAuthentication().getName() : "unknown");
-                    
-            // Devolver respuesta con estado 403 FORBIDDEN
-            return new ResponseEntity<>(exceptionDTO, ApiResponse.AUTHENTICATION_FAILED.getStatus());
-        }
+    /**
+     * Maneja excepciones específicas de autorización cuando un usuario
+     * intenta acceder a un recurso sin los permisos necesarios.
+     * 
+     * @param ex La excepción de autorización denegada
+     * @return ResponseEntity con detalles sobre el error de autorización
+     */
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ExceptionDTO> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+        // Crear DTO de excepción utilizando ApiResponse predefinido
+        ExceptionDTO exceptionDTO = new ExceptionDTO(
+                ApiResponse.AUTHENTICATION_FAILED.getTitle(),
+                "No tienes los permisos necesarios para realizar esta operación",
+                ApiResponse.AUTHENTICATION_FAILED.getStatus().value(),
+                null,
+                ZonedDateTime.now().toLocalDateTime());
+        
+        // Log del error
+        logger.warn(Colours.paintRed("Acceso denegado para : {}"), 
+                SecurityContextHolder.getContext().getAuthentication() != null ? 
+                SecurityContextHolder.getContext().getAuthentication().getName() : "unknown");
+                
+        // Devolver respuesta con estado 403 FORBIDDEN
+        return new ResponseEntity<>(exceptionDTO, ApiResponse.AUTHENTICATION_FAILED.getStatus());
+    }
 
     /**
      * Maneja excepciones generales que no son capturadas por otros manejadores.
@@ -160,6 +166,7 @@ public class APIExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDTO> handleAllExceptions(Exception ex) {
+    logger.error(Colours.paintRed("Error interno del servidor: {}"), ex.getMessage(), ex);
         return new ResponseEntity<>(
                 new ExceptionDTO(
                         ApiResponse.INTERNAL_SERVER_ERROR.getTitle(),

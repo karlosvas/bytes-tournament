@@ -1,7 +1,6 @@
 package com.equipo2.bytestournament.config;
 
 import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.equipo2.bytestournament.utilities.Colours;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -76,7 +76,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 // para que esté disponible en el resto de la aplicación.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                logger.info("JWT válido para el usuario: " + username);
+                logger.info(Colours.paintGreen("JWT válido para el usuario: " + username));
             }
         } catch (Error e) {
             throw new Error("Error al procesar el JWT", e);

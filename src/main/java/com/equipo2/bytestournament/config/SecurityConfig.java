@@ -1,7 +1,10 @@
 package com.equipo2.bytestournament.config;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +21,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.equipo2.bytestournament.DTO.UserDTO;
+import com.equipo2.bytestournament.enums.Rank;
+import com.equipo2.bytestournament.enums.Role;
+import com.equipo2.bytestournament.repository.UserRepository;
 import com.equipo2.bytestournament.service.CustomUserDetailsService;
+import com.equipo2.bytestournament.utilities.Colours;
 
 /**
  * see @Configuración este bean define la configuración de seguridad de la aplicación.
@@ -33,7 +41,22 @@ import com.equipo2.bytestournament.service.CustomUserDetailsService;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    private final UserRepository userRepository;
+    /**
+     * {@link Value} Anotaciones que permiten inyectar valores de propiedades desde el archivo de configuración.
+     * Estas propiedades se utilizan para configurar el usuario administrador y su contraseña.
+     * 
+     * En este caso se utiliza para definir un usuario administrador en memoria al iniciar la aplicación para poder crear mas administradores.
+     * Se utiliza el mismo ususario y contraseña que el administrador de la BD.
+     */
+    @Value("${spring.datasource.username}") private String usernameAdmin;
+    @Value("${spring.datasource.password}") private String usernamePassword;
+
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
+
+    SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     /**
      * Un PasswordEncoder es un componente que se utiliza para codificar contraseñas de forma segura.
      * 
@@ -85,10 +108,31 @@ public class SecurityConfig {
     */
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager(){
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder().encode("pass"))
-                .roles("USER")
+        UserDetails user = User.withUsername(usernameAdmin)
+                .password(passwordEncoder().encode(usernamePassword))
+                .roles(Role.ADMIN.getName())
                 .build();
+
+        // Si no existe lo creamos en la base de datos
+        Optional<com.equipo2.bytestournament.model.User> newUser = userRepository.findByUsername(usernameAdmin);
+        
+        if(!newUser.isPresent()){
+            userRepository.save(
+                com.equipo2.bytestournament.model.User.builder()
+                .username(user.getUsername())
+                .email(user.getUsername() + "@bytes.com")
+                .password(user.getPassword())
+                .role(Role.ADMIN)
+                .rank(Rank.BRONZE)
+                .points(0)
+                .build()
+            );
+            logger.info(Colours.paintGreen("Usuario administrador creado en la base de datos: " + usernameAdmin));
+        } else {
+            logger.info(Colours.paintGreen("Usuario administrador ya existe en la base de datos: " + usernameAdmin));
+        }
+        
+
         return new InMemoryUserDetailsManager(user);
     }
 

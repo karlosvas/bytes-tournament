@@ -11,7 +11,6 @@ import com.equipo2.bytestournament.enums.Result;
 /**
  * Entidad JPA que representa una partida de un torneo.
  * Contiene el id del torneo, el jugador 1, el jugador 2 y la ronda actual.
- * @author Christian Escalas
  */
 @Data
 @Entity
@@ -29,7 +28,6 @@ public class Match {
      * player2: Jugador 2 que participa en la partida. No debe ser nulo
      * result: Resultado de la partida. No debe ser nulo ni vacío.
      * round: Ronda actual de la partida
-     * @author Christian Escalas
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

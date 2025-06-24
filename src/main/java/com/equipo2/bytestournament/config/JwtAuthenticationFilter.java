@@ -2,6 +2,8 @@ package com.equipo2.bytestournament.config;
 
 import java.io.IOException;
 import com.equipo2.bytestournament.model.User;
+import com.equipo2.bytestournament.utilities.Colours;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.core.Authentication;
@@ -49,11 +51,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-             logger.info("Procesando solicitud de autenticación");
             User usuario = new ObjectMapper()
-                .readValue(request.getInputStream(), User.class);
-
-            logger.info("Intento de autenticación para usuario: " + usuario.getUsername());
+            .readValue(request.getInputStream(), User.class);
+            
+            logger.info(Colours.paintGreen("Intento de autenticación para usuario: " + usuario.getUsername()));
             UsernamePasswordAuthenticationToken authToken = 
                 new UsernamePasswordAuthenticationToken(
                     usuario.getUsername(),
@@ -78,7 +79,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         String token = jwtUtil.generateToken(authResult);
-        logger.info("Token generado para: " + authResult.getName());
+        logger.info(Colours.paintGreen("Token generado para: " + authResult.getName()));
         response.addHeader("Authorization", "Bearer " + token);
     }
 
@@ -98,6 +99,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // Escribir respuesta de error en formato JSON
         response.getWriter().write("{\"error\": \"" + "Autenticación fallida: " + failed.getMessage() + "\"}");
         // Log de error
-        logger.error("Falló la autenticación para la solicitud: " + request.getRequestURI(), failed);
+        logger.error(Colours.paintRed("Falló la autenticación para la solicitud: " + request.getRequestURI()), failed);
     }
 }

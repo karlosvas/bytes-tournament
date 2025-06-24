@@ -10,6 +10,18 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+/**
+ * Mapper que convierte la entidad User a DTO y la DTO a entidad
+ * y viceversa.
+ * Utiliza MapStruct para generar el código de mapeo automáticamente.
+ * 
+ * Utiliza un helper {@link UserMapperHelper} para mapear
+ * los campos que no se pueden mapear directamente debido a la complejidad como las relaciones
+ * entre entidades.
+ * 
+ * {@link Mapper} Anotación de MapStruct que indica que esta interfaz es un mapper.
+ * {@link Mapping} Anotación de MapStruct que indica cómo se deben mapear
+ */
 @Mapper(componentModel = "spring", uses = {UserMapperHelper.class})
 public interface UserMapper {
     public final Logger logger = LoggerFactory.getLogger(UserMapper.class);
