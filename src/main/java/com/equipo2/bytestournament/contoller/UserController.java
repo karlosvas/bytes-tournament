@@ -38,7 +38,7 @@ import com.equipo2.bytestournament.config.SecurityConfig;
  */
 @Tag(name = "User", description = "Controlador para la gestión de usuarios y autenticación")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UserController {
     
     /**
@@ -47,7 +47,7 @@ public class UserController {
     private final UserService userService;
 
     public UserController(UserService customUserDetailsService){
-        this.userService=customUserDetailsService;
+        this.userService = customUserDetailsService;
     }
 
     /**
@@ -91,8 +91,8 @@ public class UserController {
      */
     @Operation(summary = "Obtener datos personales autentificados", description = "Este endpoint permite a los usuarios autentificados obtener sus datos personales.")
     @SwaggerApiResponses
-    @GetMapping("/user/me")
-    @PreAuthorize("hasAnyAuthority('PLAYER', 'ADMIN')")
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     public UserDTO personalData(Authentication authentication) {
         return userService.profileData(authentication);
     }
@@ -106,8 +106,9 @@ public class UserController {
      */
     @Operation(summary = "Obtener datos personales por id", description = "Este endpoint permite a los usuarios obtener los datos personales de el usuario con el id pasado por parametro, solo accesibles para usuarios con el rol de ADMIN.")
     @SwaggerApiResponses
-    @GetMapping("/user/{id}")
-    public UserDTO profileUser(@PathVariable Long id) {
-        return userService.profileUser(id);
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserDTO profileUser(@PathVariable Long userId) {
+        return userService.profileUser(userId);
     }
 }

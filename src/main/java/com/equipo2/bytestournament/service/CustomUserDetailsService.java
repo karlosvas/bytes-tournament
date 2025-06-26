@@ -47,7 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Lo obtenemos de la base de datos
-        Optional<User> userOptional = userRepository.findByEmail(username);
+        Optional<User> userOptional = userRepository.findByUsername(username);
 
         // Verificamos si el usuario existeq
         if(!userOptional.isPresent())
@@ -56,9 +56,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Si existe, lo convertimos a UserDetails y lo devolvemos
         User user = userOptional.get();
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
+                .username(user.getUsername())
                 .password(user.getPassword())
-                .authorities(new SimpleGrantedAuthority(user.getRole().getName()))
+                .authorities(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()))
                 .build();
     }
 
@@ -66,14 +66,14 @@ public class CustomUserDetailsService implements UserDetailsService {
      * Agrega una autoridad específica a un usuario dado su ID.
      * Este método busca al usuario por su ID, verifica si existe y luego agrega la autoridad especificada a su conjunto de privilegios.
      * 
-     * @param userId El ID del usuario al que se le agregará la autoridad.
+     * @param userName El ID del usuario al que se le agregará la autoridad.
      * @param authority La autoridad que se agregará al usuario, representada por la enumeración AuthorityPrivilegies.
      */
-    public UserDTO addAuthorityToUser(Long userId, AuthorityPrivilegies authority) {
+    public UserDTO addAuthorityCreateAdmin(String userName, AuthorityPrivilegies authority) {
         // Verificamos si el usuario existe
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<User> userOptional = userRepository.findByUsername(userName);
         if (!userOptional.isPresent()) 
-            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontró un usuario con el ID proporcionado: " + userId);
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontró un usuario proporcionado: " + userName);
         
         // Si existe, lo obtenemos
         User existingUser = userOptional.get();

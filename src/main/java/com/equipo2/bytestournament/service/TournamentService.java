@@ -13,12 +13,15 @@ import com.equipo2.bytestournament.repository.TournamentRepository;
 import com.equipo2.bytestournament.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import com.equipo2.bytestournament.enums.Result;
+import com.equipo2.bytestournament.enums.Role;
+
 
 /**
  * TournamentService es un servicio que se encarga de gestionar los torneos.
@@ -221,5 +224,34 @@ public class TournamentService {
         }
        
         return listDetailsRanking;
+    }
+
+    public TournamentDTO updateTournament(TournamentDTO tournamentDTO, Authentication authentication) {
+        Optional<User> userRequest = userRepository.findByUsername(authentication.getName());
+
+        if(userRequest.isEmpty() || userRequest.get().getRole() != Role.ADMIN)
+            throw new RequestException(ApiResponse.FORBIDDEN, "Acceso denegado", "El usuario no tiene permisos para actualizar torneos");
+
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentDTO.getId());
+
+        if(tournamentOptional.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un torneo con esa ID");
+
+        Tournament tournament = tournamentOptional.get();
+
+        // Actualizamos los campos del torneo con los valores del DTO
+        tournament.setName(tournamentDTO.getName());
+        tournament.setMaxPlayers(tournamentDTO.getMaxPlayers());
+        tournament.setStatus(tournamentDTO.getStatus());
+        tournament.setRounds(tournamentDTO.getRounds());
+        tournament.setMaxRounds(tournamentDTO.getMaxRounds());
+        tournament.setMatches(tournamentMapper.tournamentDtoToTournament(tournamentDTO).getMatches());
+        tournament.setPlayers(tournamentMapper.tournamentDtoToTournament(tournamentDTO).getPlayers());
+
+        // Guardamos el torneo actualizado en la base de datos
+        Tournament updatedTournament = tournamentRepository.save(tournament);
+
+        // Devolvemos el TournamentDTO actualizado
+        return tournamentMapper.tournamentToTournamentDTO(updatedTournament);
     }
 }

@@ -1,8 +1,12 @@
 package com.equipo2.bytestournament.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.model.User;
@@ -12,6 +16,7 @@ import com.equipo2.bytestournament.config.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +34,7 @@ import java.util.Optional;
  * {@link Test} se utiliza para marcar los métodos de prueba.
  */
 class UserServiceTest {
-    // Test de la clase UserService con Mockito
+    // Mokeamos las dependencias de UserService
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
@@ -121,7 +126,7 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals("mocked-jwt-token", result);
         // Verifica que el usuario se haya guardado exactamente una vez
-        verify(userRepository, times(1)).save(any(User.class));
+        Mockito.verify(userRepository, times(1)).save(any(User.class));
     }
 
     /**
@@ -182,9 +187,9 @@ class UserServiceTest {
         Authentication authentication = mock(Authentication.class);
 
         // Simula que el email del usuario autenticado es "test@gmail.com"
-        when(authentication.getName()).thenReturn("test@gmail.com");
+        when(authentication.getName()).thenReturn("testUser");
         // Simula que el repositorio devuelve un usuario al buscar por email
-        when(userRepository.findByEmail("test@gmail.com")).thenReturn(Optional.of(user));
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
         // Simula el mapeo de User a UserDTO
         when(userMapper.userToUserDTO(user)).thenReturn(userDTO);
 
@@ -209,13 +214,17 @@ class UserServiceTest {
         assertNotNull(result);
     }
 
+    /**
+     * Verifica que el método registerUser permite a un administrador crear otro administrador.
+     */
     @Test
     void testRegisterUser_AdminCreatesAdmin() {
         // Simula que el usuario autenticado es ADMIN
         Authentication authenticationRequest = mock(Authentication.class);
-        when(authenticationRequest.getName()).thenReturn("admin@gmail.com");
+        when(authenticationRequest.getName()).thenReturn("admin");
 
-        when(userRepository.findByEmail("admin@gmail.com")).thenReturn(Optional.of(userAdmin));
+        // Simula el registro de lo realizado en el servicio
+        when(userRepository.findByUsername("admin")).thenReturn(Optional.of(userAdmin));
         when(userRepository.findByUsername(userAdminDTO.getUsername())).thenReturn(Optional.empty());
         when(userMapper.userDTOToUser(userAdminDTO)).thenReturn(userAdmin);
         when(passwordEncoder.encode(userAdmin.getPassword())).thenReturn("encodedPassword");
@@ -226,7 +235,7 @@ class UserServiceTest {
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(jwtUtil.generateToken(authentication)).thenReturn("mocked-jwt-token");
 
-         // EJECUTA el método a probar
+         // Ehecuta el método a probar que funciona
         String result = userService.registerUser(userAdminDTO, authenticationRequest);
         assertNotNull(result);
         verify(userRepository, times(1)).save(any(User.class)); 

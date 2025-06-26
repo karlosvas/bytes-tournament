@@ -56,7 +56,7 @@ public class MatchController {
      * @return ResponseEntity<List<MatchDTO>> que contiene una lista de partidos generados y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/generate/{tournamentId}")
     @Operation(summary = "Generar partidos para un torneo", description = "Este endpoint permite a los administradores generar partidos para un torneo específico.")
     public ResponseEntity<List<MatchDTO>> generateMatches(@PathVariable Long tournamentId) {
@@ -86,8 +86,8 @@ public class MatchController {
      * @return MatchDTO que contiene la información actualizada del partido.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PutMapping("/{id}/result")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{matchId}/result")
     @Operation(summary = "Actualizar el resultado de un partido", description = "Este endpoint permite a los administradores actualizar el resultado de un partido específico.")
     public MatchDTO updateMatchResult(@PathVariable Long matchId, @RequestBody MatchDTO macthDTO) {
         return matchService.updateMatchResult(matchId, macthDTO);

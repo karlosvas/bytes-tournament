@@ -148,7 +148,7 @@ public class MatchService {
      * Si el match no existe, lanza una excepción.
      * Si el match existe, devuelve un mensaje informativo con los jugadores del match.
      * 
-     * @param id ID del match a comprobar.
+     * @param matchId ID del match a comprobar.
      */
     public MatchDTO checkMatch(Long matchId) {
         // Comprobamos si el match existe

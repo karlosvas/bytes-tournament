@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.config.JwtUtil;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 import com.equipo2.bytestournament.exceptions.RequestException;
@@ -64,12 +65,12 @@ public class UserService {
      */
     public String registerUser(UserDTO userDTO, Authentication authenticationRequest) {
         try {
-            // Comprobamos que el que crea un usuario solo cree admin si es admin
-            if(userDTO.getRole().equals(Role.ADMIN)) {
+            // Comprobamos que el que crea un usuario solo cree admin si es admin, o tiene permisos para crear usuarios
+            if(userDTO.getRole().equals(Role.ADMIN) || userDTO.getAuthorityPrivilegies().contains(AuthorityPrivilegies.USER_CREATE.toString())) {
                 // Si hay autentificación deve de ser administrador
                 if(authenticationRequest != null){
-                    String userName = authenticationRequest.getName(); // Email
-                    Optional<User> userRequestOptional = userRepository.findByEmail(userName);
+                    String userName = authenticationRequest.getName(); 
+                    Optional<User> userRequestOptional = userRepository.findByUsername(userName);
                     if(userRequestOptional.isEmpty())
                     throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese email");
                     
@@ -100,14 +101,13 @@ public class UserService {
             logger.info("Password encoded for user: " + user.getEmail());
 
             // Guardar en la base de datos el User
-            User newUser = userRepository.save(user);
-            System.out.println("User saved: " + newUser.getEmail());
+            userRepository.save(user);
 
 
             // Creamos el objecto authentication
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    userDTO.getEmail(),
+                    userDTO.getUsername(),
                     userDTO.getPassword()
                 )
             );
@@ -137,7 +137,7 @@ public class UserService {
             // Autenticar al usuario usando las credenciales proporcionadas
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    userDTO.getEmail(),      // Email proporcionado por el usuario
+                    userDTO.getUsername(),      // Email proporcionado por el usuario
                     userDTO.getPassword()    // Contraseña proporcionada por el usuario
                 )
             );
@@ -162,17 +162,20 @@ public class UserService {
     public UserDTO profileData(Authentication authentication) {
         try {
             // Obtener de la base de datos el User, pasandole el id de DTO
-            String email = authentication.getName();
-            Optional<User> newUser = userRepository.findByEmail(email);
+            String username = authentication.getName();
+            Optional<User> newUser = userRepository.findByUsername(username);
             
             // Si no existe devolvemos un error
             if(!newUser.isPresent())
-                throw new Exception();
+                throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se pudo agregar el usuario al torneo porque no existe user con ese token");
 
             // Convertimos a User -> UserDTO y lo devolvemos
             UserDTO user = userMapper.userToUserDTO(newUser.get());
             return user;
-        } catch (Exception e) {
+        }catch (RequestException e) {
+            // Si el usuario no existe o hay otro problema relacionado con la solicitud
+            throw e; // Re-lanzamos la excepción para que sea manejada por el controlador
+        }  catch (Exception e) {
              throw new RequestException(ApiResponse.BAD_REQUEST);
         }
     
@@ -205,7 +208,7 @@ public class UserService {
 
     /**
      * Obtiene el nombre de usuario a partir de la autenticación.
-     * Este método busca al usuario en la base de datos utilizando el nombre de usuario (email
+     * Este método busca al usuario en la base de datos utilizando el nombre de usuario 
      * de la autenticación) y devuelve su nombre de usuario.
      * 
      * @param authentication la autenticación del usuario que está solicitando su nombre de usuario
@@ -213,7 +216,7 @@ public class UserService {
      */
     public String getUserNameFronAutentication(Authentication authentication) {
         // Obtenemos el usuario de la base de datos a partir de el token de autenticación del usuario que hizo la petición
-        Optional<User> userOptional =  userRepository.findByEmail(authentication.getName());
+        Optional<User> userOptional =  userRepository.findByUsername(authentication.getName());
         
         if(userOptional.isEmpty())
             throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");

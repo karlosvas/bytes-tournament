@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,7 @@ public class TournamentDTO {
     private Status status;
 
     @NotNull
+    @Default
     @Schema(description = "Número de rondas del torneo", example = "3")
     private Integer rounds = 0;
 
@@ -53,8 +56,10 @@ public class TournamentDTO {
     private Integer maxRounds;
 
     @Schema(description = "Lista de partidos asociados al torneo")
+    @Default
     private List<Match> matches = new ArrayList<>();
 
     @Schema(description = "Lista de jugadores que participan en el torneo")
+    @Default
     private List<Long> players = new ArrayList<>();
 }

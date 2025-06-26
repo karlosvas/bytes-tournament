@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 
 /**
  *  UserDTO es una clase que se utiliza para transportar datos entre diferentes capas de una aplicación,
@@ -45,6 +46,7 @@ public class UserDTO {
 
     @NotBlank
     @Schema(description = "Contraseña del usuario", example = "password123")
+    @Default
     private String password = "hidden"; // Se oculta la contraseña en la documentación
 
     @NotNull
@@ -52,6 +54,7 @@ public class UserDTO {
     private Role role;
 
     @NotBlank
+    @Default
     @Schema(description = "Rango del usuario", example = "Oro")
     private Rank rank = Rank.BRONZE;
 
@@ -60,11 +63,14 @@ public class UserDTO {
     private Integer points;
 
     @Schema(description = "Lista de IDs de partidas en las que el usuario ha participado")
+    @Default
     private List<Long> matches = new ArrayList<>();
 
+    @Default
     @Schema(description = "Lista de IDs de torneos en los que el usuario ha participado")
     private List<Long> tournaments = new ArrayList<>();
 
+    @Default
     @Schema(description = "Lista de privilegios de autoridad del usuario")
     private Set<String> authorityPrivilegies = new HashSet<>();
 }

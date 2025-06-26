@@ -64,7 +64,7 @@ public class TournamentController {
      * @return ResponseEntity<TournamentDTO> que contiene el torneo creado y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Crear un torneo", description = "Este endpoint permite a los administradores crear un nuevo torneo.")
     public ResponseEntity<TournamentDTO> create(@RequestBody TournamentDTO tournamentDTO) {
@@ -80,7 +80,7 @@ public class TournamentController {
      * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un estado HTTP 200 OK.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/players")
     @Operation(summary = "Unirse a un torneo como jugador", description = "Este endpoint permite a los jugadores unirse a un torneo existente.")
     public TournamentDTO joinTournament(@RequestParam Long tournamentId, @RequestParam String userName) {
@@ -93,9 +93,9 @@ public class TournamentController {
      * Este método utiliza el servicio UserService para obtener el nombre del usuario autenticado.
      * y luego llama al servicio TournamentService para agregar al usuario al torneo especificado.
      * 
-     * @param tournamentId
-     * @param authentication
-     * @return
+     * @param tournamentId ID del torneo al que el usuario desea unirse.
+     * @param authentication Objeto de autenticación que contiene la información del usuario autenticado.
+     * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
     @PostMapping("/players/me")
@@ -111,9 +111,9 @@ public class TournamentController {
      * Obtiene la clasificación en formato JSON, o en el caso de que el parámetro pretty sea true,
      * en formato String para una visualización más amigable.
      * 
-     * @param tournamentId
-     * @param pretty
-     * @return
+     * @param tournamentId ID del torneo del cual se desea obtener la clasificación.
+     * @param pretty Indica si la respuesta debe ser formateada de manera amigable (pretty) o no.
+     * @return ResponseEntity<?> que contiene la clasificación del torneo y un estado HTTP 200 OK.
      */
     @SwaggerApiResponses
     @GetMapping("/ranking/{tournamentId}")
@@ -140,5 +140,12 @@ public class TournamentController {
     public ResponseEntity<?> getRankingDetails(@PathVariable Long tournamentId, @RequestParam(value = "pretty", required = false) boolean pretty) {
         var ranking = tournamentService.getRankingDetails(tournamentId);
         return ResponseEntity.ok((pretty) ?  ranking.toString() : ranking);
+    }
+
+    @SwaggerApiResponses
+    @PutMapping
+    @Operation(summary = "Actualizar un torneo", description = "Este endpoint permite a los administradores actualizar un torneo existente.")
+    public TournamentDTO updateTournament(@RequestBody TournamentDTO tournamentDTO, Authentication authentication) {
+        return tournamentService.updateTournament(tournamentDTO, authentication);
     }
 }
