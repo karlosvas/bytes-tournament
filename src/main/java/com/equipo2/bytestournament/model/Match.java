@@ -89,7 +89,15 @@ public class Match {
         this.player1 = player1;
         this.player2 = player2;
         this.result = result;
+
         this.round = 1;
+
+
+        if (round < 1) {
+            throw new IllegalArgumentException("La ronda debe ser al menos la 1.")
+        } else {
+            this.round = round
+        }
     }
 
     public Long getId() {
@@ -123,9 +131,16 @@ public class Match {
     }
 
     public void setPlayer2(User player2) {
+
         if (player2 == null) {
             throw new IllegalArgumentException("El jugador no puede ser nulo.");
-        }
+
+
+        if (player1.getId() == player2.getId()) {
+            throw new IllegalArgumentException("Un jugador no puede competir contra sí mismo, escoge otro jugador.")
+        } else {
+            this.player2 = player2;
+       }
         if (player2.getId() == null) {
             throw new IllegalArgumentException("El jugador debe tener id asignado.");
         }
@@ -134,6 +149,7 @@ public class Match {
         }
 
         this.player2 = player2;
+    }
     }
 
     public Result getResult() {
@@ -153,8 +169,16 @@ public class Match {
     }
 
     public void setRound(Integer round) {
+
         if (round == null || round < this.round) {
             throw new IllegalArgumentException("La ronda debe ser igual o superior a la que ya está la partida.");
+
+
+        if (round < 1) {
+            throw new IllegalArgumentException("La ronda debe ser al menos la 1.")
+        } else {
+            this.round = round;
+
         }
         this.round = round;
     }

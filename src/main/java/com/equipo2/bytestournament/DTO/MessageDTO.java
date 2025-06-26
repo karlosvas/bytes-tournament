@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Schema(description = "DTO para mensajes en el sistema")
 public class MessageDTO {
+
     @Schema(description = "Identificador único del mensaje", example = "1")
     private Long id;
      
@@ -37,15 +38,13 @@ public class MessageDTO {
     @Schema(description = "Contenido del mensaje", example = "¡Hola!")
     private String content;
 
-    @NotNull
     @Schema(description = "Fecha y hora del mensaje", example = "2024-06-16T15:30:00")
     private LocalDateTime timestamp;
 
+    @Schema(description = "ID de la partida si aplica", example = "300")
     private Long matchId;
 
-    @NotNull
+  
     @Schema(description = "ID del torneo relacionado", example = "200")
-
-    // TODO: Poner relación entre entidaddes
     private Long tournamentId;
 }
