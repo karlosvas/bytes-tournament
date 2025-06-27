@@ -3,6 +3,7 @@ package com.equipo2.bytestournament.mapper;
 import com.equipo2.bytestournament.DTO.TournamentDTO;
 import com.equipo2.bytestournament.mapper.helper.TournamentMapperHelper;
 import com.equipo2.bytestournament.model.Tournament;
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,11 +22,23 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {TournamentMapperHelper.class})
 public interface TournamentMapper {
+    // Tournament -> TournamentDTO
     @Mapping(target = "matches", source = "matches")
     @Mapping(target = "players", source = "players")
     TournamentDTO tournamentToTournamentDTO(Tournament tournament);
 
+    // TournamentDTO -> Tournament
     @Mapping(target = "matches", source = "matches")
     @Mapping(target = "players", source = "players")
     Tournament tournamentDtoToTournament(TournamentDTO tournamentDTO);
+
+    // List<TournamentDTO> -> List<Tournament>
+    @Mapping(target = "matches", source = "matches")
+    @Mapping(target = "players", source = "players")
+    List<Tournament> tournamentDTOListToTournamentList(List<TournamentDTO> listTournamentsDTOs);
+
+    // List<Tournament> -> List<TournamentDTO>
+    @Mapping(target = "matches", source = "matches")
+    @Mapping(target = "players", source = "players")
+    List<TournamentDTO> tournamentListToTournamentDTOList(List<Tournament> listTournaments);
 }

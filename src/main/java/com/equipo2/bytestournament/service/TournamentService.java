@@ -223,30 +223,15 @@ public class TournamentService {
         return listDetailsRanking;
     }
 
-
-
     /**
      * Obtiene una lista con los torneos.
      * 
      * @param tournamentDTO ID del torneo para el cual se quieren obtener los detalles del ranking.
      * @return Lista de RankingDetailsDTO con los detalles del ranking de los jugadores del torneo.
      */
-
     public List<TournamentDTO> getTournament(){
-
-    List<Tournament> tournaments = tournamentRepository.findAll();
-    List<TournamentDTO> tournamentDTOs = new ArrayList<>();
-    for (Tournament tournament : tournaments) {
-        tournamentDTOs.add(tournamentMapper.tournamentToTournamentDTO(tournament));
+        List<Tournament> tournaments = tournamentRepository.findAll();
+        List<TournamentDTO> tournamentDTOs = tournamentMapper.tournamentListToTournamentDTOList(tournaments);
+        return tournamentDTOs;
     }
-    return tournamentDTOs;
-
-
-
-    }
-
-
-
-
-
 }

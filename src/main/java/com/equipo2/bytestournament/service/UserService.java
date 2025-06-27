@@ -224,13 +224,16 @@ public class UserService {
         return user.getUsername();
     }
 
-
+     /**
+     * Obtiene la lista de todos los usuarios registrados en el sistema.
+     * Este método recupera todos los usuarios de la base de datos, los convierte a UserDTO
+     * y devuelve la lista resultante.
+     * 
+     * @return List<UserDTO> que contiene la lista de todos los usuarios encontrados.
+     */
     public List<UserDTO> listAllUsers() {
-    List<User> users = userRepository.findAll();
-    List<UserDTO> userDTOs = new ArrayList<>();
-    for (User user : users) {
-        userDTOs.add(userMapper.userToUserDTO(user));
+        List<User> users = userRepository.findAll();
+        List<UserDTO> userDTOs = userMapper.userListToUserDTOList(users);
+        return userDTOs;
     }
-    return userDTOs;
-}
 }

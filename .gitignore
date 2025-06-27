@@ -34,5 +34,3 @@ build/
 
 ### Custom files ###
 .env
-application-dev.properties
-application-prod.properties

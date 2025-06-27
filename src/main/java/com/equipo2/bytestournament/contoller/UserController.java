@@ -114,11 +114,17 @@ public class UserController {
         return userService.profileUser(id);
     }
 
+     /**
+     * Obtiene la lista de todos los usuarios registrados.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     * 
+     * @return List<UserDTO> que contiene la lista de todos los usuarios encontrados.
+     */
     @Operation(summary = "Listar usuarios", description = "Este endpoint permite listar todos los usuarios.")
-@SwaggerApiResponses
-@GetMapping("/users/list")
-@PreAuthorize("hasAuthority('ADMIN')")
-public List<UserDTO> listAllUsers() {
-    return userService.listAllUsers();
-}
+    @SwaggerApiResponses
+    @GetMapping("/user/list")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserDTO> listAllUsers() {
+        return userService.listAllUsers();
+    }
 }
