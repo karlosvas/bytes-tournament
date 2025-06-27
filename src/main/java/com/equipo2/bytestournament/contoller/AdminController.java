@@ -67,7 +67,7 @@ public class AdminController {
      * Permite a un administrador dar el permiso 'USER_CREATE' a un usuario específico existente, pasado por parámetro.
      * 
      * @param username El nombre de usuario del nuevo usuario a crear.
-     * @return ResponseEntity<UserDTO> Un objeto ResponseEntity que contiene el nuevo usuario creado para devolber 201 Created.
+     * @return ResponseEntity<UserDTO> Un objeto ResponseEntity que contiene el nuevo usuario creado para devolver 201 Created.
      */
     @PostMapping("/user")
     @PreAuthorize("hasAuthority('USER_CREATE')")
