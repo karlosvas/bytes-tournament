@@ -47,7 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Lo obtenemos de la base de datos
-        Optional<User> userOptional = userRepository.findByEmail(username);
+        Optional<User> userOptional = userRepository.findByUsername(username);
 
         // Verificamos si el usuario existeq
         if(!userOptional.isPresent())
@@ -56,7 +56,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         // Si existe, lo convertimos a UserDetails y lo devolvemos
         User user = userOptional.get();
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
+                .username(user.getUsername())
                 .password(user.getPassword())
                 .authorities(new SimpleGrantedAuthority(user.getRole().getName()))
                 .build();

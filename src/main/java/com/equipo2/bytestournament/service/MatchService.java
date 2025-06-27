@@ -68,17 +68,21 @@ public class MatchService {
             // Obtenemos la lista de jugadores del torneo
             List<User> players = tournament.getPlayers();
             if (players.size() < 2)
-                throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY);
+                throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "Necesitas al menos 2 jugadores en el torneo para generar matches");
 
             // Actualizamos la ronda del torneo
             tournament.setRounds(tournament.getRounds() + 1);
+            logger.info("Ronda actual del torneo: " + tournament.getRounds());
 
             // Copiamos los jugadores para la logica de emparejamiento y no modificar la lista original
             List<User> emparejatedPlayers = new ArrayList<>(players);
+            logger.info("Jugadores a emparejar: " + emparejatedPlayers.size());
+
             // Genemamos todos los matches de la ronda actual
             while (emparejatedPlayers.size() >= 2) {
                 List<User> emparejatedMatch = this.matchUsers(emparejatedPlayers);
 
+                logger.info("Emparejando jugadores: " + emparejatedMatch.get(0).getEmail() + " vs " + emparejatedMatch.get(1).getEmail());
                 // Obtenemos los dos jugadores emparejados
                 User player1 = emparejatedMatch.get(0);
                 User player2 = emparejatedMatch.get(1);
@@ -92,6 +96,7 @@ public class MatchService {
                         .round(tournament.getRounds())
                         .build();
 
+                logger.info("Emparejados: " + player1.getEmail() + " vs " + player2.getEmail());
                 // Añadimos un nuevo match a la lista de matches del torneo
                 List<Match> tournamentList = tournament.getMatches();
                 tournamentList.add(newMatch);
@@ -121,7 +126,7 @@ public class MatchService {
      * @param allPlayers Lista de todos los jugadores del torneo.
      * @return Lista de dos jugadores emparejados.
      */
-    public List<User> matchUsers(List<User> allPlayers) {
+    public List<User> matchUsers(List<User> allPlayers) throws RequestException {
         // Comprobamos que haya al menos 2 jugadores para emparejar
         if(allPlayers.size() < 2)
             throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable",
@@ -192,5 +197,32 @@ public class MatchService {
         logger.info("Resultado del match actualizado: " + matchUpdated.getPlayer1().getEmail() + " vs " + matchUpdated.getPlayer2().getEmail());
 
         return matchMapper.matchToMatchDTO(matchUpdated);
+    }
+
+    public List<MatchDTO> getAllMatches() {
+        // Obtenemos todos los matches de la base de datos
+        List<Match> matches = matchRepository.findAll();
+
+        logger.info("Obtenidos " + matches.size() + " matches de la base de datos");
+
+        // Convertimos los matches a MatchDTO
+        return matchMapper.matchListToMatchDTOList(matches);
+    }
+
+    /**
+     * Elimina un match de la base de datos.
+     * Si el match no existe, lanza una excepción.
+     * 
+     * @param matchID ID del match a eliminar.
+     */
+    public void deleteMatch(Long matchID) {
+        // Comprobamos si el match existe
+        Optional<Match> matchOptional = matchRepository.findById(matchID);
+        if (matchOptional.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + matchID + " no existe");
+
+        Match match = matchOptional.get();
+        logger.info("Match eliminado: " + match.getPlayer1().getEmail() + " vs " + match.getPlayer2().getEmail());
+        matchRepository.delete(match);
     }
 }
