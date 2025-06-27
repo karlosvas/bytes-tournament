@@ -12,12 +12,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "matches")
 public class Match {
     public static final Long UMBRAL = 1000L;
 
@@ -34,13 +38,16 @@ public class Match {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @Column(name = "tournament_id", updatable = false, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", updatable = false, nullable = false)
     private Tournament tournament;
 
-    @Column(name = "player1", updatable = true, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "player1_id", nullable = false)
     private User player1;
 
-    @Column(name = "player2", updatable = true, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "player2_id", nullable = false)
     private User player2;
 
     @Enumerated(EnumType.STRING)

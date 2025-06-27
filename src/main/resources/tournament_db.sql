@@ -37,7 +37,7 @@ CREATE TABLE public.matches (
     tournament_id BIGINT NOT NULL,
     player1_id BIGINT,
     player2_id BIGINT,
-    result varchar(20) check (result IN ('PLAYER1_WIN', 'PLAYER2_WIN', 'DRAW', 'WIN', 'LOSE', 'PENDING')) NOT NULL,
+    result varchar(20) check (result IN ('PLAYER1_WIN', 'PLAYER2_WIN', 'DRAW', 'PENDING')) NOT NULL,
     round integer NOT NULL
 );
 

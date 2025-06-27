@@ -14,15 +14,24 @@ import org.mapstruct.factory.Mappers;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TournamentMapperTest {
 
+    /**
+     * tournamentMapper Instancia del TournamentMapper que se va a probar.
+     * userRepository Repositorio de usuarios, usado por el TournamentMapperHelper.
+     * matchRepository Repositorio de partidos, usado por el TournamentMapperHelper.
+     */
     private static TournamentMapper tournamentMapper;
     private static UserRepository userRepository;
     private static MatchRepository matchRepository;
     
+    /**
+     * setUp Método que se ejecuta antes de todas las pruebas.
+     * Inyecta el TournamentMapperHelper en el TournamentMapper.
+     * Este método se ejecuta una sola vez antes de todas las pruebas en esta clase.
+     */
     @BeforeAll
     static void setUp() throws Exception {
         tournamentMapper = Mappers.getMapper(TournamentMapper.class);
@@ -32,6 +41,12 @@ public class TournamentMapperTest {
         helperField.set(tournamentMapper, helper);
     }
 
+    /**
+     * testTournamentToTournamentDTO Método que prueba la conversión
+     * de Tournament a TournamentDTO.
+     * Crea un Tournament, lo convierte a TournamentDTO y verifica que
+     * los campos coincidan.
+     */
     @Test
     void testTournamentToTournamentDTO() {
         User user1 = User.builder().id(1L).build();
@@ -65,6 +80,13 @@ public class TournamentMapperTest {
         assertTrue(dto.getPlayers().contains(2L));
     }
 
+    /**
+     * testTournamentDTOToTournament Método que prueba la conversión
+     * de TournamentDTO a Tournament.
+     * Crea un TournamentDTO, lo convierte a Tournament y verifica que
+     * los campos coincidan.
+     * Los IDs de los jugadores se pueden mapear a entidades reales si es necesario.
+     */
     @Test
     void testTournamentDTOToTournament() {
         Match match1 = Match.builder().id(10L).build();

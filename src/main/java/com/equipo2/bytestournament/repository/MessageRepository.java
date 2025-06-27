@@ -2,7 +2,6 @@ package com.equipo2.bytestournament.repository;
  
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.equipo2.bytestournament.model.Message;
@@ -27,7 +26,7 @@ public interface MessageRepository extends JpaRepository  <Message, Long>{
      * @param tournamentId el identificador del torneo
      * @return una lista de mensajes del torneo indicado
      */
-    Optional<List<Message>> findByTournamentId(Long tournamentId);
+    List<Message> findByTournamentId(Long tournamentId);
 
     /**
      * Recupera la lista de mensajes asociados a una partida específica.
@@ -35,7 +34,7 @@ public interface MessageRepository extends JpaRepository  <Message, Long>{
      * @param matchId el identificador de la partida
      * @return una lista de mensajes de la partida indicada
      */
-    Optional<List<Message>> findByMatchId(Long matchId);
+    List<Message> findByMatchId(Long matchId);
 
     /**
      *  Recupera la lista de mensajes asociados a un torneo específico, ordenados por la marca de tiempo de forma ascendente.
@@ -44,7 +43,7 @@ public interface MessageRepository extends JpaRepository  <Message, Long>{
      * @param tournamentId el identificador del torneo
      * @return una lista de mensajes del torneo indicado, ordenados por la marca de tiempo de forma ascendente
      */
-    Optional<List<Message>> findByTournamentIdOrderByTimestampAsc(Long tournamentId);
+    List<Message> findByTournamentIdOrderByTimestampAsc(Long tournamentId);
 
     /**
      *  Recupera la lista de mensajes asociados a una partida específica, ordenados por la marca de tiempo de forma ascendente.
@@ -53,6 +52,6 @@ public interface MessageRepository extends JpaRepository  <Message, Long>{
      * @param matchId el identificador de la partida
      * @return una lista de mensajes de la partida indicada, ordenados por la marca de tiempo de forma ascendente
      */
-    Optional<List<Message>> findByMatchIdOrderByTimestampAsc(Long matchId);
+    List<Message> findByMatchIdOrderByTimestampAsc(Long matchId);
 }
 

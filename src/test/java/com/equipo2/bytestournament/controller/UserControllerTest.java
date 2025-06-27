@@ -1,9 +1,14 @@
 package com.equipo2.bytestournament.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +65,7 @@ public class UserControllerTest {
             "username": "jorge",
             "email": "jorge@gmail.com",
             "password": "jorge20",
-            "role": "PLAYER",
-            "points": 900
+            "role": "PLAYER"
             }
         """;
 
@@ -89,8 +93,7 @@ public class UserControllerTest {
             "username": "admin",
             "email": "admin@bytes.com",
             "password": "admin",
-            "role": "ADMIN",
-            "points": 1000
+            "role": "ADMIN"
         }
         """;
 
@@ -120,7 +123,7 @@ public class UserControllerTest {
 
         Mockito.when(userService.profileData(Mockito.any(Authentication.class))).thenReturn(userDTO);
 
-        mockMvc.perform(get("/api/user/me"))
+        mockMvc.perform(get("/api/user/auth/me"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.username").value("testuser"))
                 .andExpect(jsonPath("$.email").value("testuser@correo.com"))
@@ -147,5 +150,60 @@ public class UserControllerTest {
             .andExpect(jsonPath("$.username").value("testuser"))
             .andExpect(jsonPath("$.email").value("testuser@correo.com"))
             .andExpect(jsonPath("$.role").value("ADMIN"));
+    }
+
+    /**
+     * Test para la obtención de todos los usuarios.
+     * Este test verifica que al enviar una petición GET al endpoint /api/user/{userId}/list
+     */
+    @Test
+    @WithMockUser(username = "test", roles = {"ADMIN"})
+    void getAllUsersTest() throws Exception {
+        Long userId = 1L;
+
+        Mockito.when(userService.listAllUsers()).thenReturn(List.of(new UserDTO()));
+
+        mockMvc.perform(get("/api/user/list", userId)
+                .with(csrf()))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test para la actualización de un usuario.
+     * Este test verifica que al enviar una petición PUT al endpoint /api/user/{userId}/update
+     */
+    @Test
+    @WithMockUser(username = "test", roles = {"ADMIN"})
+    void updateUserTest() throws Exception {
+        Long userId = 1L;
+        String userJson = """
+        {
+            "username": "admin",
+            "email": "admin@bytes.com",
+            "password": "admin",
+            "role": "ADMIN",
+            "points": 900
+        }
+                    
+        """;
+        Mockito.when(userService.updateUser(Mockito.anyLong(), Mockito.any(UserDTO.class)))
+                .thenReturn(new UserDTO());
+
+        mockMvc.perform(put("/api/user/{userId}", userId).with(csrf())
+                .contentType("application/json")
+                .content(userJson))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "test", roles = {"ADMIN"})
+    void deleteUserTest() throws Exception {
+        Long userId = 1L;
+
+        Mockito.doNothing().when(userService).deleteUser(userId);
+
+        mockMvc.perform(delete("/api/user/{userId}", userId)
+                .with(csrf()))
+                .andExpect(status().isNoContent());
     }
 }

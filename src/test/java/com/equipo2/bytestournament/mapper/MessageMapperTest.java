@@ -12,6 +12,12 @@ public class MessageMapperTest {
 
     private static final MessageMapper messageMapper = Mappers.getMapper(MessageMapper.class);
 
+    /**
+     * testMessageToMessageDTO Método que prueba la conversión
+     * de Message a MessageDTO.
+     * Crea un Message, lo convierte a MessageDTO y verifica que
+     * los campos coincidan.
+     */
     @Test
     void testMessageToMessageDTO() {
         Message message = Message.builder()
@@ -34,6 +40,12 @@ public class MessageMapperTest {
         assertEquals(message.getTournamentId(), dto.getTournamentId());
     }
 
+    /**
+     * testMessageDTOToMessage Método que prueba la conversión
+     * de MessageDTO a Message.
+     * Crea un MessageDTO, lo convierte a Message y verifica que
+     * los campos coincidan.
+     */
     @Test
     void testMessageDTOToMessage() {
         MessageDTO dto = MessageDTO.builder()
@@ -56,6 +68,12 @@ public class MessageMapperTest {
         assertEquals(dto.getTournamentId(), message.getTournamentId());
     }
 
+    /**
+     * testMessageListToMessageDTOList Método que prueba la conversión
+     * de una lista de Message a una lista de MessageDTO.
+     * Crea una lista de Message, la convierte a MessageDTO y verifica que
+     * la lista resultante tenga el tamaño correcto y los IDs coincidan.
+     */
     @Test
     void testMessageListToMessageDTOList() {
         Message message = Message.builder()
@@ -73,6 +91,12 @@ public class MessageMapperTest {
         assertEquals(message.getId(), dtoList.get(0).getId());
     }
 
+    /**
+     * testMessageDTOListToMessageList Método que prueba la conversión
+     * de una lista de MessageDTO a una lista de Message.
+     * Crea una lista de MessageDTO, la convierte a Message y verifica que
+     * la lista resultante tenga el tamaño correcto y los IDs coincidan.
+     */
     @Test
     void testMessageDTOListToMessageList() {
         MessageDTO dto = MessageDTO.builder()

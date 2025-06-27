@@ -11,7 +11,6 @@ import com.equipo2.bytestournament.repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import org.mockito.Mock;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -80,6 +79,12 @@ class MatchMapperTest {
         assertEquals(dto.getRound(), matchMapped.getRound());
     }
 
+    /**
+     * testMatchListToMatchDTOList Método que prueba la conversión
+     * de una lista de Match a una lista de MatchDTO.
+     * Crea una lista de Match, la convierte a MatchDTO y verifica que
+     * la lista resultante tenga el tamaño correcto y los IDs coincidan.
+     */
     @Test
     void testMatchListToMatchDTOList() {
         Tournament tournament = Tournament.builder().id(1L).build();
@@ -101,6 +106,12 @@ class MatchMapperTest {
         assertEquals(match.getId(), dtoList.get(0).getId());
     }
 
+    /**
+     * testMatchDTOListToMatchList Método que prueba la conversión
+     * de una lista de MatchDTO a una lista de Match.
+     * Crea una lista de MatchDTO, la convierte a Match y verifica que
+     * la lista resultante tenga el tamaño correcto y los IDs coincidan.
+     */
     @Test
     void testMatchDTOListToMatchList() {
         MatchDTO dto = MatchDTO.builder()

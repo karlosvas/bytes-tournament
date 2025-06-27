@@ -41,9 +41,12 @@ public class MessageDTO {
     @Schema(description = "Fecha y hora del mensaje", example = "2024-06-16T15:30:00")
     private LocalDateTime timestamp;
 
+    @NotNull
     @Schema(description = "ID de la partida si aplica", example = "300")
     private Long matchId;
   
+
+    @NotNull
     @Schema(description = "ID del torneo relacionado", example = "200")
     private Long tournamentId;
 }

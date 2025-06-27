@@ -7,6 +7,7 @@ import java.util.Set;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -53,14 +54,14 @@ public class UserDTO {
     @Schema(description = "Rol del usuario", example = "ADMIN")
     private Role role;
 
-    @NotBlank
     @Default
     @Schema(description = "Rango del usuario", example = "Oro")
     private Rank rank = Rank.BRONZE;
 
-    @NotNull
+    @Default
+    @Min(value = 0, message = "Los puntos deben ser al menos 0")
     @Schema(description = "Puntos del usuario", example = "1500")
-    private Integer points;
+    private Integer points = 0;
 
     @Schema(description = "Lista de IDs de partidas en las que el usuario ha participado")
     @Default

@@ -1,6 +1,7 @@
 package com.equipo2.bytestournament.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -107,5 +108,49 @@ public class MatchControllerTest {
                 .contentType("application/json")
                 .content(macthDTO))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Prueba para el endpoint de actualización del resultado de un partido que no existe.
+     * Simula una petición PUT al endpoint "/api/matches/{matchId}/result"
+     */
+    @Test
+    @WithMockUser(username = "test", roles = {"ADMIN"})
+    public void updateMatchResultTestNotFound() throws Exception {
+        Long matchId = 99L;
+        String macthDTO = """
+                {
+                    "tournament": 100,
+                    "player1": 34,
+                    "player2": 35,
+                    "result": "PLAYER2_WIN",
+                    "round": 1
+                }
+                """;
+
+        Mockito.when(matchService.updateMatchResult(matchId, new MatchDTO()))
+                .thenThrow(new RequestException(ApiResponse.NOT_FOUND));
+
+        mockMvc.perform(put("/api/matches/{matchId}/result", matchId)
+                .with(csrf())
+                .contentType("application/json")
+                .content(macthDTO))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Prueba para eliminar un partido.
+     * Simula una petición DELETE al endpoint "/api/matches/{matchId}" con un usuario con rol ADMIN.
+     */
+    @Test
+    @WithMockUser(username = "test", roles = {"ADMIN"})
+    public void deleteMatchTest() throws Exception {
+        Long matchId = 1L;
+
+        Mockito.doNothing().when(matchService).deleteMatch(matchId);
+
+        mockMvc.perform(delete("/api/matches/{matchId}", matchId)
+                .with(csrf()))
+                .andExpect(status().isNoContent());
     }
 }

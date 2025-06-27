@@ -4,6 +4,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import com.equipo2.bytestournament.DTO.RankingDTO;
@@ -19,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.equipo2.bytestournament.contoller.TournamentController;
 import com.equipo2.bytestournament.service.TournamentService;
 import com.equipo2.bytestournament.service.UserService;
-
 import java.util.List;
 
 /**
@@ -187,4 +187,21 @@ public class TournamentControllerTest {
                 .content(tournamentDTO))
                 .andExpect(status().isOk());
     }
+
+        /**
+         * Prueba para eliminar un torneo.
+         * Simula una petición DELETE al endpoint "/api/tournaments/{tournamentId}" con un usuario con rol ADMIN.
+         * El torneo se elimina según el ID proporcionado en la URL.
+         */
+        @Test
+        @WithMockUser(username = "test", roles = {"ADMIN"})
+        public void deleteTournamentTest() throws Exception {
+                Long tournamentId = 1L;
+
+                Mockito.doNothing().when(tournamentService).deleteTournament(tournamentId);
+
+                mockMvc.perform(delete("/api/tournaments/{tournamentId}", tournamentId).with(csrf()))
+                        .andExpect(status().isNoContent());
+        }
+
 }
