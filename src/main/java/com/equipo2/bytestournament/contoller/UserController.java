@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -51,7 +54,7 @@ public class UserController {
     }
 
     /**
-     * Maneja lso registros de usuarios, para crear un nuevo usuario en la BD devolbiendo el token de acceso.
+     * Maneja los registros de usuarios, para crear un nuevo usuario en la BD devolviendo el token de acceso.
      * Este método permite a un nuevo usuario registrarse en la aplicación, para crear otro administrador es necesario
      * tener un usuario con privilegios de administrador. Por ejemplo con el usuario root creado por defecto al iniciar la aplicación.
      * para mas info ver el metodo inMemoryUserDetailsManager en la clase {@link SecurityConfig}.
@@ -110,4 +113,12 @@ public class UserController {
     public UserDTO profileUser(@PathVariable Long id) {
         return userService.profileUser(id);
     }
+
+    @Operation(summary = "Listar usuarios", description = "Este endpoint permite listar todos los usuarios.")
+@SwaggerApiResponses
+@GetMapping("/users/list")
+@PreAuthorize("hasAuthority('ADMIN')")
+public List<UserDTO> listAllUsers() {
+    return userService.listAllUsers();
+}
 }

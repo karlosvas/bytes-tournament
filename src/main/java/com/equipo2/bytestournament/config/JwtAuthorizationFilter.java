@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 /**
  * JwtAuthorizationFilter es un filtro de autorización que se encarga de validar el token JWT
  * en cada solicitud HTTP. Extiende OncePerRequestFilter para asegurarse de que se ejecute una vez por solicitud.
- * Este filtro se llama justo depues de ejecutarse el filtro de autenticación JWT.
+ * Este filtro se llama justo depúes de ejecutarse el filtro de autenticación JWT.
  */
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 

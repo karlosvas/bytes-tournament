@@ -9,7 +9,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-
+ 
 /**
  * Mapper que convierte la entidad User a DTO y la DTO a entidad
  * y viceversa.

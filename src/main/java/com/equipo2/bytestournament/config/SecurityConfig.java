@@ -47,7 +47,7 @@ public class SecurityConfig {
      * Estas propiedades se utilizan para configurar el usuario administrador y su contraseña.
      * 
      * En este caso se utiliza para definir un usuario administrador en memoria al iniciar la aplicación para poder crear mas administradores.
-     * Se utiliza el mismo ususario y contraseña que el administrador de la BD.
+     * Se utiliza el mismo usuario y contraseña que el administrador de la BD.
      */
     @Value("${spring.datasource.username}") private String usernameAdmin;
     @Value("${spring.datasource.password}") private String usernamePassword;

@@ -19,6 +19,7 @@ import java.util.List;
  * {@link Mapper} Anotación de MapStruct que indica que esta interfaz es un mapper.
  * {@link Mapping} Anotación de MapStruct que indica cómo se deben mapear
  */
+
 @Mapper(componentModel = "spring", uses = {MatchMapperHelper.class})
 public interface MatchMapper {
     @Mapping(source = "tournament", target = "tournament")

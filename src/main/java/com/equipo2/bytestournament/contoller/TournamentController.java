@@ -8,6 +8,9 @@ import com.equipo2.bytestournament.service.TournamentService;
 import com.equipo2.bytestournament.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -79,8 +82,10 @@ public class TournamentController {
      * @param userName Nombre del usuario que está actualizando el torneo.
      * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un estado HTTP 200 OK.
      */
+
+     //Se cambia de ADMIN a player
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('PLAYER')")
     @PostMapping("/players")
     @Operation(summary = "Unirse a un torneo como jugador", description = "Este endpoint permite a los jugadores unirse a un torneo existente.")
     public TournamentDTO joinTournament(@RequestParam Long tournamentId, @RequestParam String userName) {
@@ -88,7 +93,7 @@ public class TournamentController {
     }
 
     /**
-     * Permite a el usuario autenticado unirse a un torneo existente.
+     * Permite al usuario autenticado unirse a un torneo existente.
      * Este método es accesible para todos los usuarios autenticados.
      * Este método utiliza el servicio UserService para obtener el nombre del usuario autenticado.
      * y luego llama al servicio TournamentService para agregar al usuario al torneo especificado.
@@ -98,6 +103,7 @@ public class TournamentController {
      * @return
      */
     @SwaggerApiResponses
+    @PreAuthorize("hasAnyAuthority('PLAYER')")
     @PostMapping("/players/me")
     @Operation(summary = "Unirse a un torneo como jugador autenticado", description = "Este endpoint permite al usuario autenticado unirse a un torneo existente.")
     public ResponseEntity<TournamentDTO> joinTournamentWithActualUser(@RequestParam Long tournamentId, Authentication authentication) {
@@ -141,4 +147,23 @@ public class TournamentController {
         var ranking = tournamentService.getRankingDetails(tournamentId);
         return ResponseEntity.ok((pretty) ?  ranking.toString() : ranking);
     }
+
+
+
+
+    @SwaggerApiResponses
+    @GetMapping
+    @Operation(summary = "Listar torneos", description = "Este endpoint permite listar los torneos.")
+    public ResponseEntity<List<TournamentDTO>> getTournaments() {
+    return ResponseEntity.ok(tournamentService.getTournament());
+    }
+
+   @SwaggerApiResponses
+    @GetMapping("/{id}")
+    @Operation(summary = "Detalles del torneo", description = "Este endpoint muestra los detalles de un torneo por su ID.")
+    public ResponseEntity<TournamentDTO> getTournamentById(@PathVariable Long id) {
+        return ResponseEntity.ok(tournamentService.findTournamentById(id));
+    }
+
+
 }
