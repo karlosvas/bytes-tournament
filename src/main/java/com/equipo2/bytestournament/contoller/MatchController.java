@@ -7,7 +7,6 @@ import com.equipo2.bytestournament.service.MatchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 
 /**
  * MatchController es un controlador REST que maneja las solicitudes relacionadas con los partidos de cada torneo.
@@ -59,7 +57,7 @@ public class MatchController {
      * @return ResponseEntity<List<MatchDTO>> que contiene una lista de partidos generados y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/generate/{tournamentId}")
     @Operation(summary = "Generar partidos para un torneo", description = "Este endpoint permite a los administradores generar partidos para un torneo específico.")
     public ResponseEntity<List<MatchDTO>> generateMatches(@PathVariable Long tournamentId) {
@@ -89,8 +87,8 @@ public class MatchController {
      * @return MatchDTO que contiene la información actualizada del partido.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PutMapping("/result/{matchId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{matchId}/result")
     @Operation(summary = "Actualizar el resultado de un partido", description = "Este endpoint permite a los administradores actualizar el resultado de un partido específico.")
     public MatchDTO updateMatchResult(@PathVariable Long matchId, @RequestBody @Valid MatchDTO macthDTO) {
         return matchService.updateMatchResult(matchId, macthDTO);

@@ -8,7 +8,6 @@ import com.equipo2.bytestournament.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +49,7 @@ public class UserController {
     private final UserService userService;
 
     public UserController(UserService customUserDetailsService){
-        this.userService=customUserDetailsService;
+        this.userService = customUserDetailsService;
     }
 
     /**
@@ -95,7 +94,7 @@ public class UserController {
     @Operation(summary = "Obtener datos personales autentificados", description = "Este endpoint permite a los usuarios autentificados obtener sus datos personales.")
     @SwaggerApiResponses
     @GetMapping("/auth/me")
-    @PreAuthorize("hasAnyAuthority('PLAYER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     public UserDTO personalData(Authentication authentication) {
         return userService.profileData(authentication);
     }
@@ -109,9 +108,11 @@ public class UserController {
      */
     @Operation(summary = "Obtener datos personales por id", description = "Este endpoint permite a los usuarios obtener los datos personales de el usuario con el id pasado por parametro, solo accesibles para usuarios con el rol de ADMIN.")
     @SwaggerApiResponses
-    @GetMapping("/auth/{id}")
-    public UserDTO profileUser(@PathVariable Long id) {
-        return userService.profileUser(id);
+
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserDTO profileUser(@PathVariable Long userId) {
+        return userService.profileUser(userId);
     }
 
      /**
@@ -123,7 +124,7 @@ public class UserController {
     @Operation(summary = "Listar usuarios", description = "Este endpoint permite listar todos los usuarios.")
     @SwaggerApiResponses
     @GetMapping("/list")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> listAllUsers() {
         return userService.listAllUsers();
     }
@@ -137,7 +138,7 @@ public class UserController {
      */
     @SwaggerApiResponses
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Eliminar un usuario", description = "Este endpoint permite a los administradores eliminar un usuario por su ID.")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
@@ -154,7 +155,7 @@ public class UserController {
      */
     @SwaggerApiResponses
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Actualizar un usuario", description = "Este endpoint permite a los administradores actualizar los datos de un usuario por su ID.")
     public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid  UserDTO userDTO) {
         return userService.updateUser(id, userDTO);

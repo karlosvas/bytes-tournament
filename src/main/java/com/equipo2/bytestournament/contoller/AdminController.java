@@ -1,10 +1,10 @@
 package com.equipo2.bytestournament.contoller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.equipo2.bytestournament.service.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.annotations.SwaggerApiResponses;
-import com.equipo2.bytestournament.enums.ApiResponse;
 
 /**
  * AdminController es un controlador REST que maneja las solicitudes relacionadas con la administración de usuarios.
@@ -68,14 +66,13 @@ public class AdminController {
      * Permite a un administrador dar el permiso 'USER_CREATE' a un usuario específico existente, pasado por parámetro.
      * 
      * @param username El nombre de usuario del nuevo usuario a crear.
-     * @return ResponseEntity<UserDTO> Un objeto ResponseEntity que contiene el nuevo usuario creado para devolver 201 Created.
+     * @return UserDTO Un objeto UserDTO que representa al usuario al que se le ha otorgado el permiso.
      */
-    @PostMapping("/user")
-    @PreAuthorize("hasAuthority('USER_CREATE')")
-    @Operation(summary = "Crear un nuevo usuario", description = "Este endpoint permite a los administradores dar el permiso 'USER_CREATE' a un usuario específico existente.")
-    public ResponseEntity<UserDTO> postMethodName(@RequestBody @Valid Long username) {
-        UserDTO newUserCreated = userService.addAuthorityToUser(username, AuthorityPrivilegies.USER_CREATE);
-        return ResponseEntity.status(ApiResponse.CREATED.getStatus()).body(newUserCreated);
+    @SwaggerApiResponses
+    @PutMapping("/createAdmin")
+    @Operation(summary = "Da un nuevo permiso a un usuario exixstente", description = "Este endpoint permite a los administradores dar el permiso 'USER_CREATE' a un usuario específico existente.")
+    public UserDTO addAuthorityCreateAdmin(@RequestParam String username) {
+        return userService.addAuthorityCreateAdmin(username, AuthorityPrivilegies.USER_CREATE);
     }
 }
 

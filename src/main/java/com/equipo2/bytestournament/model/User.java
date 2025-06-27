@@ -3,11 +3,23 @@ package com.equipo2.bytestournament.model;
 import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Builder.Default;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+import jakarta.persistence.JoinColumn;
 /**
  * Entidad JPA que representa un usuario de la aplicación de torneos.
  * Contiene el nombre de usuario, el email, la contraseña, el rol, el ranking y los puntos de cada usuario.
@@ -71,14 +83,18 @@ public class User implements UserDetails{
     private Integer points;
 
     @OneToMany(mappedBy = "player1")
+    @Default
     private List<Match> matchesAsPlayer1 = new ArrayList<>();
 
     @OneToMany(mappedBy = "player2")
+    @Default
     private List<Match> matchesAsPlayer2 = new ArrayList<>();
 
     @ManyToMany(mappedBy = "players")
+    @Default
     private List<Tournament> tournaments = new ArrayList<>();
 
+    @Default
     @ElementCollection
     @CollectionTable(name = "user_authority_privilegies", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

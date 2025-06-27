@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +62,7 @@ public class TournamentDTO {
     @Schema(description = "Lista de partidos asociados al torneo")
     private List<Match> matches = new ArrayList<>();
 
-    @Default
     @Schema(description = "Lista de jugadores que participan en el torneo")
+    @Default
     private List<Long> players = new ArrayList<>();
 }

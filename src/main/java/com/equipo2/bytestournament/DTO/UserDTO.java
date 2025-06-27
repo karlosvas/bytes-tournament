@@ -45,9 +45,9 @@ public class UserDTO {
     @Schema(description = "Correo electrónico", example = "usuario@gmail.com")
     private String email;
 
-    @Default
     @NotBlank
     @Schema(description = "Contraseña del usuario", example = "password123")
+    @Default
     private String password = "hidden"; // Se oculta la contraseña en la documentación
 
     @NotNull
@@ -63,8 +63,8 @@ public class UserDTO {
     @Schema(description = "Puntos del usuario", example = "1500")
     private Integer points = 0;
 
-    @Default
     @Schema(description = "Lista de IDs de partidas en las que el usuario ha participado")
+    @Default
     private List<Long> matches = new ArrayList<>();
 
     @Default

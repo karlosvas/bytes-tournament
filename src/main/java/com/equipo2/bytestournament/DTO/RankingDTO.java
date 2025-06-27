@@ -3,6 +3,8 @@ package com.equipo2.bytestournament.DTO;
 import java.util.ArrayList;
 import java.util.List;
 import com.equipo2.bytestournament.enums.Rank;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +31,11 @@ import lombok.Builder.Default;
 public class RankingDTO {
 
     public static class InnerClassificationDTO {
+        @NotBlank
         public String playerName;
+        @NotNull
         public Rank rank;
+        @NotNull
         public Integer points;
 
         public InnerClassificationDTO(String playerName, Rank rank, Integer points) {

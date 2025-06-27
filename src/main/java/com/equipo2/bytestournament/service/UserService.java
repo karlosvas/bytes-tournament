@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.config.JwtUtil;
 import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 import com.equipo2.bytestournament.exceptions.RequestException;
@@ -65,11 +67,11 @@ public class UserService {
      */
     public String registerUser(UserDTO userDTO, Authentication authenticationRequest) {
         try {
-            // Comprobamos que el que crea un usuario solo cree admin si es admin
-            if(userDTO.getRole().equals(Role.ADMIN)) {
+            // Comprobamos que el que crea un usuario solo cree admin si es admin, o tiene permisos para crear usuarios
+            if(userDTO.getRole().equals(Role.ADMIN) || userDTO.getAuthorityPrivilegies().contains(AuthorityPrivilegies.USER_CREATE.toString())) {
                 // Si hay autentificación deve de ser administrador
                 if(authenticationRequest != null){
-                    String userName = authenticationRequest.getName();
+                    String userName = authenticationRequest.getName(); 
                     Optional<User> userRequestOptional = userRepository.findByUsername(userName);
                     if(userRequestOptional.isEmpty())
                         throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese email");
@@ -163,18 +165,17 @@ public class UserService {
         try {
             // Obtener de la base de datos el User, pasandole el id de DTO
             String username = authentication.getName();
-            Optional<User> newUser = userRepository.findByUsername(username);//Se cambia de email a username
+            Optional<User> newUser = userRepository.findByUsername(username);
             
             // Si no existe devolvemos un error
             if(!newUser.isPresent())
-                throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese email");
-
+                throw new UsernameNotFoundException("Usuario no encontrado: " + username);
             // Convertimos a User -> UserDTO y lo devolvemos
-            UserDTO user = userMapper.userToUserDTO(newUser.get());
-            return user;
-        } catch (RequestException e) {
-            throw e;
-        } catch (Exception e) {
+            return userMapper.userToUserDTO(newUser.get());
+        }catch (RequestException e) {
+            // Si el usuario no existe o hay otro problema relacionado con la solicitud
+            throw e; // Re-lanzamos la excepción para que sea manejada por el controlador
+        }  catch (Exception e) {
              throw new RequestException(ApiResponse.BAD_REQUEST);
         }
     
@@ -209,7 +210,7 @@ public class UserService {
 
     /**
      * Obtiene el nombre de usuario a partir de la autenticación.
-     * Este método busca al usuario en la base de datos utilizando el nombre de usuario (email
+     * Este método busca al usuario en la base de datos utilizando el nombre de usuario 
      * de la autenticación) y devuelve su nombre de usuario.
      * 
      * @param authentication la autenticación del usuario que está solicitando su nombre de usuario

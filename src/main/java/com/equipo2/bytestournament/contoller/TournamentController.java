@@ -9,7 +9,6 @@ import com.equipo2.bytestournament.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -82,7 +81,7 @@ public class TournamentController {
      *         estado HTTP 201 Created.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Crear un torneo", description = "Este endpoint permite a los administradores crear un nuevo torneo.")
     public ResponseEntity<TournamentDTO> create(@RequestBody @Valid TournamentDTO tournamentDTO) {
@@ -96,11 +95,11 @@ public class TournamentController {
      * 
      * @param tournamentId ID del torneo a actualizar.
      * @param userName     Nombre del usuario que está actualizando el torneo.
-     * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un
-     *         estado HTTP 200 OK.
+     * @return TournamentDTO que contiene el torneo actualizado y un estado HTTP 200 OK.
      */
+      // TODO: Si eres player solo puedes unirte tu mismo
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('PLAYER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     @PostMapping("/players")
     @Operation(summary = "Unirse a un torneo como jugador", description = "Este endpoint permite a los jugadores unirse a un torneo existente.")
     public TournamentDTO joinTournament(@RequestParam Long tournamentId, @RequestParam String userName) {
@@ -115,11 +114,9 @@ public class TournamentController {
      * y luego llama al servicio TournamentService para agregar al usuario al torneo
      * especificado.
      * 
-     * @param tournamentId   ID del torneo al que el usuario desea unirse.
-     * @param authentication Objeto de autenticación que contiene la información del
-     *                       usuario autenticado.
-     * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un
-     *         estado HTTP 201 Created.
+     * @param tournamentId ID del torneo al que el usuario desea unirse.
+     * @param authentication Objeto de autenticación que contiene la información del usuario autenticado.
+     * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
     @PreAuthorize("hasAnyAuthority('PLAYER', 'ADMIN')")
@@ -139,9 +136,9 @@ public class TournamentController {
      * pretty sea true,
      * en formato String para una visualización más amigable.
      * 
-     * @param tournamentId
-     * @param pretty
-     * @return
+     * @param tournamentId ID del torneo del cual se desea obtener la clasificación.
+     * @param pretty Indica si la respuesta debe ser formateada de manera amigable (pretty) o no.
+     * @return ResponseEntity<?> que contiene la clasificación del torneo y un estado HTTP 200 OK.
      */
     @SwaggerApiResponses
     @GetMapping("/ranking/{tournamentId}")
@@ -172,6 +169,23 @@ public class TournamentController {
         var ranking = tournamentService.getRankingDetails(tournamentId);
         return ResponseEntity.ok((pretty) ? ranking.toString() : ranking);
     }
+
+    /**
+     * Actualiza un torneo existente.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     * 
+     * @param tournamentDTO DTO que contiene la información del torneo a actualizar.
+     * @param authentication Objeto de autenticación que contiene la información del usuario autenticado.
+     * @return TournamentDTO que contiene el torneo actualizado y un estado HTTP 200 OK.
+     */
+    
+    @SwaggerApiResponses
+    @PutMapping
+    @Operation(summary = "Actualizar un torneo", description = "Este endpoint permite a los administradores actualizar un torneo existente.")
+    public TournamentDTO updateTournament(@RequestBody TournamentDTO tournamentDTO, Authentication authentication) {
+        return tournamentService.updateTournament(tournamentDTO, authentication);
+    }
+    
 
     /**
      * Lista todos los torneos disponibles.

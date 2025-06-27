@@ -33,13 +33,18 @@ public class MessageService {
     }
 
     public List<MessageDTO> getTournamentMessages(Long tournamentId) {
+        List<Message> messages = messageRepository.findByTournamentIdOrderByTimestampAsc(tournamentId);
+
+        if(messages.isEmpty()) 
+            throw new RequestException(ApiResponse.NOT_FOUND, "No se encontraron mensajes para el torneo con ID: " + tournamentId, "No se encontraron mensajes asociados al torneo con ID: " + tournamentId);
+
          Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
 
         if (!tournament.isPresent())
             throw new RequestException(ApiResponse.NOT_FOUND, "Torneo no encontrado", "No se pudo enviar el mensaje porque no se encontró el torneo con el ID proporcionado");
 
-         List<Message> messages = messageRepository.findByTournamentIdOrderByTimestampAsc(tournamentId);
-        return messageMapper.messageToMessageDtos(messages);
+        List<Message> messagesList = messageRepository.findByTournamentIdOrderByTimestampAsc(tournamentId);
+        return messageMapper.messageToMessageDtos(messagesList);
     }
 
     public MessageDTO sendTournamentMessage(Long tournamentId, MessageDTO dto) {

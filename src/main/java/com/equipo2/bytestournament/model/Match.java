@@ -23,7 +23,7 @@ import jakarta.persistence.Table;
 @Builder
 @Table(name = "matches")
 public class Match {
-    public static final Long UMBRAL = 100L;
+    public static final Long UMBRAL = 1000L;
 
     /**
      * id: Identificador único de la partida que se genera automáticamente.
