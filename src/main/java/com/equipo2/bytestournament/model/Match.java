@@ -1,53 +1,49 @@
 package com.equipo2.bytestournament.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import com.equipo2.bytestournament.enums.Result;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-/**
- * Entidad JPA que representa una partida de un torneo.
- * Contiene el id del torneo, el jugador 1, el jugador 2 y la ronda actual.
- */
-@Data
 @Entity
-@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "matches")
+@Builder
 public class Match {
-    public static final Integer UMBRAL = 100;
 
     /**
-     * id: Entidad JPA que representa una partida de un torneo de la aplicación de torneos.
-     * tournament: Contiene el id del torneo, el jugador 1, el jugador 2 y la ronda actual.
-     * player1: Jugador 1 que participa en la partida. No debe ser nulo
-     * player2: Jugador 2 que participa en la partida. No debe ser nulo
+     * id: Identificador único de la partida que se genera automáticamente.
+     * tournamentId: Identificador único del torneo al que pertenece la partida. No debe ser nulo.
+     * player1: Jugador 1 que participa en la partida. No debe ser nulo.
+     * player2: Jugador 2 que participa en la partida. No debe ser nulo.
      * result: Resultado de la partida. No debe ser nulo ni vacío.
-     * round: Ronda actual de la partida
+     * round: Ronda actual de la partida. No debe ser nulo.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
-    private Tournament tournament;
+    @Column(name = "tournament_id", updatable = false, nullable = false)
+    private Long tournamentId;
 
-    @ManyToOne
-    @JoinColumn(name = "player1_id", nullable = false)
+    @Column(name = "player1", updatable = true, nullable = false)
     private User player1;
 
-    @ManyToOne
-    @JoinColumn(name = "player2_id", nullable = false)
+    @Column(name = "player2", updatable = true, nullable = false)
     private User player2;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "result")
+    @Column(name = "result", updatable = true, nullable = false)
     private Result result;
 
     @Column(name = "round", updatable = true, nullable = false)

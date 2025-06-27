@@ -36,5 +36,9 @@ public interface MessageRepository extends JpaRepository  <Message, Long>{
      * @return una lista de mensajes de la partida indicada
      */
     Optional<List<Message>> findByMatchId(Long matchId);
+
+    List<Message> findByTournamentIdOrderByTimestampAsc(Long tournamentId);
+
+    List<Message> findByMatchIdOrderByTimestampAsc(Long matchId);
 }
 
