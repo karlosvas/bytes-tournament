@@ -195,7 +195,7 @@ public class UserService {
             
             // Si no existe error
             if(!newUserOptional.isPresent())
-                throw new Exception(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
+                throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
             
             // Devolvemos el DTO asociado
             UserDTO user = userMapper.userToUserDTO(newUserOptional.get());

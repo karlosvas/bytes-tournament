@@ -90,7 +90,7 @@ public class MatchController {
      */
     @SwaggerApiResponses
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PutMapping("/{id}/result")
+    @PutMapping("/result/{matchId}")
     @Operation(summary = "Actualizar el resultado de un partido", description = "Este endpoint permite a los administradores actualizar el resultado de un partido específico.")
     public MatchDTO updateMatchResult(@PathVariable Long matchId, @RequestBody @Valid MatchDTO macthDTO) {
         return matchService.updateMatchResult(matchId, macthDTO);

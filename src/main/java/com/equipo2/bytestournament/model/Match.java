@@ -14,12 +14,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "matches")
 public class Match {
     public static final Long UMBRAL = 100L;
 
@@ -41,11 +43,11 @@ public class Match {
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(name = "player1", nullable = false)
+    @JoinColumn(name = "player1_id", nullable = false)
     private User player1;
 
     @ManyToOne
-    @JoinColumn(name = "player2", nullable = false)
+    @JoinColumn(name = "player2_id", nullable = false)
     private User player2;
 
     @Enumerated(EnumType.STRING)

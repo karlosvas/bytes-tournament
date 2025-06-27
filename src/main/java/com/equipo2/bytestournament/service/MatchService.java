@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import static com.equipo2.bytestournament.model.Match.UMBRAL;
-
+import java.util.concurrent.ThreadLocalRandom;
 /**
  * MatchService es un servicio que se encarga de gestionar los matches de un torneo.
  * Proporciona métodos para generar matches, emparejar jugadores, comprobar la existencia de un
@@ -59,9 +59,6 @@ public class MatchService {
             // Obtenemos el torneo que le estamos pasando
             Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentID);
 
-            if (tournamentOptional.isEmpty())
-                throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el torneo", "El torneo con id " + tournamentID + " no existe");
-
             Tournament tournament = tournamentOptional.get();
             logger.info("Generando matches para el torneo: " + tournament.getName());
 
@@ -70,6 +67,10 @@ public class MatchService {
             if (players.size() < 2)
                 throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "Necesitas al menos 2 jugadores en el torneo para generar matches");
 
+            // Comprobamos que el número de jugadores sea par
+            if(players.size() % 2 != 0)
+                throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "El número de jugadores debe ser par para generar matches, elimina un usuario o añade uno más");
+            
             // Actualizamos la ronda del torneo
             tournament.setRounds(tournament.getRounds() + 1);
             logger.info("Ronda actual del torneo: " + tournament.getRounds());
@@ -82,10 +83,12 @@ public class MatchService {
             while (emparejatedPlayers.size() >= 2) {
                 List<User> emparejatedMatch = this.matchUsers(emparejatedPlayers);
 
-                logger.info("Emparejando jugadores: " + emparejatedMatch.get(0).getEmail() + " vs " + emparejatedMatch.get(1).getEmail());
-                // Obtenemos los dos jugadores emparejados
+                // Comprobamos que se hayan emparejado correctamente dos jugadores
+                if(emparejatedMatch.size() != 2)
+                    throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "No se han podido emparejar los jugadores correctamente, por favor añade más jugadores al torneo.");
+
                 User player1 = emparejatedMatch.get(0);
-                User player2 = emparejatedMatch.get(1);
+                User player2 =emparejatedMatch.get(1);
 
                 // Eliminamos los jugadores de la lista de emparejamiento
                 Match newMatch = Match.builder()
@@ -127,25 +130,44 @@ public class MatchService {
      * @return Lista de dos jugadores emparejados.
      */
     public List<User> matchUsers(List<User> allPlayers) throws RequestException {
-        // Comprobamos que haya al menos 2 jugadores para emparejar
-        if(allPlayers.size() < 2)
+        try {
+            // Comprobamos que haya al menos 2 jugadores para emparejar
+            if(allPlayers.size() < 2)
+                throw new Exception();
+            // Obtenemos el jugador 1 de forma aleatoria
+            int randomPlayer1 = ThreadLocalRandom.current().nextInt(allPlayers.size());
+            User player1 = allPlayers.get(randomPlayer1);
+            allPlayers.remove(player1);
+            
+            // Filtramos por todos los jugadores que tengan menos o mas de 100 puntos de diferencia
+            List<User> possiblePlayers = allPlayers.stream()
+            .filter(player -> Math.abs(player.getPoints() - player1.getPoints()) <= UMBRAL)
+            .toList();
+            
+            User player2 = null;
+            if (possiblePlayers.isEmpty()){
+                // Si no hay jugadores que cumplan el criterio de puntos, obtenemos un jugador aleatorio de los disponibles que mas se acerce en cuanto a puntos, que ademas sea diferente al jugador 1
+                player2 = allPlayers.stream()
+                .filter(player -> !player.equals(player1))
+                .min((a, b) -> Integer.compare(
+                    Math.abs(a.getPoints() - player1.getPoints()),
+                    Math.abs(b.getPoints() - player1.getPoints())
+                ))
+                .orElseThrow(() -> new Exception());  
+            } else{
+                // Obtenemos el jugador 2 de forma aleatoria, sin contar con el jugador 1
+                Integer randomPlayer2 = ThreadLocalRandom.current().nextInt(possiblePlayers.size());
+                player2 = possiblePlayers.get(randomPlayer2);
+            }
+
+            if(player2 == null) throw new Exception();
+            
+            allPlayers.remove(player2);
+            return List.of(player1, player2);
+        } catch (Exception e) {
             throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable",
             "La solicitud contiene datos que no se pueden procesar debido a que se necesitan al menos 2 jugadores para emparejar");
-
-        // Obtenemos el jugador 1 de forma aleatoria
-        User player1 = allPlayers.get((int) (Math.random() * allPlayers.size()));
-        allPlayers.remove(player1);
-
-        // Filtramos por todos los jugadores que tengan menos o mas de 100 puntos de diferencia
-        List<User> players = allPlayers.stream()
-                .filter(player -> Math.abs(player.getPoints() - player1.getPoints()) <= UMBRAL)
-                .toList();
-
-        // Obtenemos el jugador 2 de forma aleatoria
-        User player2 = players.get((int) (Math.random() * players.size()));
-        allPlayers.remove(player2);
-
-        return List.of(player1, player2);
+        }
     }
 
     /**
@@ -177,25 +199,24 @@ public class MatchService {
      * @param macthDTO DTO con el resultado del match a actualizar.
      * @return MatchDTO con el match actualizado.
      */
-    public MatchDTO updateMatchResult(Long matchID, MatchDTO macthDTO) {
+    public MatchDTO updateMatchResult(Long matchID, MatchDTO macthDTO) throws RequestException {
         // Comprobamos si el match existe
         Optional<Match> matchOptional = matchRepository.findById(matchID);
         if (matchOptional.isEmpty())
             throw new RequestException(ApiResponse.NOT_FOUND, "No se ha encontrado el match", "El match con id " + matchID + " no existe");
 
-        Match match = matchOptional.get();
-
-        // Comprobamos que el id proiporcionado sea el mismo que elq ue queremos actualizar
-        if (!match.getId().equals(matchID))
-            throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "El id del match no coincide", "El id del match proporcionado no coincide con el id del match a actualizar");
-
         // Actualizamos el resultado del match
         Match matchUpdated = matchMapper.matchDtoToMatch(macthDTO);
         matchUpdated.setId(matchID);
 
-        matchRepository.save(matchUpdated);
-        logger.info("Resultado del match actualizado: " + matchUpdated.getPlayer1().getEmail() + " vs " + matchUpdated.getPlayer2().getEmail());
+        if(matchUpdated.getPlayer1() == null || matchUpdated.getPlayer2() == null)
+            throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "El match debe tener dos jugadores validos");
+        if(matchUpdated.getTournament() == null)
+            throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "El match debe pertenecer a un torneo valido");
 
+        matchRepository.save(matchUpdated);
+
+        logger.info("Resultado del match actualizado: " + matchUpdated.getResult());
         return matchMapper.matchToMatchDTO(matchUpdated);
     }
 
