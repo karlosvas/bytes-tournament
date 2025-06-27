@@ -23,8 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 /**
  * Aspecto para registrar información de las peticiones HTTP en los controladores REST.
  * Este aspecto intercepta las llamadas a los métodos de los controladores REST
- * y registra información relevante como el método HTTP, la ruta de la petición y los parámetros pas
- * ados.
+ * y registra información relevante como el método HTTP, la ruta de la petición y los parámetros pasados.
  * {@link Aspect} Anotación que indica que esta clase es un aspecto de AOP (Programación Orientada a Aspectos).
  * {@link Component} Anotación que indica que esta clase es un componente de Spring y será registrada en el contexto de la aplicación.
  * {@link Logger} Utilizado para registrar mensajes de log, en este caso, para registrar información de las peticiones HTTP.
@@ -36,8 +35,8 @@ public class LoggingAspect {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
-     * Registra información antes de que se ejecute un método en un controlador REST, InterceptaNDO las llamadas a los métodos para
-     * y registrar información relevante como el método HTTP, la ruta de la petición y los parámetros pasados.
+     * Registra información antes de que se ejecute un método en un controlador REST, interceptando las llamadas a los métodos para 
+     * registrar información relevante como el método HTTP, la ruta de la petición y los parámetros pasados.
      * 
      * @Before es un bean de Aspect que se ejecuta antes de la ejecución del método interceptado.
      * 

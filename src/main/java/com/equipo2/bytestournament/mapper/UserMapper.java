@@ -5,11 +5,12 @@ import com.equipo2.bytestournament.mapper.helper.UserMapperHelper;
 import com.equipo2.bytestournament.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.List;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-
+ 
 /**
  * Mapper que convierte la entidad User a DTO y la DTO a entidad
  * y viceversa.
@@ -40,6 +41,20 @@ public interface UserMapper {
     @Mapping(target = "tournaments", source = "tournaments")
     @Mapping(target = "authorityPrivilegies", source = "authorityPrivilegies")
     User userDTOToUser(UserDTO userDTO);
+
+    // List<User> -> List<UserDTO>
+    @Mapping(target = "matchesAsPlayer1", ignore = true)
+    @Mapping(target = "matchesAsPlayer2", ignore = true)
+    @Mapping(target = "tournaments", source = "tournaments")
+    @Mapping(target = "authorityPrivilegies", source = "authorityPrivilegies")
+    List<UserDTO> userListToUserDTOList(List<User> listUsers);
+
+    // List<UserDTO> -> List<User>
+    @Mapping(source = "tournaments", target = "tournaments")
+    @Mapping(source = ".", target = "matches") // Combina las listas de cuando a sido palyer1 y player2
+    @Mapping(target = "authorityPrivilegies", source = "authorityPrivilegies")
+    @Mapping(target = "password", ignore = true) // Ignoramos la contraseña para que no se mapee desde el DTO
+    List<User> userDTOListToUsersList(List<UserDTO> listUsersDTOs);
 
     @AfterMapping
     default void logAfterUserMapping(User user, @MappingTarget UserDTO userDTO) {

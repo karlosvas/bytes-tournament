@@ -120,4 +120,5 @@ public class User implements UserDetails{
         allMatches.addAll(matchesAsPlayer2);
         return allMatches;
     }
+    
 }
