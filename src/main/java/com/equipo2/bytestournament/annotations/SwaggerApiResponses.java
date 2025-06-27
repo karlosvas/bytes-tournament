@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 
 /**
  * Anotación para definir las respuestas de los endpoints de la API. Manejado por Swagger.
- * @see Target para indicar que la anotación puede ser aplicada a un método o tipo.
- * @see Retention para indicar que la anotación estará disponible en tiempo de ejecución.
- * @see interface para definir una anotación, se crea la anotacion SwaggerApiResponses.
+ * {@link Target} para indicar que la anotación puede ser aplicada a un método o tipo.
+ * {@link Retention} para indicar que la anotación estará disponible en tiempo de ejecución.
+ * {@link interface} para definir una anotación, se crea la anotación SwaggerApiResponses.
  */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

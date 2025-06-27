@@ -5,28 +5,24 @@ import org.springframework.http.HttpStatus;
 /**
  * Enumeración de errores de la API con sus respectivos códigos de estado HTTP, títulos y detalles.
  * Esta enumeración se utiliza para estandarizar los mensajes de error devueltos por la API.
- * see @Getter, @RequiredArgsConstructor son anotaciones de Lombok para generar automáticamente los getters
- * y constructores con todos los argumentos
  */
 public enum ApiResponse {
-    // User-related responses
-    USER_DELETE_FAILED(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "Eliminación de Usuario Fallida",
-            "No se pudo eliminar el usuario debido a un error interno."),
-    USER_NOT_FOUND(
-            HttpStatus.NOT_FOUND,
-            "Usuario No Encontrado",
-            "El usuario solicitado no existe en el sistema."),
-    USER_ALREADY_EXISTS(
-            HttpStatus.CONFLICT,
-            "Usuario Existente",
-            "El usuario ya existe con el identificador proporcionado."),
+    CREATED(
+            HttpStatus.CREATED,
+            "Recurso Creado",
+           "El recurso se ha creado correctamente."),
+    SUCCESS(
+        HttpStatus.OK,
+            "Operación Exitosa",
+           "La operación se ha completado con éxito."),
     AUTHENTICATION_FAILED(
             HttpStatus.UNAUTHORIZED,
             "Autenticación Fallida",
             "Credenciales Inválidas"),
-    // Other responses
+    NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "Recurso no encontrado",
+            "El recuros solicitado no existe en el sistema."),
     BAD_REQUEST(
             HttpStatus.BAD_REQUEST,
             "Petición Incorrecta",
@@ -80,6 +76,11 @@ public enum ApiResponse {
             "Endpoint No Encontrado",
             "El endpoint solicitado de la API no existe.");
 
+    /**
+    * status: El código de estado HTTP asociado a la respuesta de la API.
+    * title: Un título breve que describe el tipo de error o éxito de la respuesta.
+    * detail: Un detalle más específico que proporciona información adicional sobre la respuesta.  
+    */
     private final HttpStatus status;
     private final String title;
     private final String detail;
@@ -90,27 +91,10 @@ public enum ApiResponse {
         this.detail = detail;
     }
 
-    /**
-     * Obtiene el código de estado HTTP asociado a la respuesta de la API.
-     * @return El código de estado HTTP.
-     */
-    public HttpStatus getStatus() {
-        return status;
-    }
+    public HttpStatus getStatus() { return status; }
 
-    /**
-     * Obtiene el título de la respuesta de la API.
-     * @return El título de la respuesta.
-     */
-    public String getTitle() {
-        return title;
-    }
+   
+    public String getTitle() { return title; }
 
-    /**
-     * Obtiene el detalle de la respuesta de la API.
-     * @return El detalle de la respuesta.
-     */
-    public String getDetail() {
-        return detail;
-    }
+    public String getDetail() { return detail; }
 }

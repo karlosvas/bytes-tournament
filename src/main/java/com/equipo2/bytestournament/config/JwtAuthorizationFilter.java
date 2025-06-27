@@ -1,7 +1,6 @@
 package com.equipo2.bytestournament.config;
 
 import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,15 +10,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.equipo2.bytestournament.utilities.Colours;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.lang.NonNull;
 
 /**
  * JwtAuthorizationFilter es un filtro de autorización que se encarga de validar el token JWT
  * en cada solicitud HTTP. Extiende OncePerRequestFilter para asegurarse de que se ejecute una vez por solicitud.
- * Este filtro se llama justo depues de ejecutarse el filtro de autenticación JWT.
+ * Este filtro se llama justo depúes de ejecutarse el filtro de autenticación JWT.
  */
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -49,7 +50,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
      * * @throws IOException si ocurre un error de entrada/salida durante el procesamiento de la solicitud.
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             // Extrae el JWT del encabezado de autorización de la solicitud
             // y valida el token.
@@ -76,7 +77,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 // para que esté disponible en el resto de la aplicación.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                logger.info("JWT válido para el usuario: " + username);
+                logger.info(Colours.paintGreen("JWT válido para el usuario: " + username));
             }
         } catch (Error e) {
             throw new Error("Error al procesar el JWT", e);

@@ -7,9 +7,14 @@ import java.util.List;
 
 /**
  * Mapper que convierte la entidad Message a DTO y la DTO a entidad
- *
- * @author Christian Escalas
+ * y viceversa.
+ * Utiliza MapStruct para generar el código de mapeo automáticamente.
+ * 
+ * {@link Mapper} Anotación de MapStruct que indica que esta interfaz es un mapper.
+ * {@link Mapping} Anotación de MapStruct que indica cómo se deben mapear
  */
+
+ 
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
     MessageDTO messageToMessageDTO(Message message);

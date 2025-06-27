@@ -1,10 +1,10 @@
 package com.equipo2.bytestournament.enums;
 /**
- * Enum que muestra los valores que puede tomar el atributo role
+ * Enum Role que muestra los valores que puede tomar el atributo role
  *
- * Puede tomar los valores de ADMIN y PLAYER
- *
- * @author Christian Escalas
+ * Los valores que puede tomar son:
+ * ADMIN: Indica que el usuario tiene privilegios de administrador.
+ * PLAYER: Indica que el usuario es un jugador normal.
  */
 
 public enum Role {
