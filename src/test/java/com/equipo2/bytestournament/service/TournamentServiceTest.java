@@ -70,10 +70,16 @@ public class TournamentServiceTest {
         TournamentDTO tournamentDTO = new TournamentDTO().builder()
                 .id(1L)
                 .name("Test Tournament")
+                .maxPlayers(2)
+                .rounds(0)       
+                .maxRounds(1)  
                 .build();
         Tournament tournament = new Tournament().builder()
                 .id(tournamentDTO.getId())
                 .name(tournamentDTO.getName())
+                .maxPlayers(2)
+                .rounds(0)
+                .maxRounds(1)
                 .build();
 
         // Mockea el mapeo de DTO a entidad y viceversa

@@ -79,6 +79,10 @@ public class TournamentService {
         // Aquí se debería implementar la lógica para crear un torneo a partir de la entidad proporcionada
         // Por ahora, simplemente retornamos un TournamentDTO vacío como ejemplo
         Tournament tournament = tournamentMapper.tournamentDtoToTournament(tournamentDTO);
+
+        // Validamos que el torneo cumple con las reglas
+       this.validateTournament(tournament);
+
         // Aquí se deberían establecer los valores del torneo según la entidad recibida
         tournamentRepository.save(tournament);
         return tournamentMapper.tournamentToTournamentDTO(tournament);
@@ -121,6 +125,9 @@ public class TournamentService {
         // Un nuevo usuario pertenece a un torneo
         user.getTournaments().add(tournamentOptional.get());
 
+        // Validamos que el torneo cumple con las reglas
+        this.validateTournament(tournament);
+        
         // Guardamos en la base de datos todos los cambios
         Tournament torurnamentSaved = tournamentRepository.save(tournament);
         userRepository.save(user);
@@ -239,16 +246,17 @@ public class TournamentService {
      */
     public TournamentDTO updateTournament(TournamentDTO tournamentDTO, Authentication authentication) {
         Optional<User> userRequest = userRepository.findByUsername(authentication.getName());
-
+        
         if(userRequest.isEmpty() || userRequest.get().getRole() != Role.ADMIN)
-            throw new RequestException(ApiResponse.FORBIDDEN, "Acceso denegado", "El usuario no tiene permisos para actualizar torneos");
-
+        throw new RequestException(ApiResponse.FORBIDDEN, "Acceso denegado", "El usuario no tiene permisos para actualizar torneos");
+        
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentDTO.getId());
-
+        
         if(tournamentOptional.isEmpty())
-            throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un torneo con esa ID");
-
+        throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un torneo con esa ID");
+        
         Tournament tournament = tournamentOptional.get();
+        this.validateTournament(tournament);
 
         // Actualizamos los campos del torneo con los valores del DTO
         tournament.setName(tournamentDTO.getName());
@@ -286,6 +294,7 @@ public class TournamentService {
      * Actualiza un torneo existente.
      * Este método busca el torneo por su ID y actualiza sus campos con los valores del TournamentDTO proporcionado.
      * Si el torneo no existe, lanza una excepción.
+     * 
      * @param tournamentDTO TournamentDTO que contiene la información del torneo a actualizar.
      * @return TournamentDTO con la información del torneo actualizado.
      */
@@ -305,6 +314,12 @@ public class TournamentService {
 
     }
 
+    /**
+     * Elimina un torneo dado su ID.
+     * Este método busca el torneo por su ID y lo elimina de la base de datos.
+     * 
+     * @param id ID del torneo a eliminar.
+     */
     public void deleteTournament(Long id) {
         // Verificamos si el torneo existe
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(id);
@@ -315,5 +330,17 @@ public class TournamentService {
         // Eliminamos el torneo de la base de datos
         tournamentRepository.deleteById(id);
         logger.info("Torneo con ID {} eliminado correctamente", id);
+    }
+
+    /**
+     * Valida un torneo para asegurarse de que cumple con las reglas establecidas.
+     * Verifica que el número de jugadores no exceda el máximo permitido y que el número
+     * @param tournament Torneo a validar.
+     */
+    public void validateTournament(Tournament tournament) throws RequestException {
+         if(tournament.getPlayers().size() > tournament.getMaxPlayers())
+            throw new RequestException(ApiResponse.BAD_REQUEST, "Número de jugadores excedido", "El número de jugadores no puede ser mayor que el máximo permitido");
+        if(tournament.getRounds() > tournament.getMaxRounds() )
+            throw new RequestException(ApiResponse.BAD_REQUEST, "Número de rondas excedido", "El número de rondas no puede ser mayor que el máximo permitido");
     }
 }

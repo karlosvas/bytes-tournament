@@ -8,9 +8,11 @@ import com.equipo2.bytestournament.model.Tournament;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.TournamentRepository;
 import com.equipo2.bytestournament.repository.UserRepository;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -24,16 +26,19 @@ class MatchMapperTest {
      * userRepository Repositorio de usuarios, usado por el MatchMapperHelper.
      */
     private static MatchMapper matchMapper;
+    @Mock
     private static TournamentRepository tournamentRepository;
+    @Mock
     private static UserRepository userRepository;
 
     /**
-     * setUp Método que se ejecuta antes de todas las pruebas.
+     * setUp Método que se ejecuta antes de cada prueba.
+     * Este método inyecta el MatchMapperHelper en el MatchMapper.
      * Inyecta el MatchMapperHelper en el MatchMapper.
      */
-    @BeforeAll
-    static void setUp() throws Exception {
-        // Si el mapper usa un helper, inyecta el mock/manualmente si es necesario
+    @BeforeEach
+    void setUp() throws Exception {
+        MockitoAnnotations.openMocks(this);
         matchMapper = Mappers.getMapper(MatchMapper.class);
         Field helperField = matchMapper.getClass().getDeclaredField("matchMapperHelper");
         MatchMapperHelper helper = new MatchMapperHelper(userRepository, tournamentRepository);
