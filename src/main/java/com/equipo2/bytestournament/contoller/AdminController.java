@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.equipo2.bytestournament.service.CustomUserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,7 +73,7 @@ public class AdminController {
     @PostMapping("/user")
     @PreAuthorize("hasAuthority('USER_CREATE')")
     @Operation(summary = "Crear un nuevo usuario", description = "Este endpoint permite a los administradores dar el permiso 'USER_CREATE' a un usuario específico existente.")
-    public ResponseEntity<UserDTO> postMethodName(@RequestBody Long username) {
+    public ResponseEntity<UserDTO> postMethodName(@RequestBody @Valid Long username) {
         UserDTO newUserCreated = userService.addAuthorityToUser(username, AuthorityPrivilegies.USER_CREATE);
         return ResponseEntity.status(ApiResponse.CREATED.getStatus()).body(newUserCreated);
     }

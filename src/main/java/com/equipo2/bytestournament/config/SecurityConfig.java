@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.equipo2.bytestournament.DTO.UserDTO;
 import com.equipo2.bytestournament.enums.Rank;
 import com.equipo2.bytestournament.enums.Role;
 import com.equipo2.bytestournament.repository.UserRepository;
@@ -84,8 +83,8 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/api/admin/**").hasRole("ADMIN")
-            .requestMatchers("/api/auth/**",
+            .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+            .requestMatchers("/api/user/auth/**",
                             "/swagger-ui.html",
                             "/swagger-ui/**",
                             "/v3/api-docs/**").permitAll() // Cualquier operación en /auth es permitida sin autenticación y Swagger UI y OpenAPI también son accesibles sin autenticación

@@ -3,13 +3,11 @@ package com.equipo2.bytestournament.DTO;
 import java.util.ArrayList;
 import java.util.List;
 import com.equipo2.bytestournament.enums.Rank;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Builder.Default;
 
 /**
  *  RankingDTO es una clase que se utiliza para transportar datos de clasificación
@@ -22,6 +20,7 @@ import lombok.Setter;
  * {@link AllArgsConstructor} Anotación de Lombok que genera un constructor con todos los campos como parámetros.
  * {@link NoArgsConstructor} Anotación de Lombok que genera un constructor sin parámetros
  * {@link Builder} Anotación de Lombok que permite crear instancias de la clase utilizando el patrón Builder.
+ * {@link Default} Anotación de Lombok que inicializa la lista de jugadores como una lista vacía por defecto.
  */
 @Data
 @AllArgsConstructor
@@ -46,6 +45,7 @@ public class RankingDTO {
         }
     }
 
+    @Default
     public List<InnerClassificationDTO> players = new ArrayList<>();
 
    @Override

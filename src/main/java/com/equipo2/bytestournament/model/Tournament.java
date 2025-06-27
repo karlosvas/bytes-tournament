@@ -1,13 +1,24 @@
 package com.equipo2.bytestournament.model;
 
-import jakarta.persistence.*;
 import com.equipo2.bytestournament.enums.Status;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import lombok.Builder.Default;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +65,11 @@ public class Tournament {
     @Column(name = "max_rounds", updatable = true, nullable = false)
     private Integer maxRounds;
 
+    @Default
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Match> matches = new ArrayList<>();
 
+    @Default
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "tournament_players",
             joinColumns = @JoinColumn(name = "tournament_id"),

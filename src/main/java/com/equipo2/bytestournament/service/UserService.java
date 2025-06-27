@@ -1,6 +1,5 @@
 package com.equipo2.bytestournament.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -70,10 +69,10 @@ public class UserService {
             if(userDTO.getRole().equals(Role.ADMIN)) {
                 // Si hay autentificación deve de ser administrador
                 if(authenticationRequest != null){
-                    String userName = authenticationRequest.getName(); // Email
-                    Optional<User> userRequestOptional = userRepository.findByEmail(userName);
+                    String userName = authenticationRequest.getName();
+                    Optional<User> userRequestOptional = userRepository.findByUsername(userName);
                     if(userRequestOptional.isEmpty())
-                    throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese email");
+                        throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese email");
                     
                     User userRequest = userRequestOptional.get();
                     if(!userRequest.getRole().equals(Role.ADMIN)) 
@@ -102,14 +101,13 @@ public class UserService {
             logger.info("Password encoded for user: " + user.getEmail());
 
             // Guardar en la base de datos el User
-            User newUser = userRepository.save(user);
-            System.out.println("User saved: " + newUser.getEmail());
+            userRepository.save(user);
 
 
             // Creamos el objecto authentication
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    userDTO.getEmail(),
+                    userDTO.getUsername(),
                     userDTO.getPassword()
                 )
             );
@@ -139,7 +137,7 @@ public class UserService {
             // Autenticar al usuario usando las credenciales proporcionadas
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    userDTO.getEmail(),      // Email proporcionado por el usuario
+                    userDTO.getUsername(),      // Email proporcionado por el usuario
                     userDTO.getPassword()    // Contraseña proporcionada por el usuario
                 )
             );
@@ -164,16 +162,18 @@ public class UserService {
     public UserDTO profileData(Authentication authentication) {
         try {
             // Obtener de la base de datos el User, pasandole el id de DTO
-            String email = authentication.getName();
-            Optional<User> newUser = userRepository.findByUsername(email);//Se cambia de email a username
+            String username = authentication.getName();
+            Optional<User> newUser = userRepository.findByUsername(username);//Se cambia de email a username
             
             // Si no existe devolvemos un error
             if(!newUser.isPresent())
-                throw new Exception();
+                throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con ese email");
 
             // Convertimos a User -> UserDTO y lo devolvemos
             UserDTO user = userMapper.userToUserDTO(newUser.get());
             return user;
+        } catch (RequestException e) {
+            throw e;
         } catch (Exception e) {
              throw new RequestException(ApiResponse.BAD_REQUEST);
         }
@@ -195,11 +195,13 @@ public class UserService {
             
             // Si no existe error
             if(!newUserOptional.isPresent())
-                throw new Exception();
+                throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
             
             // Devolvemos el DTO asociado
             UserDTO user = userMapper.userToUserDTO(newUserOptional.get());
             return user;
+        }catch (RequestException e) {
+            throw e; 
         } catch (Exception e) {
           throw new RequestException(ApiResponse.BAD_REQUEST);
         }
@@ -215,7 +217,7 @@ public class UserService {
      */
     public String getUserNameFronAutentication(Authentication authentication) {
         // Obtenemos el usuario de la base de datos a partir de el token de autenticación del usuario que hizo la petición
-        Optional<User> userOptional =  userRepository.findByEmail(authentication.getName());
+        Optional<User> userOptional =  userRepository.findByUsername(authentication.getName());
         
         if(userOptional.isEmpty())
             throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
@@ -235,5 +237,48 @@ public class UserService {
         List<User> users = userRepository.findAll();
         List<UserDTO> userDTOs = userMapper.userListToUserDTOList(users);
         return userDTOs;
+    }
+
+    /*
+     * Actualiza un usuario existente por su ID.
+     * Este método busca al usuario en la base de datos utilizando su ID,
+     * y si existe, actualiza sus datos con la información proporcionada en el UserDTO
+     */
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        // Buscamos el usuario por su ID
+        Optional<User> userOptional = userRepository.findById(id);
+        
+        if(userOptional.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
+        
+        // Convertimos el UserDTO a User
+        User user = userMapper.userDTOToUser(userDTO);
+        
+        // Asignamos el ID del usuario existente al nuevo objeto User
+        user.setId(id);
+        
+        
+        // Guardamos el usuario actualizado en la base de datos
+        User updatedUser = userRepository.save(user);
+        
+        // Convertimos el User actualizado a UserDTO y lo devolvemos
+        return userMapper.userToUserDTO(updatedUser);
+    }
+
+     /**
+     * Elimina un usuario por su ID.
+     * Este método busca al usuario en la base de datos utilizando su ID y, si existe
+     * 
+     * @param id el ID del usuario que se desea eliminar
+     */
+    public void deleteUser (Long id) {
+        // Comprobamos si el usuario existe
+        Optional<User> userOptional = userRepository.findById(id);
+        if(userOptional.isEmpty()) {
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
+        }
+        
+        // Si existe lo borramos
+        userRepository.deleteById(id);
     }
 }
