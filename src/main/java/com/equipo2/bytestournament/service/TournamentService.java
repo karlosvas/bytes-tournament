@@ -262,9 +262,44 @@ public class TournamentService {
      * @param tournamentDTO ID del torneo para el cual se quieren obtener los detalles del ranking.
      * @return Lista de RankingDetailsDTO con los detalles del ranking de los jugadores del torneo.
      */
-    public List<TournamentDTO> getTournament(){
+    public List<TournamentDTO> getAllTournament(){
         List<Tournament> tournaments = tournamentRepository.findAll();
         List<TournamentDTO> tournamentDTOs = tournamentMapper.tournamentListToTournamentDTOList(tournaments);
         return tournamentDTOs;
+    }
+
+    /**
+     * Actualiza un torneo existente.
+     * Este método busca el torneo por su ID y actualiza sus campos con los valores del TournamentDTO proporcionado.
+     * Si el torneo no existe, lanza una excepción.
+     * @param tournamentDTO TournamentDTO que contiene la información del torneo a actualizar.
+     * @return TournamentDTO con la información del torneo actualizado.
+     */
+    public TournamentDTO updateTournament(Long id, TournamentDTO tournamentDTO) {
+        // Buscamos el torneo por su ID
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(id);
+
+        if(tournamentOptional.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un torneo con esa ID");
+
+        Tournament tournament = tournamentMapper.tournamentDtoToTournament(tournamentDTO);
+        tournament.setId(id); // Aseguramos que el ID del torneo es el correcto
+
+        // Actualizamos los campos del torneo con los valores del TournamentDTO
+        Tournament updatedTournament = tournamentRepository.save(tournament);
+        return tournamentMapper.tournamentToTournamentDTO(updatedTournament);
+
+    }
+
+    public void deleteTournament(Long id) {
+        // Verificamos si el torneo existe
+        Optional<Tournament> tournamentOptional = tournamentRepository.findById(id);
+        
+        if(tournamentOptional.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "Tournament no encontrado", "No se encontro un torneo con esa ID");
+
+        // Eliminamos el torneo de la base de datos
+        tournamentRepository.deleteById(id);
+        logger.info("Torneo con ID {} eliminado correctamente", id);
     }
 }

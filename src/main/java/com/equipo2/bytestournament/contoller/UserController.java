@@ -7,15 +7,14 @@ import com.equipo2.bytestournament.annotations.SwaggerApiResponses;
 import com.equipo2.bytestournament.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -66,7 +65,7 @@ public class UserController {
     @SwaggerApiResponses
     @PostMapping("/auth/register")
     @Operation(summary = "Registrar un nuevo usuario", description = "Este endpoint permite a los usuarios registrarse en la aplicación, creando un nuevo usuario en la base de datos y devolviendo el token de acceso si el registro es exitoso. Para crear otro administrador es necesario tener un usuario con privilegios de administrador, como el usuario root creado por defecto al iniciar la aplicación.")
-    public ResponseEntity<String> registerUser(@RequestBody UserDTO entity, Authentication authentication) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid UserDTO entity, Authentication authentication) {
         return ResponseEntity.status(ApiResponse.CREATED.getStatus()).body(userService.registerUser(entity, authentication));
     }
 
@@ -81,7 +80,7 @@ public class UserController {
     @SwaggerApiResponses
     @GetMapping("/auth/login")
     @Operation(summary = "Iniciar sesión", description = "Este endpoint permite a los usuarios iniciar sesión en la aplicación, proporcionando sus credenciales (nombre de usuario y contraseña) y obteniendo un token de acceso si las credenciales son válidas.")
-    public String userLogin(@RequestBody UserDTO entity) {
+    public String userLogin(@RequestBody @Valid UserDTO entity) {
         return userService.userLogin(entity);
     }
 
@@ -94,7 +93,7 @@ public class UserController {
      */
     @Operation(summary = "Obtener datos personales autentificados", description = "Este endpoint permite a los usuarios autentificados obtener sus datos personales.")
     @SwaggerApiResponses
-    @GetMapping("/me")
+    @GetMapping("/auth/me")
     @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     public UserDTO personalData(Authentication authentication) {
         return userService.profileData(authentication);
@@ -109,6 +108,7 @@ public class UserController {
      */
     @Operation(summary = "Obtener datos personales por id", description = "Este endpoint permite a los usuarios obtener los datos personales de el usuario con el id pasado por parametro, solo accesibles para usuarios con el rol de ADMIN.")
     @SwaggerApiResponses
+
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public UserDTO profileUser(@PathVariable Long userId) {
@@ -123,9 +123,41 @@ public class UserController {
      */
     @Operation(summary = "Listar usuarios", description = "Este endpoint permite listar todos los usuarios.")
     @SwaggerApiResponses
-    @GetMapping("/user/list")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/list")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> listAllUsers() {
         return userService.listAllUsers();
+    }
+
+    /**
+     * Actualiza los datos de un usuario existente.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     * 
+     * @param id
+     * @return
+     */
+    @SwaggerApiResponses
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Eliminar un usuario", description = "Este endpoint permite a los administradores eliminar un usuario por su ID.")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Actualiza los datos de un usuario existente.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     * 
+     * @param id ID del usuario a actualizar.
+     * @param userDTO UserDTO que contiene la información actualizada del usuario, como nombre de usuario, correo electrónico y otros datos relevantes.
+     * @return UserDTO que contiene los datos actualizados del usuario.
+     */
+    @SwaggerApiResponses
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Actualizar un usuario", description = "Este endpoint permite a los administradores actualizar los datos de un usuario por su ID.")
+    public UserDTO updateUser(@PathVariable Long id, @RequestBody @Valid  UserDTO userDTO) {
+        return userService.updateUser(id, userDTO);
     }
 }

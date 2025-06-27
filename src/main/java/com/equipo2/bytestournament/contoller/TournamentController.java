@@ -8,9 +8,8 @@ import com.equipo2.bytestournament.service.TournamentService;
 import com.equipo2.bytestournament.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
+import jakarta.validation.Valid;
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -85,7 +84,7 @@ public class TournamentController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @Operation(summary = "Crear un torneo", description = "Este endpoint permite a los administradores crear un nuevo torneo.")
-    public ResponseEntity<TournamentDTO> create(@RequestBody TournamentDTO tournamentDTO) {
+    public ResponseEntity<TournamentDTO> create(@RequestBody @Valid TournamentDTO tournamentDTO) {
         return ResponseEntity.status(ApiResponse.CREATED.getStatus())
                 .body(tournamentService.createTournament(tournamentDTO));
     }
@@ -98,9 +97,8 @@ public class TournamentController {
      * @param userName     Nombre del usuario que está actualizando el torneo.
      * @return TournamentDTO que contiene el torneo actualizado y un estado HTTP 200 OK.
      */
+      // TODO: Si eres player solo puedes unirte tu mismo
     @SwaggerApiResponses
-    // TODO: Si eres player solo puedes unirte tu mismo
-    @PreAuthorize("hasRole('PLAYER')")
     @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     @PostMapping("/players")
     @Operation(summary = "Unirse a un torneo como jugador", description = "Este endpoint permite a los jugadores unirse a un torneo existente.")
@@ -121,7 +119,7 @@ public class TournamentController {
      * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('PLAYER', 'ADMIN')")
     @PostMapping("/players/me")
     @Operation(summary = "Unirse a un torneo como jugador autenticado", description = "Este endpoint permite al usuario autenticado unirse a un torneo existente.")
     public ResponseEntity<TournamentDTO> joinTournamentWithActualUser(@RequestParam Long tournamentId,
@@ -186,10 +184,10 @@ public class TournamentController {
      * @return List<TournamentDTO> que contiene todos los torneos.
      */
     @SwaggerApiResponses
-    @GetMapping
+    @GetMapping("/list")
     @Operation(summary = "Listar torneos", description = "Este endpoint permite listar los torneos.")
-    public List<TournamentDTO> getTournaments() {
-        return tournamentService.getTournament();
+    public List<TournamentDTO> getAllTournaments() {
+        return tournamentService.getAllTournament();
     }
 
     /**
@@ -206,5 +204,34 @@ public class TournamentController {
         return tournamentService.findTournamentById(id);
     }
 
+    /**
+     * Actualiza un torneo existente.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     * 
+     * @param id ID del torneo a actualizar.
+     * @param tournamentDTO DTO que contiene la información actualizada del torneo.
+     */
+    @SwaggerApiResponses
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un torneo", description = "Este endpoint permite a los administradores actualizar un torneo existente.")
+    public ResponseEntity<TournamentDTO> updateTournament(@PathVariable Long id, @RequestBody @Valid TournamentDTO tournamentDTO) {
+        return ResponseEntity.ok(tournamentService.updateTournament(id, tournamentDTO));
+    }
 
+    /**
+     * Elimina un torneo por su ID.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     * 
+     * @param id ID del torneo que se desea eliminar.
+     * @return ResponseEntity<Void> con un estado HTTP 204 No Content si la eliminación fue exitosa.
+     */
+    @SwaggerApiResponses
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un torneo", description = "Este endpoint permite a los administradores eliminar un torneo por su ID.")
+    public ResponseEntity<Void> deleteTournament(@PathVariable Long id) {
+        tournamentService.deleteTournament(id);
+        return ResponseEntity.noContent().build();
+    }
 }

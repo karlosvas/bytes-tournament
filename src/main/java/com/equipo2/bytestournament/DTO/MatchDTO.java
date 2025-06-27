@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 
@@ -19,6 +20,8 @@ import jakarta.validation.constraints.NotNull;
  * {@link AllArgsConstructor} Anotación de Lombok que genera un constructor con todos los campos como parámetros.
  * {@link NoArgsConstructor} Anotación de Lombok que genera un constructor sin parámetros
  * {@link Builder} Anotación de Lombok que permite crear instancias de la clase utilizando el patrón Builder.
+ * {@link Min} Anotación de validación que asegura que el valor de un campo sea al menos el valor especificado.
+ * {@link NotNull} Anotación de validación que asegura que un campo no sea nulo.
  */
 @Data
 @AllArgsConstructor
@@ -34,11 +37,11 @@ public class MatchDTO {
     private Long tournament;
 
     @NotNull
-    @Schema(description = "Jugador 1")
+    @Schema(description = "Jugador 1 ID")
     private Long player1;
 
     @NotNull
-    @Schema(description = "Jugador 2")
+    @Schema(description = "Jugador 2 ID")
     private Long player2;
 
     @NotNull
@@ -46,6 +49,7 @@ public class MatchDTO {
     private Result result;
 
     @NotNull
+    @Min(value = 0, message = "El número de ronda debe ser al menos 0")
     @Schema(description = "Número de ronda", example = "1")
     private Integer round;
 }

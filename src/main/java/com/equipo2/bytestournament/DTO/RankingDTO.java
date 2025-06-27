@@ -3,7 +3,6 @@ package com.equipo2.bytestournament.DTO;
 import java.util.ArrayList;
 import java.util.List;
 import com.equipo2.bytestournament.enums.Rank;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,6 +22,7 @@ import lombok.Builder.Default;
  * {@link AllArgsConstructor} Anotación de Lombok que genera un constructor con todos los campos como parámetros.
  * {@link NoArgsConstructor} Anotación de Lombok que genera un constructor sin parámetros
  * {@link Builder} Anotación de Lombok que permite crear instancias de la clase utilizando el patrón Builder.
+ * {@link Default} Anotación de Lombok que inicializa la lista de jugadores como una lista vacía por defecto.
  */
 @Data
 @AllArgsConstructor

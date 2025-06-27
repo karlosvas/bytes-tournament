@@ -3,6 +3,7 @@ package com.equipo2.bytestournament.DTO;
 import com.equipo2.bytestournament.enums.Status;
 import com.equipo2.bytestournament.model.Match;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,8 @@ public class TournamentDTO {
     @Schema(description = "Nombre del torneo", example = "Torneo de Primavera")
     private String name;
 
-    @NotBlank
+    @NotNull
+    @Min(value = 2, message = "El número maxmimo de jugadores debe ser al menos 2")
     @Schema(description = "Cantidad máxima de participantes", example = "6", required = true)
     private Integer maxPlayers;
 
@@ -46,19 +47,23 @@ public class TournamentDTO {
     @Schema(description = "Estado del torneo", example = "EN_CURSO")
     private Status status;
 
-    @NotNull
     @Default
+    @NotNull
+    @Min(value = 0, message = "El número de rondas debe ser al menos 0")
     @Schema(description = "Número de rondas del torneo", example = "3")
     private Integer rounds = 0;
 
     @NotNull
+    @Min(value = 1, message = "El número máximo de rondas debe ser al menos 1")
     @Schema(description = "Número máximo de rondas del torneo", example = "5")
     private Integer maxRounds;
 
+    @Default
     @Schema(description = "Lista de partidos asociados al torneo")
     @Default
     private List<Match> matches = new ArrayList<>();
 
+    @Default
     @Schema(description = "Lista de jugadores que participan en el torneo")
     @Default
     private List<Long> players = new ArrayList<>();
