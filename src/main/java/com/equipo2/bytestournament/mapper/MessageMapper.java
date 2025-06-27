@@ -13,6 +13,8 @@ import java.util.List;
  * {@link Mapper} Anotación de MapStruct que indica que esta interfaz es un mapper.
  * {@link Mapping} Anotación de MapStruct que indica cómo se deben mapear
  */
+
+ 
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
     MessageDTO messageToMessageDTO(Message message);

@@ -3,7 +3,6 @@ package com.equipo2.bytestournament.config;
 import java.io.IOException;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.utilities.Colours;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.core.Authentication;

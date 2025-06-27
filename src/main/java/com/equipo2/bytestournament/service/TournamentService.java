@@ -107,18 +107,18 @@ public class TournamentService {
         if(userOptional.isEmpty()) 
             throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se encontro un usuario con esa ID");
         
-        // Añadmios las referencias del usuario al torneo viceversa
+        // Añadimos las referencias del usuario al torneo viceversa
         User user = userOptional.get();
         Tournament tournament = tournamentOptional.get();
 
-        // Obtenemos los usuarrios del torneo para verrificar que ya estaba apuntado
+        // Obtenemos los usuarrios del torneo para verificar que ya estaba apuntado
         List<User> listUser = tournament.getPlayers();
         if(listUser.contains(user))
             throw new RequestException(ApiResponse.DUPLICATE_RESOURCE, "Recurso duplicado", "El usuario ya esta apuntado al torneo actual");
 
         // En el torneo hay un nuevo usuario
         tournament.getPlayers().add(userOptional.get());
-        // Un nuevo usuaurio pertenece a un torneo
+        // Un nuevo usuario pertenece a un torneo
         user.getTournaments().add(tournamentOptional.get());
 
         // Guardamos en la base de datos todos los cambios
@@ -174,7 +174,7 @@ public class TournamentService {
      * @return Lista de RankingDetailsDTO con los detalles del ranking de los jugadores del torneo.
      */
     public List<RankingDetailsDTO> getRankingDetails(Long tournamentId) {
-        // Obtenemos el torneo por su ID de la DB
+        // Obtenemos el torneo por su ID de la BD
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(tournamentId);
         
         if(tournamentOptional.isEmpty())
@@ -226,6 +226,17 @@ public class TournamentService {
         return listDetailsRanking;
     }
 
+    /**
+     * Actualiza un torneo existente.
+     * Este método busca el torneo por su ID y actualiza sus campos con los valores del
+     * TournamentDTO proporcionado.
+     * Si el torneo no existe, lanza una excepción.
+     * Si el usuario que realiza la solicitud no es un administrador, lanza una excepción.
+     * 
+     * @param tournamentDTO TournamentDTO que contiene la información del torneo a actualizar.
+     * @param authentication Authentication que contiene la información del usuario que realiza la solicitud.
+     * @return TournamentDTO con la información del torneo actualizado.
+     */
     public TournamentDTO updateTournament(TournamentDTO tournamentDTO, Authentication authentication) {
         Optional<User> userRequest = userRepository.findByUsername(authentication.getName());
 
@@ -253,5 +264,21 @@ public class TournamentService {
 
         // Devolvemos el TournamentDTO actualizado
         return tournamentMapper.tournamentToTournamentDTO(updatedTournament);
+    }
+
+    /**
+     * Obtiene una lista con los torneos.
+     * Este método busca todos los torneos en la base de datos y los convierte a TournamentDTO.
+     * 
+     * @param tournamentDTO ID del torneo para el cual se quieren obtener los detalles del ranking.
+     * @return Lista de RankingDetailsDTO con los detalles del ranking de los jugadores del torneo.
+     */
+    public List<TournamentDTO> getTournament(){
+        List<Tournament> tournaments = tournamentRepository.findAll();
+
+        if(tournaments.isEmpty())
+            throw new RequestException(ApiResponse.NOT_FOUND, "No se encontraron torneos", "No se encontraron torneos en la base de datos");
+
+        return tournamentMapper.tournamentListToTournamentDTOList(tournaments);
     }
 }

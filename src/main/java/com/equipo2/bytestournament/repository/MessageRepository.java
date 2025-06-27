@@ -36,5 +36,23 @@ public interface MessageRepository extends JpaRepository  <Message, Long>{
      * @return una lista de mensajes de la partida indicada
      */
     Optional<List<Message>> findByMatchId(Long matchId);
+
+    /**
+     *  Recupera la lista de mensajes asociados a un torneo específico, ordenados por la marca de tiempo de forma ascendente.
+     * Este método es útil para obtener los mensajes en el orden en que fueron enviados.
+     * 
+     * @param tournamentId el identificador del torneo
+     * @return una lista de mensajes del torneo indicado, ordenados por la marca de tiempo de forma ascendente
+     */
+    Optional<List<Message>> findByTournamentIdOrderByTimestampAsc(Long tournamentId);
+
+    /**
+     *  Recupera la lista de mensajes asociados a una partida específica, ordenados por la marca de tiempo de forma ascendente.
+     * Este método es útil para obtener los mensajes de una partida en el orden en que fueron enviados.
+     * 
+     * @param matchId el identificador de la partida
+     * @return una lista de mensajes de la partida indicada, ordenados por la marca de tiempo de forma ascendente
+     */
+    Optional<List<Message>> findByMatchIdOrderByTimestampAsc(Long matchId);
 }
 

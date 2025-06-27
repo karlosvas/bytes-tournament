@@ -20,7 +20,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Builder.Default;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -120,4 +119,5 @@ public class User implements UserDetails{
         allMatches.addAll(matchesAsPlayer2);
         return allMatches;
     }
+    
 }

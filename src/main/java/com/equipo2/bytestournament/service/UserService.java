@@ -1,5 +1,6 @@
 package com.equipo2.bytestournament.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -223,5 +224,18 @@ public class UserService {
         
         User user = userOptional.get();
         return user.getUsername();
+    }
+
+     /**
+     * Obtiene la lista de todos los usuarios registrados en el sistema.
+     * Este método recupera todos los usuarios de la base de datos, los convierte a UserDTO
+     * y devuelve la lista resultante.
+     * 
+     * @return List<UserDTO> que contiene la lista de todos los usuarios encontrados.
+     */
+    public List<UserDTO> listAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDTO> userDTOs = userMapper.userListToUserDTOList(users);
+        return userDTOs;
     }
 }

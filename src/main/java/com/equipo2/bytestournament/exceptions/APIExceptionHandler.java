@@ -139,7 +139,7 @@ public class APIExceptionHandler {
      */
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<ExceptionDTO> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-        // Crear DTO de excepción utilizando ApiResponse predefinido
+         
         ExceptionDTO exceptionDTO = new ExceptionDTO(
                 ApiResponse.AUTHENTICATION_FAILED.getTitle(),
                 "No tienes los permisos necesarios para realizar esta operación",
