@@ -69,7 +69,8 @@ Canal de Twitch: [Bytes Colaborativos](https://www.twitch.tv/api/bytescolaborati
 
   // Dos opciones:
   // 1. Ejecutar con Doker
-  docker-compose up
+  docker-compose up --build // La primera vez que lo ejecutas o si cambias el código utiliza --build
+
   // 2. Ejecutar directamente, es lo mismo que (Boton de inicio)
   mvn spring-boot:run
 
@@ -90,3 +91,27 @@ Para generar la documentación de JavaDoc, ejecuta el siguiente comando:
 ```bash
 mvn javadoc:javadoc
 ```
+
+## Manual basico de usuario
+
+Si quieres utilizar la api deves tener en cuenta unos cuantos puntos importantes:
+
+- **Autenticación**: Utiliza el endpoint `/api/auth` para obtener un token JWT. Este token debe ser incluido en las cabeceras de las peticiones a los endpoints protegidos.
+
+  - **Registro**: `/api/auth/register` Incluye el token JWT en la cabecera `Authorization` de tus peticiones, con el formato `Bearer <token>`.
+  - **Login**: `/api/auth/login` Incluye el token JWT en la cabecera `Authorization` de tus peticiones, con el formato `Bearer <token>`.
+  - **Admin** `/api/auth/register` para crear un usuario administrador deves de ser administrador o tener el permiso `USER_CREATE`, si no tienes acceso a un administrador puedes utilizar en administrador creado por defecto con los parametrso que utilices en tu env
+
+- **Entorno** Pero y si no sabes que valores deven utilizare en el .env? en este mismo repositorio en la raíz del proyetco se encuentra un archivo `.env.demo` que contiene los valores de ejemplo que puedes utilizar para crear tu propio archivo `.env`, simplemente renombralo a `.env` y edita los valores según tus necesidades.
+  También deves tener en cuenta que esto solo ocurre cuando utilizamos docker.
+
+- **Entorno Local** Si estas utilizando el entorno local, sin utilizar docker con el comando `mvn spring-boot:run` o con el botón de play, no es necesario crear un archivo `.env`, ya que las variables de entorno se configuran directamente en el archivo `application.properties` y `application-dev.propperties`.
+
+- **Testing con Postman** Como pueso obtener los enpoints necesarios para hacer testing?
+  Puedes utilizar Postman para probar todos los endpoints de la API. Estos archivos se encuentran en el directorio `postman` del proyecto. Puedes importar el archivo `bytes-tournament.postman_collection.json` en Postman para acceder a todos los endpoints y realizar pruebas, y `Bytes_Tournament.postman_environment` para variables de entorno, tambien puedes ver yu probar los enpoints desde Swagger.
+
+- **Testing con JUnit y Mockito** Si quieres hacer pruebas unitarias puedes utilizar JUnit y Mockito. Puedes ejecutar las pruebas utilizando el comando `mvn test` o desde tu IDE.
+
+- **La base de datos** Si quieres saber más sobre la base de datos, puedes consultar el archivo `src/main/resources/tournament_db.sql`. Este archivo contiene la estructura de la base de datos y las tablas necesarias para el funcionamiento de la API y que crea docker.
+
+> **Nota:** Si encuentras algún bug, por favor abre una issue en el repositorio de GitHub para que podamos solucionarlo lo antes posible. ¡Gracias de antemano por tu colaboración! 🐛
