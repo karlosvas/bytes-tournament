@@ -56,10 +56,10 @@ public class TournamentControllerTest {
     public void createTest() throws Exception {
         String tournamentDTO = """
                 {
-                "name": "Torneo de test",
-                "maxPlayers": 10,
-                "status": "PENDING",
-                "maxRounds": 10
+                        "name": "Torneo de test",
+                        "maxPlayers": 10,
+                        "status": "PENDING",
+                        "maxRounds": 10
                 }
         """;
 
@@ -172,17 +172,17 @@ public class TournamentControllerTest {
     public void updateTournamentTest() throws Exception {
         String tournamentDTO = """
                 {
-                  "name": "Torneo Actualizado 2025",
-                  "maxPlayers": 10,
-                  "status": "PENDING",
-                  "maxRounds": 10
+                        "name": "Torneo Actualizado 2025",
+                        "maxPlayers": 10,
+                        "status": "PENDING",
+                        "maxRounds": 10
                 }
         """;
 
-        Mockito.when(tournamentService.updateTournament(Mockito.any(TournamentDTO.class), Mockito.any()))
+        Mockito.when(tournamentService.updateTournament(Mockito.eq(1L), Mockito.any(TournamentDTO.class)))
                 .thenReturn(new TournamentDTO());
 
-        mockMvc.perform(put("/api/tournaments").with(csrf())
+        mockMvc.perform(put("/api/tournaments/1").with(csrf())
                 .contentType("application/json")
                 .content(tournamentDTO))
                 .andExpect(status().isOk());
