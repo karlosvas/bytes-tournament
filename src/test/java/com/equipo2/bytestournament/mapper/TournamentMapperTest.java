@@ -28,18 +28,18 @@ public class TournamentMapperTest {
      * matchRepository Repositorio de partidos, usado por el TournamentMapperHelper.
      */
     private static TournamentMapper tournamentMapper;
-
+  
     @Mock
     private static UserRepository userRepository;
-    
+
     @Mock
     private static MatchRepository matchRepository;
     
     /**
+
      * setUp Método que se ejecuta antes de cada prueba.
      * Inicializa el TournamentMapper y su helper, inyectando los repositorios necesarios.
      */
-    @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         tournamentMapper = Mappers.getMapper(TournamentMapper.class);

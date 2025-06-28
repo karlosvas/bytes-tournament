@@ -39,9 +39,10 @@ public class TournamentDTO {
     private String name;
 
     @NotNull
+    @Default
     @Min(value = 2, message = "El número maxmimo de jugadores debe ser al menos 2")
     @Schema(description = "Cantidad máxima de participantes", example = "6", required = true)
-    private Integer maxPlayers;
+    private Integer maxPlayers = 2;
 
     @NotNull
     @Schema(description = "Estado del torneo", example = "EN_CURSO")
@@ -54,9 +55,10 @@ public class TournamentDTO {
     private Integer rounds = 0;
 
     @NotNull
+    @Default
     @Min(value = 1, message = "El número máximo de rondas debe ser al menos 1")
     @Schema(description = "Número máximo de rondas del torneo", example = "5")
-    private Integer maxRounds;
+    private Integer maxRounds = 1;
 
     @Default
     @Schema(description = "Lista de partidos asociados al torneo")
