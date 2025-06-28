@@ -20,7 +20,7 @@ import org.mapstruct.Mapping;
  * {@link Mapping} Anotación de MapStruct que indica cómo se deben mapear
  */ 
 
-@Mapper(componentModel = "spring", uses = {TournamentMapperHelper.class})
+@Mapper(componentModel = "spring", uses = {MatchMapper.class, TournamentMapperHelper.class})
 public interface TournamentMapper {
     // Tournament -> TournamentDTO
     @Mapping(target = "matches", source = "matches")

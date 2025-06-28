@@ -31,51 +31,94 @@ public class MessageController {
         this.messageService = messageService;
     }
 
+    
+    /**
+     * Obtiene todos los mensajes asociados a un torneo específico.
+     * Este método es accesible para usuarios con rol PLAYER o ADMIN.
+     *
+     * @param tournamentId ID del torneo.
+     * @return Lista de MessageDTO con los mensajes del torneo.
+     */
     @SwaggerApiResponses
     @GetMapping("/tournament/{tournamentId}")
-    @PreAuthorize("hasAnyAuthority('PLAYER','ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER','ADMIN')")
     @Operation(summary = "Obtener mensajes de un torneo", description = "Obtiene todos los mensajes asociados a un torneo específico.")
     public List<MessageDTO> getTournamentMessages(@PathVariable Long tournamentId) {
         return messageService.getTournamentMessages(tournamentId);
     }
 
+    /**
+     * Envía un mensaje a un torneo específico.
+     * Este método es accesible para usuarios con rol PLAYER o ADMIN.
+     *
+     * @param tournamentId ID del torneo.
+     * @param dto          Datos del mensaje a enviar.
+     * @return El mensaje creado (MessageDTO).
+     */
     @SwaggerApiResponses
     @PostMapping("/tournament/{tournamentId}")
-    @PreAuthorize("hasAnyAuthority('PLAYER','ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER','ADMIN')")
     @Operation(summary = "Enviar mensaje a un torneo", description = "Envía un mensaje a un torneo específico.")
     public ResponseEntity<MessageDTO> sendTournamentMessage(@PathVariable Long tournamentId, @RequestBody MessageDTO dto) {
         MessageDTO newMessageDTO = messageService.sendTournamentMessage(tournamentId, dto);
         return ResponseEntity.status(ApiResponse.CREATED.getStatus()).body(newMessageDTO);
     }
 
-    //Obtengo el mensaje de la partida
+    /**
+     * Obtiene todos los mensajes asociados a una partida específica.
+     * Este método es accesible para usuarios con rol PLAYER o ADMIN.
+     *
+     * @param matchId ID de la partida.
+     * @return Lista de MessageDTO con los mensajes de la partida.
+     */
     @SwaggerApiResponses    
     @GetMapping("/match/{matchId}")
-    @PreAuthorize("hasAnyAuthority('PLAYER','ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER','ADMIN')")
     @Operation(summary = "Obtener mensajes de una partida", description = "Obtiene todos los mensajes asociados a una partida específica.")
     public List<MessageDTO> getMatchMessages(@PathVariable Long matchId) {
         return messageService.getMatchMessages(matchId);
     }
 
-    //Enviar mensaje a partida
+   /**
+     * Envía un mensaje a una partida específica.
+     * Este método es accesible para usuarios con rol PLAYER o ADMIN.
+     *
+     * @param matchId ID de la partida.
+     * @param dto     Datos del mensaje a enviar.
+     * @return El mensaje creado (MessageDTO).
+     */
     @SwaggerApiResponses
     @PostMapping("/match/{matchId}")
-    @PreAuthorize("hasAnyAuthority('PLAYER','ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER','ADMIN')")
     public ResponseEntity<MessageDTO> sendMatchMessage(@PathVariable Long matchId, @RequestBody MessageDTO dto) {
         return ResponseEntity.status(ApiResponse.CREATED.getStatus()).body(messageService.sendMatchMessage(matchId, dto));
     }
 
+     /**
+     * Obtiene una lista de todos los mensajes enviados en el sistema.
+     * Este método es accesible para usuarios con rol PLAYER o ADMIN.
+     *
+     * @return Lista de MessageDTO con todos los mensajes.
+     */
     @SwaggerApiResponses
     @GetMapping("/list")
-    @PreAuthorize("hasAnyAuthority('PLAYER','ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER','ADMIN')")
     @Operation(summary = "Obtener todos los mensajes", description = "Obtiene una lista de todos los mensajes enviados en el sistema.")
     public List<MessageDTO> getAllMessages() {
         return messageService.getAllMessages();
     }
 
+    /**
+     * Actualiza un mensaje existente por su ID.
+     * Este método es accesible solo para usuarios con el rol de ADMIN.
+     *
+     * @param id         ID del mensaje a actualizar.
+     * @param messageDTO Datos actualizados del mensaje.
+     * @return El mensaje actualizado (MessageDTO).
+     */
     @SwaggerApiResponses
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Actualizar mensaje", description = "Actualiza un mensaje existente por su ID.")
     public MessageDTO updateMessage(@PathVariable Long id, @RequestBody @Valid MessageDTO messageDTO) {
         return messageService.updateMessage(id, messageDTO);
@@ -90,7 +133,7 @@ public class MessageController {
      */
     @SwaggerApiResponses
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Eliminar mensaje", description = "Elimina un mensaje por su ID.")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
         messageService.deleteMessage(id);

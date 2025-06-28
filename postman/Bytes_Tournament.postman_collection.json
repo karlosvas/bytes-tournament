@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "e4a08a59-448d-4ad2-9a58-26f40bcb9bd0",
 		"name": "Bytes_Tournament",
-		"description": "Bytes Tournament es un sistema backend para la organización y gestión de torneos de videojuegos online. La plataforma proporciona una API REST completa que permite a los usuarios crear torneos, registrarse para participar, competir y seguir los resultados en tiempo real. El sistema incluye funcionalidades como emparejamiento automático de jugadores, sistema de chat básico, clasificaciones dinámicas y actualización de resultados, todo construido con un enfoque en la robustez, seguridad y preparación para entornos de producción.\n\n## Metodología de Trabajo 🛠️\n\nEste proyecto sigue la metodología ágil **Scrum** para la gestión y desarrollo de las tareas.  \nUtilizamos **Trello** para organizar y hacer seguimiento de las tareas, asegurando una colaboración eficiente y una entrega continua de valor.\n\n## Equipo de Desarrollo 👥\n\n@karlosvas  \n@JariJariLo  \n@Rs-845  \n@ChristianEscalas\n\nCreadores de Bytes Colaborativos:  \n@devch-tech y @Jorexbp  \nCanal de Twitch: [Bytes Colaborativos](https://www.twitch.tv/api/bytescolaborativos)\n\n## Funcionalidades Principales 🧩\n\n- **Gestión de usuarios**: Sistema completo con registro, autenticación y roles diferenciados (administrador, organizador, jugador).\n    \n- **Gestión de torneos**: Creación, edición, consulta y eliminación de torneos con diferentes formatos y configuraciones.\n    \n- **Sistema de registro**: Inscripción de jugadores en torneos con validación de requisitos.\n    \n- **Emparejamiento automático**: Algoritmo inteligente para emparejar jugadores según nivel, historial y otros parámetros.\n    \n- **Chat básico**: Comunicación entre jugadores mediante sistema HTTP para coordinación de partidas.\n    \n- **Clasificaciones dinámicas**: Tablas de clasificación actualizadas en tiempo real según resultados.\n    \n- **Seguimiento de resultados**: Registro y actualización de resultados con histórico de partidas.\n    \n- **API REST documentada**: Endpoints bien definidos y documentados para facilitar la integración.\n    \n- **Seguridad robusta**: Control de acceso basado en roles con autenticación JWT.\n    \n\n## Tecnologías Utilizadas 🐧🐋\n\n- **Lenguaje**: Java 17\n    \n- **Framework**: Spring Boot (MVC)\n    \n- **Seguridad**: Spring Security + JWT\n    \n- **Base de datos**: PostgreSQL\n    \n- **Documentación de API**: SwaggerUI\n    \n- **Testing**:\n    \n    - Postman para pruebas de integración\n        \n    - JUnit/Mockito para pruebas unitarias\n        \n- **Control de versiones**: Git (GitHub)\n    \n- **Gestión de proyecto**: Trello (metodología Scrum)\n    \n- **Contenedores**: Docker (para desarrollo y despliegue)\n    \n\n## Instalación y Configuración 🚀\n\n### Requisitos Previos\n\n- Java 17 instalado\n    \n- PostgreSQL instalado y configurado\n    \n- Docker (opcional, para contenedores)\n    \n- Maven instalado (mvn)\n    \n- Archivo .env configurado con las variables necesarias\n    \n\n### Pasos para la Instalación\n\n```\n  // Clonar el repositorio\n  git clone https://github.com/karlosvas/bytes-tournament.git\n  cd bytes-tournament\n  // IMPORTANTE: Crear un archivo .env en la raíz del proyecto con las variables del .env.demo:\n  mvn clean install // O mvn clean package\n  // Dos opciones:\n  // 1. Ejecutar con Doker\n  docker-compose up\n  // 2. Ejecutar directamente, es lo mismo que (Boton de inicio)\n  mvn spring-boot:run\n  // Ya podrás acceder a la API en http://localhost:8081/api\n\n ```\n\n## **Resultados de endpoints**\n\n| Endpoint | Método | Respuesta Exitosa | Código |\n| --- | --- | --- | --- |\n| `/api/auth/register` | POST | Usuario registrado | 201 |\n| `/api/auth/login` | POST | Token JWT | 200 |\n| `/api/user/me` | GET | UserDTO del usuario autenticado | 200 |\n| `/api/user/{id}` | GET | UserDTO del usuario | 200 |\n| `/api/users/list` | GET | Lista de UserDTO | 200 |\n| `/api/tournaments` | GET | Lista de TournamentDTO | 200 |\n| `/api/tournaments/{id}` | GET | TournamentDTO | 200 |\n| `/api/tournaments` | POST | TournamentDTO creado | 201 |\n| `/api/tournaments/players` | POST | TournamentDTO actualizado | 201 |\n| `/api/tournaments/players/me` | POST | TournamentDTO actualizado | 201 |\n| `/api/tournaments/ranking/{tournamentId}` | GET | Ranking | 200 |\n| `/api/tournaments/ranking/details/{tournamentId}` | GET | Detalles de ranking | 200 |\n| `/api/matches/generate/{tournamentId}` | POST | Lista de MatchDTO | 201 |\n| `/api/matches/{matchId}` | GET | MatchDTO | 200 |\n| `/api/matches/{id}/result` | PUT | MatchDTO actualizado | 200 |",
+		"description": "Bytes Tournament es un sistema backend para la organización y gestión de torneos de videojuegos online. La plataforma proporciona una API REST completa que permite a los usuarios crear torneos, registrarse para participar, competir y seguir los resultados en tiempo real. El sistema incluye funcionalidades como emparejamiento automático de jugadores, sistema de chat básico, clasificaciones dinámicas y actualización de resultados, todo construido con un enfoque en la robustez, seguridad y preparación para entornos de producción.\n\n## Metodología de Trabajo 🛠️\n\nEste proyecto sigue la metodología ágil **Scrum** para la gestión y desarrollo de las tareas.  \nUtilizamos **Trello** para organizar y hacer seguimiento de las tareas, asegurando una colaboración eficiente y una entrega continua de valor.\n\n## Equipo de Desarrollo 👥\n\n@karlosvas  \n@JariJariLo  \n@Rs-845  \n@ChristianEscalas\n\nCreadores de Bytes Colaborativos:  \n@devch-tech y @Jorexbp  \nCanal de Twitch: [Bytes Colaborativos](https://www.twitch.tv/api/bytescolaborativos)\n\n## Funcionalidades Principales 🧩\n\n- **Gestión de usuarios**: Sistema completo con registro, autenticación y roles diferenciados (administrador, organizador, jugador).\n    \n- **Gestión de torneos**: Creación, edición, consulta y eliminación de torneos con diferentes formatos y configuraciones.\n    \n- **Sistema de registro**: Inscripción de jugadores en torneos con validación de requisitos.\n    \n- **Emparejamiento automático**: Algoritmo inteligente para emparejar jugadores según nivel, historial y otros parámetros.\n    \n- **Chat básico**: Comunicación entre jugadores mediante sistema HTTP para coordinación de partidas.\n    \n- **Clasificaciones dinámicas**: Tablas de clasificación actualizadas en tiempo real según resultados.\n    \n- **Seguimiento de resultados**: Registro y actualización de resultados con histórico de partidas.\n    \n- **API REST documentada**: Endpoints bien definidos y documentados para facilitar la integración.\n    \n- **Seguridad robusta**: Control de acceso basado en roles con autenticación JWT.\n    \n\n## Tecnologías Utilizadas 🐧🐋\n\n- **Lenguaje**: Java 17\n    \n- **Framework**: Spring Boot (MVC)\n    \n- **Seguridad**: Spring Security + JWT\n    \n- **Base de datos**: PostgreSQL\n    \n- **Documentación de API**: SwaggerUI\n    \n- **Testing**:\n    \n    - Postman para pruebas de integración\n        \n    - JUnit/Mockito para pruebas unitarias\n        \n- **Control de versiones**: Git (GitHub)\n    \n- **Gestión de proyecto**: Trello (metodología Scrum)\n    \n- **Contenedores**: Docker (para desarrollo y despliegue)\n    \n\n## Instalación y Configuración 🚀\n\n### Requisitos Previos\n\n- Java 17 instalado\n    \n- PostgreSQL instalado y configurado\n    \n- Docker (opcional, para contenedores)\n    \n- Maven instalado (mvn)\n    \n- Archivo .env configurado con las variables necesarias\n    \n\n### Pasos para la Instalación\n\n```\n  // Clonar el repositorio\n  git clone https://github.com/karlosvas/bytes-tournament.git\n  cd bytes-tournament\n  // IMPORTANTE: Crear un archivo .env en la raíz del proyecto con las variables del .env.demo:\n  mvn clean install // O mvn clean package\n  // Dos opciones:\n  // 1. Ejecutar con Doker\n  docker-compose up\n  // 2. Ejecutar directamente, es lo mismo que (Boton de inicio)\n  mvn spring-boot:run\n  // Ya podrás acceder a la API en http://localhost:8081/api\n\n ```\n\n## **Resultados de endpoints**\n\n| **Endpoint** | **Método** | **Descripción** | **Roles requeridos como token** | **Código de éxito** |\n| --- | --- | --- | --- | --- |\n| /api/auth/register | POST | Registrar usuario | Público | 201 Created |\n| /api/auth/login | POST | Login y obtener JWT | Público | 200 OK |\n| /api/user/me | GET | Obtener datos del usuario autenticado | PLAYER/ADMIN | 200 OK |\n| /api/users/list | GET | Listar todos los usuarios | ADMIN | 200 OK |\n| /api/tournaments | POST | Crear torneo | ADMIN | 201 Created |\n| /api/tournaments/list | GET | Listar todos los torneos | PLAYER/ADMIN | 200 OK |\n| /api/tournaments/{id} | GET | Obtener detalles de un torneo | PLAYER/ADMIN | 200 OK |\n| /api/tournaments/{id} | PUT | Actualizar torneo | ADMIN | 200 OK |\n| /api/tournaments/{id} | DELETE | Eliminar torneo | ADMIN | 204 No Content |\n| /api/tournaments/players | POST | Unirse a torneo (por nombre de usuario) | PLAYER/ADMIN | 200 OK |\n| /api/tournaments/players/me | POST | Unirse a torneo (usuario autenticado) | PLAYER/ADMIN | 200 OK |\n| /api/tournaments/ranking/{tournamentId} | GET | Obtener ranking de torneo | PLAYER/ADMIN | 200 OK |\n| /api/tournaments/ranking/details/{tournamentId} | GET | Detalles ranking torneo | PLAYER/ADMIN | 200 OK |\n| /api/matches/generate/{tournamentId} | POST | Generar partidos para torneo | ADMIN | 201 Created |\n| /api/matches/{matchId} | GET | Obtener detalles de un partido | PLAYER/ADMIN | 200 OK |\n| /api/matches/{matchId}/result | PUT | Actualizar resultado de partido | ADMIN | 200 OK |\n| /api/matches/list | GET | Listar todos los partidos | ADMIN | 200 OK |\n| /api/matches/{matchId} | DELETE | Eliminar partido | ADMIN | 204 No Content |\n| /api/message/tournament/{tournamentId} | GET | Obtener mensajes de un torneo | PLAYER/ADMIN | 200 OK |\n| /api/message/tournament/{tournamentId} | POST | Enviar mensaje a torneo | PLAYER/ADMIN | 201 Created |\n| /api/message/match/{matchId} | GET | Obtener mensajes de un partido | PLAYER/ADMIN | 200 OK |\n| /api/message/match/{matchId} | POST | Enviar mensaje a partido | PLAYER/ADMIN | 201 Created |\n| /api/message/list | GET | Listar todos los mensajes | PLAYER/ADMIN | 200 OK |\n| /api/message/{id} | PUT | Actualizar mensaje | ADMIN | 200 OK |\n| /api/message/{id} | DELETE | Eliminar mensaje | ADMIN | 204 No Content |",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "41327597"
 	},
@@ -70,29 +70,36 @@
 					"response": []
 				},
 				{
-					"name": "IdUser",
+					"name": "IdUser(ADMIN)",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/user/1",
+							"raw": "{{base_url}}/api/user/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"user",
-								"1"
+								"3"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Login (ALL)",
+					"name": "Login (PLAYER,ADMIN)",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -156,7 +163,7 @@
 					"response": []
 				},
 				{
-					"name": "RegisterPlayer1 (ALL)",
+					"name": "RegisterPlayer1 (PLAYER,ADMIN))",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -172,7 +179,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"chanti\",\r\n  \"email\": \"chanti@gmail.com\",\r\n  \"password\": \"chanti1234\",\r\n  \"role\": \"PLAYER\"\r\n}",
+							"raw": "{\r\n  \"username\": \"chanti\",\r\n  \"email\": \"chanti@gmail.com\",\r\n  \"password\": \"chanti\",\r\n  \"role\": \"PLAYER\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -195,7 +202,7 @@
 					"response": []
 				},
 				{
-					"name": "RegisterPlayer2 (ALL)",
+					"name": "RegisterPlayer2(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -287,14 +294,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/user/4",
+							"raw": "{{base_url}}/api/user/2",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"user",
-								"4"
+								"2"
 							]
 						}
 					},
@@ -306,10 +313,17 @@
 			"name": "Tournament",
 			"item": [
 				{
-					"name": "RankingClasification",
+					"name": "RankingClasification(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
@@ -336,10 +350,17 @@
 					"response": []
 				},
 				{
-					"name": "DetailsRanking",
+					"name": "DetailsRanking(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
 						"method": "GET",
 						"header": [],
@@ -367,7 +388,7 @@
 					"response": []
 				},
 				{
-					"name": "List tournaments(ALL)",
+					"name": "List tournaments(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -403,7 +424,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MTA0MzI2OCwiZXhwIjoxNDcxMTA0MzI2OH0.hnyFYFzVbQuNNuGBnHm2zGm8bPuW6lpT0IOlIHPjuouEE0TL2SH39ijWrhIUjWNK6-C01KYJdJWVxaPkEoEieg",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -411,14 +432,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/tournaments/list",
+							"raw": "{{base_url}}/api/tournaments/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"tournaments",
-								"list"
+								"1"
 							]
 						}
 					},
@@ -432,7 +453,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MTA0MzczMywiZXhwIjoxNDcxMTA0MzczM30._MkOfqf2FMkbMwzqaUMieYUMnuXIwJ-RbznEJju3CuI8QkvAXn9nzg1026bylGs8Nid35GJHh9OL6RQhFcmPHA",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MTEzMDc2NiwiZXhwIjoxNDcxMTEzMDc2Nn0.ycZCTSrmV4aeKr_mRClhyRbNM1NtfqJ-gP-1iMrbyI6qiA8q-WtMi4xhDCAByHyUp3E2G9Op7IBB57o4pVqYuw",
 									"type": "string"
 								}
 							]
@@ -441,7 +462,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Torneo de Verano 2027\",\r\n  \"maxPlayers\": 10,\r\n  \"status\": \"PENDING\",\r\n  \"maxRounds\": 10\r\n}",
+							"raw": "{\r\n  \"name\": \"Torneo de Verano 2025\",\r\n  \"maxPlayers\": 10,\r\n  \"status\": \"PENDING\",\r\n  \"maxRounds\": 10\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -462,7 +483,7 @@
 					"response": []
 				},
 				{
-					"name": "Add me to turnament(ALL)",
+					"name": "Add me to turnament(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -477,7 +498,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/tournaments/players/me",
+							"raw": "{{base_url}}/api/tournaments/players/me?tournamentId=1",
 							"host": [
 								"{{base_url}}"
 							],
@@ -490,8 +511,7 @@
 							"query": [
 								{
 									"key": "tournamentId",
-									"value": "1",
-									"disabled": true
+									"value": "1"
 								}
 							]
 						}
@@ -499,7 +519,7 @@
 					"response": []
 				},
 				{
-					"name": "Add user to tournament(ALL)",
+					"name": "Add user to tournament(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -514,7 +534,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/tournaments/players",
+							"raw": "{{base_url}}/api/tournaments/players?tournamentId=1&userName=jorge",
 							"host": [
 								"{{base_url}}"
 							],
@@ -526,13 +546,11 @@
 							"query": [
 								{
 									"key": "tournamentId",
-									"value": "1",
-									"disabled": true
+									"value": "1"
 								},
 								{
 									"key": "userName",
-									"value": "carlos",
-									"disabled": true
+									"value": "jorge"
 								}
 							]
 						}
@@ -556,7 +574,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Torneo 2028\",\r\n  \"maxPlayers\": 10,\r\n  \"status\": \"PENDING\",\r\n  \"maxRounds\": 2\r\n}",
+							"raw": "{\r\n  \"name\": \"Torneo 2025\",\r\n  \"maxPlayers\": 10,\r\n  \"status\": \"PENDING\",\r\n  \"maxRounds\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -564,14 +582,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/tournaments/4",
+							"raw": "{{base_url}}/api/tournaments/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"tournaments",
-								"4"
+								"1"
 							]
 						}
 					},
@@ -616,7 +634,7 @@
 			"name": "Message",
 			"item": [
 				{
-					"name": "Tournament Messages(ALL)",
+					"name": "Tournament Messages(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -646,7 +664,7 @@
 					"response": []
 				},
 				{
-					"name": "Match Messages(ALL)",
+					"name": "Match Messages(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -676,7 +694,7 @@
 					"response": []
 				},
 				{
-					"name": "All messages(ALL)",
+					"name": "All messages(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -705,7 +723,7 @@
 					"response": []
 				},
 				{
-					"name": "Send tournament message(ALL)",
+					"name": "Send tournament message(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -744,7 +762,7 @@
 					"response": []
 				},
 				{
-					"name": "Send match message(ALL)",
+					"name": "Send match message(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -760,7 +778,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"senderId\": 1,\r\n  \"content\": \"Hola BytesColaborativos!!\",\r\n  \"matchId\": 1,\r\n  \"tournamentId\": 1\r\n}",
+							"raw": "{\r\n  \"senderId\": 1,\r\n  \"content\": \"Hola Chanti y Jorge!\",\r\n  \"matchId\": 1,\r\n  \"tournamentId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -836,14 +854,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/message/2",
+							"raw": "{{base_url}}/api/message/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"message",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -885,7 +903,7 @@
 					"response": []
 				},
 				{
-					"name": "Check Match",
+					"name": "Check Match(PLAYER,ADMIN)",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -959,7 +977,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"tournament\": 1,\r\n    \"player1\": 3,\r\n    \"player2\": 2,\r\n    \"result\": \"PLAYER2_WIN\",\r\n    \"round\": 1\r\n}",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"tournament\": 1,\r\n    \"player1\": 2,\r\n    \"player2\": 3,\r\n    \"result\": \"PLAYER2_WIN\",\r\n    \"round\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1005,82 +1023,6 @@
 								"api",
 								"matches",
 								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Admin",
-			"item": [
-				{
-					"name": "Dashboard",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MTA0NTEzMCwiZXhwIjoxNDcxMTA0NTEzMH0.3huYGPtcyCvg84Mx8k-nr-5Y6FbIVtYv5_r2JxPK9o6vcS9dv9wmPXHFC3Aoi0HYBROVb0a1xEQiLk526lQ3gA",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"admin\",\r\n  \"email\": \"admin@bytes.com\",\r\n  \"password\": \"admin\",\r\n  \"role\": \"ADMIN\",\r\n  \"points\": 1000\r\n}"
-						},
-						"url": {
-							"raw": "{{base_url}}/api/admin/dashboard",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"admin",
-								"dashboard"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Assign user create permission",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc1MDg2OTA4OCwiZXhwIjoxNDcxMDg2OTA4OH0.WQCb0coIMbawSE_EFbsEZDJ0E0k_AoCrIWGKRyiI9T2go30hYDqNFS0XlQBIP1rTniKQFPHwAJOGyIbITAVu2A",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/admin/createAdmin?username=admin",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"admin",
-								"createAdmin"
-							],
-							"query": [
-								{
-									"key": "username",
-									"value": "admin"
-								}
 							]
 						}
 					},

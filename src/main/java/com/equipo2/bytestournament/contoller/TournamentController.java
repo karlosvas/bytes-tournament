@@ -119,7 +119,7 @@ public class TournamentController {
      * @return ResponseEntity<TournamentDTO> que contiene el torneo actualizado y un estado HTTP 201 Created.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('PLAYER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     @PostMapping("/players/me")
     @Operation(summary = "Unirse a un torneo como jugador autenticado", description = "Este endpoint permite al usuario autenticado unirse a un torneo existente.")
     public ResponseEntity<TournamentDTO> joinTournamentWithActualUser(@RequestParam Long tournamentId,
@@ -170,21 +170,7 @@ public class TournamentController {
         return ResponseEntity.ok((pretty) ? ranking.toString() : ranking);
     }
 
-    /**
-     * Actualiza un torneo existente.
-     * Este método es accesible solo para usuarios con el rol de ADMIN.
-     * 
-     * @param tournamentDTO DTO que contiene la información del torneo a actualizar.
-     * @param authentication Objeto de autenticación que contiene la información del usuario autenticado.
-     * @return TournamentDTO que contiene el torneo actualizado y un estado HTTP 200 OK.
-     */
-    
-    @SwaggerApiResponses
-    @PutMapping
-    @Operation(summary = "Actualizar un torneo", description = "Este endpoint permite a los administradores actualizar un torneo existente.")
-    public TournamentDTO updateTournament(@RequestBody TournamentDTO tournamentDTO, Authentication authentication) {
-        return tournamentService.updateTournament(tournamentDTO, authentication);
-    }
+     
     
 
     /**
@@ -222,7 +208,7 @@ public class TournamentController {
      * @param tournamentDTO DTO que contiene la información actualizada del torneo.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar un torneo", description = "Este endpoint permite a los administradores actualizar un torneo existente.")
     public ResponseEntity<TournamentDTO> updateTournament(@PathVariable Long id, @RequestBody @Valid TournamentDTO tournamentDTO) {
@@ -237,7 +223,7 @@ public class TournamentController {
      * @return ResponseEntity<Void> con un estado HTTP 204 No Content si la eliminación fue exitosa.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar un torneo", description = "Este endpoint permite a los administradores eliminar un torneo por su ID.")
     public ResponseEntity<Void> deleteTournament(@PathVariable Long id) {

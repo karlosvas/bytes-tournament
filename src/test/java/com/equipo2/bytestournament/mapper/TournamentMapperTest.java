@@ -1,5 +1,6 @@
 package com.equipo2.bytestournament.mapper;
 
+import com.equipo2.bytestournament.DTO.MatchDTO;
 import com.equipo2.bytestournament.DTO.TournamentDTO;
 import com.equipo2.bytestournament.enums.Status;
 import com.equipo2.bytestournament.mapper.helper.TournamentMapperHelper;
@@ -99,44 +100,45 @@ public class TournamentMapperTest {
      * los campos coincidan.
      * Los IDs de los jugadores se pueden mapear a entidades reales si es necesario.
      */
-    @Test
-    void testTournamentDTOToTournament() {
-        Match match1 = Match.builder().id(1L).build();
-        Match match2 = Match.builder().id(2L).build();
+    // ...existing code...
+@Test
+void testTournamentDTOToTournament() {
+    MatchDTO matchDTO1 = MatchDTO.builder().id(1L).build();
+    MatchDTO matchDTO2 = MatchDTO.builder().id(2L).build();
 
-        TournamentDTO dto = TournamentDTO.builder()
-                .id(200L)
-                .name("Torneo DTO test")
-                .maxPlayers(16)
-                .status(Status.FINISHED)
-                .rounds(3)
-                .maxRounds(7)
-                .matches(new ArrayList<>(List.of(match1, match2)))
-                .players(new ArrayList<>(List.of(1L, 2L)))
-                .build();
+    TournamentDTO dto = TournamentDTO.builder()
+            .id(200L)
+            .name("Torneo DTO test")
+            .maxPlayers(16)
+            .status(Status.FINISHED)
+            .rounds(3)
+            .maxRounds(7)
+            .matches(new ArrayList<>(List.of(matchDTO1, matchDTO2))) // <-- Ahora sí es correcto
+            .players(new ArrayList<>(List.of(1L, 2L)))
+            .build();
 
-        // Mockeamos el comportamiento del repositorio de usuarios
-        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(User.builder().id(1L).build()));
-        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.of(User.builder().id(2L).build()));
-        // Mockemos los matches
-        Mockito.when(matchRepository.findById(1L)).thenReturn(Optional.of(match1));
-        Mockito.when(matchRepository.findById(2L)).thenReturn(Optional.of(match2));
+    // Mockeamos el comportamiento del repositorio de usuarios
+    Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(User.builder().id(1L).build()));
+    Mockito.when(userRepository.findById(2L)).thenReturn(Optional.of(User.builder().id(2L).build()));
+    // Mockeamos los matches
+    Mockito.when(matchRepository.findById(1L)).thenReturn(Optional.of(Match.builder().id(1L).build()));
+    Mockito.when(matchRepository.findById(2L)).thenReturn(Optional.of(Match.builder().id(2L).build()));
 
-        Tournament tournament = tournamentMapper.tournamentDtoToTournament(dto);
-        assertNotNull(tournament);
-        assertAll(
-            () -> assertEquals(dto.getId(), tournament.getId()),
-            () -> assertEquals(dto.getName(), tournament.getName()),
-            () -> assertEquals(dto.getMaxPlayers(), tournament.getMaxPlayers()),
-            () -> assertEquals(dto.getStatus(), tournament.getStatus()),
-            () -> assertEquals(dto.getRounds(), tournament.getRounds()),
-            () -> assertEquals(dto.getMaxRounds(), tournament.getMaxRounds()),
-            () -> assertEquals(2, tournament.getMatches().size()),
-            () -> assertEquals(2, tournament.getPlayers().size()),
-            () -> assertTrue(tournament.getPlayers().stream().anyMatch(user -> user.getId().equals(1L))),
-            () -> assertTrue(tournament.getPlayers().stream().anyMatch(user -> user.getId().equals(2L))),
-            () -> assertTrue(tournament.getMatches().stream().anyMatch(match -> match.getId().equals(1L))),
-            () -> assertTrue(tournament.getMatches().stream().anyMatch(match -> match.getId().equals(2L)))
-        );
-    }
+    Tournament tournament = tournamentMapper.tournamentDtoToTournament(dto);
+    assertNotNull(tournament);
+    assertAll(
+        () -> assertEquals(dto.getId(), tournament.getId()),
+        () -> assertEquals(dto.getName(), tournament.getName()),
+        () -> assertEquals(dto.getMaxPlayers(), tournament.getMaxPlayers()),
+        () -> assertEquals(dto.getStatus(), tournament.getStatus()),
+        () -> assertEquals(dto.getRounds(), tournament.getRounds()),
+        () -> assertEquals(dto.getMaxRounds(), tournament.getMaxRounds()),
+        () -> assertEquals(2, tournament.getMatches().size()),
+        () -> assertEquals(2, tournament.getPlayers().size()),
+        () -> assertTrue(tournament.getPlayers().stream().anyMatch(user -> user.getId().equals(1L))),
+        () -> assertTrue(tournament.getPlayers().stream().anyMatch(user -> user.getId().equals(2L))),
+        () -> assertTrue(tournament.getMatches().stream().anyMatch(match -> match.getId().equals(1L))),
+        () -> assertTrue(tournament.getMatches().stream().anyMatch(match -> match.getId().equals(2L)))
+    );
+}
 }

@@ -101,7 +101,7 @@ public class MatchController {
      * @return List<MatchDTO> que contiene todos los partidos.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
     @Operation(summary = "Obtener todos los partidos", description = "Este endpoint permite a los administradores obtener una lista de todos los partidos.")
     public List<MatchDTO> getAllMatch() {
@@ -117,7 +117,7 @@ public class MatchController {
      * @return ResponseEntity<Void> con un estado HTTP 204 No Content si la eliminación fue exitosa.
      */
     @SwaggerApiResponses
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{matchId}")
     @Operation(summary = "Eliminar un partido por ID", description = "Este endpoint permite a los administradores eliminar un partido específico por su ID.")
     public ResponseEntity<Void> deleteMatch(@PathVariable Long matchId) {

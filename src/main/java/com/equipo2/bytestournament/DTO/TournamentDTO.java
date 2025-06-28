@@ -62,8 +62,8 @@ public class TournamentDTO {
 
     @Default
     @Schema(description = "Lista de partidos asociados al torneo")
-    private List<Match> matches = new ArrayList<>();
-
+   
+    private List<MatchDTO> matches = new ArrayList<>();
     @Schema(description = "Lista de jugadores que participan en el torneo")
     @Default
     private List<Long> players = new ArrayList<>();
