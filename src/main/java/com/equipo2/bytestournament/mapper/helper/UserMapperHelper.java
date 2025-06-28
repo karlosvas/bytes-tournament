@@ -1,6 +1,8 @@
 package com.equipo2.bytestournament.mapper.helper;
 
+import com.equipo2.bytestournament.enums.ApiResponse;
 import com.equipo2.bytestournament.enums.AuthorityPrivilegies;
+import com.equipo2.bytestournament.exceptions.RequestException;
 import com.equipo2.bytestournament.model.Match;
 import com.equipo2.bytestournament.model.Tournament;
 import com.equipo2.bytestournament.model.User;
@@ -62,7 +64,7 @@ public class UserMapperHelper {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al combinar las partidas del usuario: " + user.getUsername(), e);
-            return new ArrayList<>(); 
+            throw new RequestException(ApiResponse.NOT_FOUND, "Partidas no encontradas", "No se pudo combinar las partidas del usuario: " + user.getUsername());
         }
         
     }
@@ -76,14 +78,14 @@ public class UserMapperHelper {
     public List<Long> tournamentsToIds(List<Tournament> tournaments) {
         try {
             if (tournaments == null) 
-                return null;
+                throw new Exception();
         
         return tournaments.stream()
                 .map(Tournament::getId)
                 .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de torneos a IDs", e);
-            return new ArrayList<>(); 
+            throw new RequestException(ApiResponse.NOT_FOUND, "Torneo no encontrado", "No se pudo convertir la lista de torneos a IDs");
         }
     }
 
@@ -96,7 +98,7 @@ public class UserMapperHelper {
     public List<Tournament> idsToTournaments(List<Long> tournamentIds) {
         try {
             if (tournamentIds == null) 
-                return null;
+                throw new Exception();
         
         return tournamentIds.stream()
                 .map(id -> tournamentRepository.findById(id).orElse(null))
@@ -104,7 +106,7 @@ public class UserMapperHelper {
                 .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de IDs de torneos a objetos Tournament", e);
-            return new ArrayList<>();
+            throw new RequestException(ApiResponse.NOT_FOUND, "Torneo no encontrado", "No se pudo convertir la lista de IDs de torneos a objetos Tournament");
         }
     }
 
@@ -122,7 +124,7 @@ public class UserMapperHelper {
             .collect(Collectors.toSet());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de privilegios a nombres", e);
-            return Set.of(); 
+            throw new RequestException(ApiResponse.NOT_FOUND, "Privilegios no encontrados", "No se pudo convertir la lista de privilegios a nombres");
         }
         
     }
@@ -142,7 +144,7 @@ public class UserMapperHelper {
             .collect(Collectors.toSet());
         } catch (Exception e) {
             logger.error("Error al convertir el conjunto de nombres de privilegios a AuthorityPrivilegies", e);
-            return Set.of(); 
+            throw new RequestException(ApiResponse.NOT_FOUND, "Privilegios no encontrados", "No se pudo convertir el conjunto de nombres de privilegios a AuthorityPrivilegies");
         }
     }
 }

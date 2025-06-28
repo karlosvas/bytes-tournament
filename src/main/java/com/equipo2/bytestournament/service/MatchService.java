@@ -10,6 +10,8 @@ import com.equipo2.bytestournament.model.Tournament;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.MatchRepository;
 import com.equipo2.bytestournament.repository.TournamentRepository;
+import com.equipo2.bytestournament.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +38,14 @@ public class MatchService {
     private final MatchRepository matchRepository;
     private final MatchMapper matchMapper;
     private final TournamentRepository tournamentRepository;
+    private final UserRepository userRepository;
     public final Logger logger = Logger.getLogger(MatchService.class.getName());
 
-    public MatchService(MatchRepository matchRepository, MatchMapper matchMapper, TournamentRepository tournamentRepository) {
+    public MatchService(MatchRepository matchRepository, MatchMapper matchMapper, TournamentRepository tournamentRepository, UserRepository userRepository) {
         this.matchRepository = matchRepository;
         this.matchMapper = matchMapper;
         this.tournamentRepository = tournamentRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -160,6 +164,7 @@ public class MatchService {
                 player2 = possiblePlayers.get(randomPlayer2);
             }
 
+            // Comprobamos que el jugador 2 no sea nulo por si no hay suficientes jugadores o a ocurrido algun error
             if(player2 == null) throw new Exception();
             
             allPlayers.remove(player2);
@@ -214,6 +219,9 @@ public class MatchService {
         if(matchUpdated.getTournament() == null)
             throw new RequestException(ApiResponse.UNPROCESSABLE_ENTITY, "Entidad No Procesable", "El match debe pertenecer a un torneo valido");
 
+            
+        // Actualiamos el resultado de los jugadores en el torneo y en la entidad
+        this.setPointsToPLayers(matchUpdated);
         matchRepository.save(matchUpdated);
 
         logger.info("Resultado del match actualizado: " + matchUpdated.getResult());
@@ -245,5 +253,36 @@ public class MatchService {
         Match match = matchOptional.get();
         logger.info("Match eliminado: " + match.getPlayer1().getEmail() + " vs " + match.getPlayer2().getEmail());
         matchRepository.delete(match);
+    }
+
+    /**
+     * Asigna los puntos de manera aletoria entre 10-20 a el ganador, en caso de empate ambos
+     * jugadores ganan pero reciben menos punntos
+     * 
+     * @param matchUpdated Match actualizado con el resultado del match.
+     */
+    public void setPointsToPLayers(Match matchUpdated) {
+        // Damos los puntos a el jugador ganador
+        User player1 = matchUpdated.getPlayer1();
+        User player2 = matchUpdated.getPlayer2();
+
+        // Si algguien gana recibe un nuermo random entre 10 y 20 puntos
+        Integer numRandom = ThreadLocalRandom.current().nextInt(10, 21);
+        if (matchUpdated.getResult() == Result.PLAYER1_WIN)
+            player1.setPoints(player1.getPoints() + numRandom); 
+        else if(matchUpdated.getResult() == Result.PLAYER2_WIN)
+            player2.setPoints(player2.getPoints() + numRandom);
+        else if(matchUpdated.getResult() == Result.DRAW){
+            player1.setPoints(player1.getPoints() + (numRandom/2));
+            player2.setPoints(player2.getPoints() + (numRandom/2));
+        }
+
+        // Guardamos los datos de los jugadores en la entidad de match
+        matchUpdated.setPlayer1(player1);
+        matchUpdated.setPlayer2(player2);
+
+        // Guardamos los jugadores en la base de datos
+        userRepository.save(player1);
+        userRepository.save(player2);
     }
 }

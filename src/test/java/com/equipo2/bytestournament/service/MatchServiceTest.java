@@ -9,6 +9,7 @@ import com.equipo2.bytestournament.model.Tournament;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.MatchRepository;
 import com.equipo2.bytestournament.repository.TournamentRepository;
+import com.equipo2.bytestournament.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -46,6 +47,9 @@ public class MatchServiceTest {
     @Mock
     private Logger logger;
 
+    @Mock
+    private UserRepository userRepository;
+
     private final User user;
 
     @InjectMocks
@@ -74,12 +78,13 @@ public class MatchServiceTest {
 
        // Caso exitoso
         List<User> players = new ArrayList<>();
-        User user1 = new User().builder().username("a").email("a@a.com").points(100).build();
-        User user2 = new User().builder().username("b").email("b@b.com").points(110).build();
+        User user1 = User.builder().username("a").email("a@a.com").points(100).build();
+        User user2 = User.builder().username("b").email("b@b.com").points(110).build();
+        
         players.add(user1);
         players.add(user2);
 
-        Tournament tournament = new Tournament().builder()
+        Tournament tournament = Tournament.builder()
                 .id(1L)
                 .name("Torneo de prueba")
                 .rounds(0)
@@ -93,7 +98,8 @@ public class MatchServiceTest {
         Mockito.when(tournamentRepository.save(Mockito.any(Tournament.class))).thenReturn(tournament);
         List<MatchDTO> matchDTOList = new ArrayList<>();
         Mockito.when(matchMapper.matchListToMatchDTOList(Mockito.anyList())).thenReturn(matchDTOList);
-
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenAnswer(i -> i.getArgument(0));
+        
         // // Llama al método a probar
         List<MatchDTO> resultado = matchService.generateMatches(1L);
 
@@ -197,19 +203,21 @@ public class MatchServiceTest {
         assertThrows(RequestException.class, () -> matchService.updateMatchResult(1L, matchDTO));
  
         // Caso: el match existe y los jugadores son parte del match
-        Match existingMatch = new Match().builder()
+        Match existingMatch = Match.builder()
                 .id(3L)
-                .tournament(new Tournament())
-                .player1(new User().builder().id(1L).build())
-                .player2(new User().builder().id(2L).build())
-                .result(Result.PENDING)
+                .tournament(Tournament.builder().id(1L).build())
+                .player1(User.builder().id(1L).points(100).build())
+                .player2(User.builder().id(2L).points(100).build())
+                .result(Result.PLAYER1_WIN)
                 .round(0)
                 .build();
 
-        // Simulamos el comportamiento del repositorio
+        // Simulamos el comportamiento del repositorio, obtiene el match
         Mockito.when(matchRepository.findById(3L)).thenReturn(Optional.of(existingMatch));
         // Simulamos el comportamiento del mapper
         Mockito.when(matchMapper.matchDtoToMatch(Mockito.any(MatchDTO.class))).thenReturn(existingMatch);
+
+        // Lo convertimos a DTO
         Mockito.when(matchMapper.matchToMatchDTO(Mockito.any(Match.class))).thenReturn(matchDTO);
 
         // Llama al método a probar
@@ -218,6 +226,7 @@ public class MatchServiceTest {
         // Verifica que se haya guardado el resultado correctamente
         Mockito.verify(matchRepository, Mockito.times(1)).save(Mockito.any(Match.class));
         Mockito.verify(matchMapper, Mockito.times(1)).matchToMatchDTO(Mockito.any(Match.class));
+
         // Verifica que el resultado sea el esperado
         assertAll(
             () -> assertEquals(Result.PENDING, result.getResult()),

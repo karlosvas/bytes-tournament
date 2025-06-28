@@ -17,11 +17,15 @@ import java.util.List;
  
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
+    // Message -> MessageDTO
     MessageDTO messageToMessageDTO(Message message);
 
-    Message messageDtoToMessage(MessageDTO messageDTO);
+    // MessageDTO -> Message
+    Message messageDTOToMessage(MessageDTO messageDTO);
 
-    List<MessageDTO> messageToMessageDtos(List<Message> messages);
+    // List<Message> -> List<MessageDTO>
+    List<MessageDTO> messageListToMessageDTOsList(List<Message> messages);
 
-    List<Message> messageDtosToMessages(List<MessageDTO> messageDTOS);
+    // List<MessageDTO> -> List<Message>
+    List<Message> messageDTOsListToMessagesList(List<MessageDTO> messageDTOS);
 }

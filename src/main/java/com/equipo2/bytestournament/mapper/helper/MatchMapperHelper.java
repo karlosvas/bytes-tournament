@@ -1,5 +1,7 @@
 package com.equipo2.bytestournament.mapper.helper;
 
+import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.exceptions.RequestException;
 import com.equipo2.bytestournament.model.Tournament;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.UserRepository;
@@ -45,7 +47,7 @@ public class MatchMapperHelper {
             return tournamentId == null ? null : tournamentRepository.findById(tournamentId).orElse(null);
         } catch (Exception e) {
             logger.error("Error al buscar el torneo con ID: " + tournamentId, e);
-            return null; 
+            throw new RequestException(ApiResponse.NOT_FOUND, "Torneo no encontrado",  "No se pudo establecer la relación con el torneo con ID: " + tournamentId);
         }
     }
 
@@ -60,7 +62,7 @@ public class MatchMapperHelper {
             return tournament == null ? null : tournament.getId();
         } catch (Exception e) {
             logger.error("Error al obtener el ID del torneo: " + tournament, e);
-            return null;
+            throw new RequestException(ApiResponse.NOT_FOUND, "Torneo no encontrado",  "No se pudo establecer la relación con el torneo");
         }
     }
 
@@ -75,7 +77,7 @@ public class MatchMapperHelper {
             return id == null ? null : userRepository.findById(id).orElse(null);
         } catch (Exception e) {
             logger.error("Error al buscar el usuario con ID: " + id, e);
-            return null;
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se pudo establecer la relación con el usuario");
         }
     }
 
@@ -90,7 +92,7 @@ public class MatchMapperHelper {
             return user == null ? null : user.getId();
         } catch (Exception e) {
             logger.error("Error al obtener el ID del usuario: " + user, e);
-            return null;
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se pudo establecer la relación con el usuario");
         }
     }
 }

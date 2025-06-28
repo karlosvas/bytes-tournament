@@ -22,21 +22,25 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {MatchMapperHelper.class})
 public interface MatchMapper {
+    // MatchDTO -> Match
     @Mapping(source = "tournament", target = "tournament")
     @Mapping(source = "player1", target = "player1")
     @Mapping(source = "player2", target = "player2")
     Match matchDtoToMatch(MatchDTO matchDTO);
 
+    // Match -> MatchDTO
     @Mapping(source = "tournament", target = "tournament")
     @Mapping(source = "player1", target = "player1")
     @Mapping(source = "player2", target = "player2")
     List<Match> matchDTOListToMatchList(List<MatchDTO> matchDTOs);
 
+    // List<Match> -> List<MatchDTO>
     @Mapping(source = "tournament", target = "tournament")
     @Mapping(source = "player1", target = "player1")
     @Mapping(source = "player2", target = "player2")
     List<MatchDTO> matchListToMatchDTOList(List<Match> matches);
 
+    // List<MatchDTO> -> List<MatchDTO>
     @Mapping(source = "tournament", target = "tournament")
     @Mapping(source = "player1", target = "player1")
     @Mapping(source = "player2", target = "player2")

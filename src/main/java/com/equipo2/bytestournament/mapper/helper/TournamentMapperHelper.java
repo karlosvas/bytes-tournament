@@ -1,5 +1,7 @@
 package com.equipo2.bytestournament.mapper.helper;
 
+import com.equipo2.bytestournament.enums.ApiResponse;
+import com.equipo2.bytestournament.exceptions.RequestException;
 import com.equipo2.bytestournament.model.Match;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.MatchRepository;
@@ -46,14 +48,14 @@ public class TournamentMapperHelper {
     public List<Long> matchesToIds(List<Match> matchesList) {
         try {
             if (matchesList == null)
-                return null;
+                throw new Exception();
             
             return matchesList.stream()
                     .map(Match::getId)
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de partidas a IDs", e);
-            return new ArrayList<>();
+            throw new RequestException(ApiResponse.NOT_FOUND, "Match no encontrado", "No se pudo convertir la lista de partidas a IDs");
         }
     }
 
@@ -66,7 +68,7 @@ public class TournamentMapperHelper {
     public List<Match> idsToMatches(List<Long> matchIds) {
         try {
             if (matchIds == null)
-                return null;
+                throw new Exception();
             
             return matchIds.stream()
                     .map(id -> matchRepository.findById(id).orElse(null))
@@ -74,7 +76,7 @@ public class TournamentMapperHelper {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de IDs de partidas a objetos Match", e);
-            return new ArrayList<>();
+            throw new RequestException(ApiResponse.NOT_FOUND, "Match no encontrado", "No se pudo convertir la lista de IDs de partidas a objetos Match");
         }
     }
 
@@ -87,14 +89,14 @@ public class TournamentMapperHelper {
     public List<Long> playersToIds(List<User> players) {
         try {
             if (players == null)
-                return null;
+                throw new Exception();
             
             return players.stream()
                     .map(User::getId)
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de jugadores a IDs", e);
-            return new ArrayList<>();
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se pudo convertir la lista de jugadores a IDs");
         }
     }
 
@@ -106,9 +108,8 @@ public class TournamentMapperHelper {
      */
     public List<User> idsToPlayers(List<Long> playerIds) {
         try {
-            if (playerIds == null) {
-                return null;
-            }
+            if (playerIds == null) 
+                throw new Exception();
             
             return playerIds.stream()
                     .map(id -> userRepository.findById(id).orElse(null))
@@ -116,7 +117,7 @@ public class TournamentMapperHelper {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error al convertir la lista de IDs de usuarios a objetos User", e);
-            return new ArrayList<>();
+            throw new RequestException(ApiResponse.NOT_FOUND, "Usuario no encontrado", "No se pudo convertir la lista de IDs de usuarios a objetos User");
         }
     }
 }

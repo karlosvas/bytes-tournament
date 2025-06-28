@@ -7,11 +7,13 @@ import com.equipo2.bytestournament.mapper.helper.UserMapperHelper;
 import com.equipo2.bytestournament.model.User;
 import com.equipo2.bytestournament.repository.TournamentRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.Field;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 /**
 * Clase de prueba para UserMapper.
@@ -22,21 +24,28 @@ import org.mockito.Mockito;
 */
 class UserMapperTest {
 
-    private static UserMapper userMapper;
+    private UserMapper userMapper;
 
-    @BeforeAll
-     static void setUp() {
-         try {
-             userMapper = Mappers.getMapper(UserMapper.class);
-             TournamentRepository tournamentRepository = Mockito.mock(TournamentRepository.class);
-             UserMapperHelper helper = new UserMapperHelper(tournamentRepository);
-             Field helperField = userMapper.getClass().getDeclaredField("userMapperHelper");
-             helperField.setAccessible(true);
-             helperField.set(userMapper, helper);
-         } catch (Exception e) {
-             throw new RuntimeException("Error al inyectar el helper en el mapper para los tests", e);
-         }
-     }
+    @Mock
+    private TournamentRepository tournamentRepository;
+
+    /**
+     * setUp Método que se ejecuta antes de cada prueba.
+     * Inicializa el UserMapper y su helper, inyectando el TournamentRepository necesario.
+     */
+    @BeforeEach
+    void setUp() {
+        try {
+            MockitoAnnotations.openMocks(this);
+            userMapper = Mappers.getMapper(UserMapper.class);
+            UserMapperHelper helper = new UserMapperHelper(tournamentRepository);
+            Field helperField = userMapper.getClass().getDeclaredField("userMapperHelper");
+            helperField.setAccessible(true);
+            helperField.set(userMapper, helper);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
@@ -48,7 +57,7 @@ class UserMapperTest {
      @Test
      void testUserToUserDTO() {
          User user = User.builder()
-                 .id(1L) //  Ejemplo de id de la DB
+                 .id(1L)
                  .username("testUserMapper")
                  .email("testmapper@gmail.com")
                  .password("1234")

@@ -305,6 +305,13 @@ public class TournamentService {
 
     }
 
+    /**
+     * Elimina un torneo por su ID.
+     * Este método busca el torneo por su ID y lo elimina de la base de datos.
+     * Si el torneo no existe, lanza una excepción.
+     * 
+     * @param id ID del torneo a eliminar.
+     */
     public void deleteTournament(Long id) {
         // Verificamos si el torneo existe
         Optional<Tournament> tournamentOptional = tournamentRepository.findById(id);

@@ -57,7 +57,7 @@ public class MessageMapperTest {
                 .tournamentId(201L)
                 .build();
 
-        Message message = messageMapper.messageDtoToMessage(dto);
+        Message message = messageMapper.messageDTOToMessage(dto);
 
         assertNotNull(message);
         assertEquals(dto.getId(), message.getId());
@@ -85,7 +85,7 @@ public class MessageMapperTest {
                 .tournamentId(202L)
                 .build();
 
-        List<MessageDTO> dtoList = messageMapper.messageToMessageDtos(List.of(message));
+        List<MessageDTO> dtoList = messageMapper.messageListToMessageDTOsList(List.of(message));
         assertNotNull(dtoList);
         assertEquals(1, dtoList.size());
         assertEquals(message.getId(), dtoList.get(0).getId());
@@ -108,7 +108,7 @@ public class MessageMapperTest {
                 .tournamentId(203L)
                 .build();
 
-        List<Message> messageList = messageMapper.messageDtosToMessages(List.of(dto));
+        List<Message> messageList = messageMapper.messageDTOsListToMessagesList(List.of(dto));
         assertNotNull(messageList);
         assertEquals(1, messageList.size());
         assertEquals(dto.getId(), messageList.get(0).getId());
